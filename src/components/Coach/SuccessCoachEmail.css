@@ -20,7 +20,10 @@
   background-image: none; /* Remove previous grid patterns */
 }
 
-
+.left-text{
+  font-size: 27px;
+  color: white;
+}
 
 .context {
   width: 100%;

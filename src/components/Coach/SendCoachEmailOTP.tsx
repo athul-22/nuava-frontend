@@ -13,6 +13,16 @@ const SEND_COACH_EMAIL_OTP = gql`
   }
 `;
 
+const VERIFY_COACH_EMAIL_OTP = gql`
+  mutation VerifyCoachEmailOTP($input: VerifyInput!) {
+    verifyCoachEmailOTP(input: $input) {
+      message
+      status
+      token
+    }
+  }
+`;
+
 const SendCoachEmailOTP: React.FC = () => {
   const notyf = new Notyf({
     duration: 2000,
@@ -50,9 +60,10 @@ const SendCoachEmailOTP: React.FC = () => {
 
   const [email, setEmail] = useState("");
   const [passkey, setPasskey] = useState("");
-  const [verificationCode, setVerificationCode] = useState<string[]>(Array(6).fill("")); // Initialize with 6 empty strings
-  const [sendOTP, { loading, error }] = useMutation(SEND_COACH_EMAIL_OTP);
-  const [showOTPForm, setShowOTPForm] = useState(false); // State to toggle OTP form visibility
+  const [verificationCode, setVerificationCode] = useState<string[]>(Array(6).fill(""));
+  const [sendOTP, { loading: loadingSendOTP, error: errorSendOTP }] = useMutation(SEND_COACH_EMAIL_OTP);
+  const [verifyOTP, { loading: loadingVerifyOTP, error: errorVerifyOTP }] = useMutation(VERIFY_COACH_EMAIL_OTP);
+  const [showOTPForm, setShowOTPForm] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
@@ -87,7 +98,7 @@ const SendCoachEmailOTP: React.FC = () => {
 
       if (response.data?.sendCoachEmailOTP.status) {
         notyf.success('Email sent successfully');
-        setShowOTPForm(true); // Show OTP form after successful send
+        setShowOTPForm(true);
       } else {
         notyf.error(response.data?.sendCoachEmailOTP.message || 'Error occurred');
       }
@@ -100,11 +111,10 @@ const SendCoachEmailOTP: React.FC = () => {
 
   const handleVerificationCodeChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newCode = [...verificationCode];
-    newCode[index - 1] = e.target.value;
+    newCode[index] = e.target.value;
     setVerificationCode(newCode);
 
-    // Automatically focus on next input if available
-    if (index < verificationCode.length) {
+    if (index < verificationCode.length - 1 && e.target.value !== "") {
       const nextInput = document.getElementById(`otp-input-${index + 1}`);
       if (nextInput) {
         nextInput.focus();
@@ -112,8 +122,37 @@ const SendCoachEmailOTP: React.FC = () => {
     }
   };
 
-  const handleVerifyOTP = () => {
-    window.location.replace("http://localhost:3001/success-coach-email");
+  const handleVerifyOTP = async () => {
+    const otp = verificationCode.join('');
+
+    if (otp.length !== 6) {
+      notyf.error('Please enter the full OTP');
+      return;
+    }
+
+    try {
+      const response = await verifyOTP({
+        variables: {
+          input: {
+            email: email,
+            otp: otp,
+          },
+        },
+      });
+
+      if (response.data?.verifyCoachEmailOTP.status) {
+        notyf.success('Email verified successfully');
+        localStorage.setItem('tempToken', response.data.verifyCoachEmailOTP.token);
+        localStorage.setItem('email', email)
+        window.location.replace("http://localhost:3001/success-coach-email");
+      } else {
+        notyf.error(response.data?.verifyCoachEmailOTP.message || 'Error occurred');
+      }
+
+    } catch (err) {
+      console.error("Error:", err);
+      notyf.error('An error occurred.');
+    }
   };
 
   return (
@@ -157,8 +196,8 @@ const SendCoachEmailOTP: React.FC = () => {
                   </label>
                 </div>
 
-                <button type="submit" className="submit-button" disabled={loading}>
-                  {loading ? "Sending..." : "Send OTP"}
+                <button type="submit" className="submit-button" disabled={loadingSendOTP}>
+                  {loadingSendOTP ? "Sending..." : "Send OTP"}
                 </button>
               </form>
             ) : (
@@ -169,24 +208,24 @@ const SendCoachEmailOTP: React.FC = () => {
                   {verificationCode.map((_, index) => (
                     <input
                       key={index}
-                      id={`otp-input-${index + 1}`}
+                      id={`otp-input-${index}`}
                       type="text"
                       className="verification-code-input"
                       maxLength={1}
                       value={verificationCode[index]}
-                      onChange={(e) => handleVerificationCodeChange(e, index + 1)}
+                      onChange={(e) => handleVerificationCodeChange(e, index)}
                     />
                   ))}
                 </div>
-                <button className="submit-button" onClick={handleVerifyOTP}>
-                  Verify OTP
+                <button className="submit-button" onClick={handleVerifyOTP} disabled={loadingVerifyOTP}>
+                  {loadingVerifyOTP ? "Verifying..." : "Verify OTP"}
                 </button>
               </div>
             )}
 
-            {error && isMobile && (
+            {(errorSendOTP || errorVerifyOTP) && isMobile && (
               <div className="error-message">
-                <p className="error-message-text">{error.message}</p>
+                <p className="error-message-text">{errorSendOTP?.message || errorVerifyOTP?.message}</p>
               </div>
             )}
           </div>
