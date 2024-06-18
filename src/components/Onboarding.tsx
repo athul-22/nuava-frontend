@@ -19,7 +19,7 @@ const Onboarding: React.FC = () => {
         }}
       ></div>
       
-      <div className="relative mt-auto px-6 pt-10 pb-8 sm:mx-auto sm:max-w-lg sm:rounded-lg sm:px-10 ">
+      <div className="relative sm:mt-0 mt-auto mb-8 sm:mb-0 px-6 pt-10 pb-8 sm:max-w-lg sm:rounded-lg sm:px-10 mx-auto">
         <div className="mx-auto max-w-md">
           <div className="text-black text-3xl md:text-5xl mb-2">
             Your ultimate<br className="md:hidden" />sports companion
