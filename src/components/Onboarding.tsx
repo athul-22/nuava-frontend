@@ -3,6 +3,11 @@ import bg from '../assets/BG.jpg';
 import grid from '../assets/GRID.svg';
 
 const Onboarding: React.FC = () => {
+
+  const coachreg = () =>{
+    window.location.replace("http://localhost:3001/coach/register");
+  }
+
   return (
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-6 sm:py-12">
       <img
@@ -19,18 +24,22 @@ const Onboarding: React.FC = () => {
         }}
       ></div>
       
-      <div className="relative sm:mt-0 mt-auto mb-8 sm:mb-0 px-6 pt-10 pb-8 sm:max-w-lg sm:rounded-lg sm:px-10 mx-auto">
-        <div className="mx-auto max-w-md">
+      <div className="relative sm:mt-0 mt-auto mb-8 sm:mb-0 px-7 sm:px-10 pt-10 pb-8 sm:max-w-lg sm:rounded-lg sm:px-10 mx-auto w-full sm:w-1000 ">
+      <div className="mx-auto max-w-md">
           <div className="text-black text-3xl md:text-5xl mb-2">
-            Your ultimate<br className="md:hidden" />sports companion
+            YOUR ULTIMATE<br className="md:hidden" /> SPORTS COMPANION
           </div>
-          <div className="text-black text-sm md:text-base mb-4 font-light text-left">
+          <div className="text-black text-sm md:text-base mb-4 font-light text-left mt-5">
             Stay in the loop with live matches,<br className="md:hidden" />coach updates & more
           </div>
+          
           <button className="bg-black text-white px-4 md:px-8 py-2 md:py-3 rounded-[8px] mb-4 w-full">
-            Get Started
+            Register as a Student
           </button>
-          <div className="text-black text-sm text-left font-normal">
+          <button onClick={coachreg}  className="bg-transparent text-black border border-black px-4 md:px-8 py-2 md:py-3 rounded-[8px] mb-4 w-full">
+            Register as a Coach
+          </button>
+          <div className="text-black text-me text-left font-normal mt-5">
             Already have an account? <span className="font-bold">Login</span>
           </div>
         </div>

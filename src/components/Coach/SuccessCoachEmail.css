@@ -66,7 +66,7 @@
   left: 25%;
   width: 80px;
   height: 80px;
-  animation-delay: 0s;
+  animation-delay: 2s;
 }
 
 /* Add more circles li styles and adjust animation delay here */
@@ -79,7 +79,7 @@
   }
 
   100% {
-    transform: translateY(-2000px) rotate(720deg); /* Adjust translateY distance */
+    transform: translateY(-1000px) rotate(720deg); /* Adjust translateY distance */
     opacity: 0;
     border-radius: 50%;
   }
@@ -172,7 +172,7 @@
   }
 
   .left-text{
-    font-size: 18px;
+    font-size: 14px;
   }
 
   .input-field {

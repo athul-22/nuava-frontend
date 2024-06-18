@@ -132,7 +132,7 @@ const SuccessCoachEmail: React.FC = () => {
           <p className="left-text" > Account Verified Successfully</p>
         </div>
 
-        <div className="area">
+        {/* <div className="area">
           <ul className="circles">
             <li></li>
             <li></li>
@@ -145,7 +145,7 @@ const SuccessCoachEmail: React.FC = () => {
             <li></li>
             <li></li>
           </ul>
-        </div>
+        </div> */}
 
         {showConfetti && (
           <Confetti

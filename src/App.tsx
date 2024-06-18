@@ -20,9 +20,13 @@ const App: React.FC = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Onboarding />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/send-coach-email-otp" element={<SendCoachEmailOTP />} />
-          <Route path="/success-coach-email" element={<SuccessCoachEmail />} />
+          {/* <Route path="/login" element={<Login />} /> */}
+
+          {/* COACH ROUTES */}
+          {/* <Route path="/send-coach-email-otp" element={<SendCoachEmailOTP />} /> */}
+          <Route path="/coach/register" element={<SendCoachEmailOTP />} />
+          <Route path="/coach/success" element={<SuccessCoachEmail />} />
+          {/* <Route path="/success-coach-email" element={<SuccessCoachEmail />} /> */}
         </Routes>
       </BrowserRouter>
     </ApolloProvider>
