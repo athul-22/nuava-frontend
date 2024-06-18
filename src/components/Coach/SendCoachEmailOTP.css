@@ -97,11 +97,11 @@
   }
 
   .welcome-subtitle {
-    font-size: 30px; /* Adjust subtitle font size for small screens */
+    font-size: 25px; /* Adjust subtitle font size for small screens */
   }
 
   .welcome-title {
-    font-size: 50px; /* Adjust title font size for small screens */
+    font-size: 40px; /* Adjust title font size for small screens */
   }
 }
 
