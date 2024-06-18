@@ -12,7 +12,7 @@
   justify-content: center;
   width: calc(50% - 100px);
   position: relative;
-  background-color: #051da0; /* Set base background color */
+  background-color: #051da0; 
   overflow: hidden;
   border-radius: 20px;
   margin: 60px;
@@ -159,6 +159,7 @@
   color: #051da0;
   margin-bottom: 20px;
   text-align: center;
+  font-size: 20px;
 }
 
 /* Media Query for screens up to 768px width */
