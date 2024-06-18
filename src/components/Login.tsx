@@ -84,7 +84,7 @@ const Login: React.FC = () => {
       if (response.data?.loginCoach.status) {
         localStorage.setItem("token", response.data.loginCoach.token);
         notyf.success('Login successful!');
-        window.location.href = "/dashboard"; // Redirect to dashboard
+        window.location.href = "/dashboard"; 
       } else {
         notyf.error(response.data?.loginCoach.message || 'Error occurred during login');
       }

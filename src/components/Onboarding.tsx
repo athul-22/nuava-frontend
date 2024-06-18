@@ -5,7 +5,11 @@ import grid from '../assets/GRID.svg';
 const Onboarding: React.FC = () => {
 
   const coachreg = () =>{
-    window.location.replace("http://localhost:3001/coach/register");
+    window.location.href = "/coach/register";
+  }
+
+  const StudentReg = () =>{
+    window.location.href = "/student/register";
   }
 
   return (
@@ -33,7 +37,7 @@ const Onboarding: React.FC = () => {
             Stay in the loop with live matches,<br className="md:hidden" />coach updates & more
           </div>
           
-          <button className="bg-black text-white px-4 md:px-8 py-2 md:py-3 rounded-[8px] mb-4 w-full">
+          <button onClick={StudentReg} className="bg-black text-white px-4 md:px-8 py-2 md:py-3 rounded-[8px] mb-4 w-full">
             Register as a Student
           </button>
           <button onClick={coachreg}  className="bg-transparent text-black border border-black px-4 md:px-8 py-2 md:py-3 rounded-[8px] mb-4 w-full">

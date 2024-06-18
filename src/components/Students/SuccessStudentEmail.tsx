@@ -4,7 +4,7 @@ import { gql, useMutation, ApolloClient, InMemoryCache, createHttpLink } from "@
 import { setContext } from "@apollo/client/link/context";
 import { Notyf } from "notyf";
 import FOOTERCOMMON from "../../assets/FOOTERCOMMON.png";
-import "./SuccessCoachEmail.css";
+import "./SuccessStudentEmail.css";
 import TICK from '../../assets/TICK.png';
 
 // Initialize Notyf for notifications
@@ -42,9 +42,9 @@ const notyf = new Notyf({
   ]
 });
 
-const REGISTER_COACH = gql`
-  mutation RegisterCoach($input: RegisterCoachInput!) {
-    registerCoach(input: $input) {
+const REGISTER_STUDENT = gql`
+  mutation RegisterStudent($input: RegisterStudentInput!) {
+    registerStudent(input: $input) {
       message
       status
       token
@@ -72,16 +72,18 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-const SuccessCoachEmail: React.FC = () => {
+const SuccessStudentEmail: React.FC = () => {
   const [showConfetti, setShowConfetti] = useState(false);
 
   // State for user inputs
   const [name, setName] = useState("");
-  const [mobile, setMobile] = useState("");
+  const [schoolID, setSchoolID] = useState("");
+  const [grade, setGrade] = useState("");
+  const [age, setAge] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState(localStorage.getItem("email") ?? "");
 
-  const [registerCoach, { loading, error }] = useMutation(REGISTER_COACH, {
+  const [registerStudent, { loading, error }] = useMutation(REGISTER_STUDENT, {
     client
   });
 
@@ -90,32 +92,36 @@ const SuccessCoachEmail: React.FC = () => {
   }, []);
 
   const handleComplete = async () => {
-    if (!name || !mobile || !password || !email) {
+    if (!name || !schoolID || !grade || !age || !password || !email) {
       notyf.error('Please fill all fields!');
       return;
     }
 
     try {
-      const response = await registerCoach({
+      const response = await registerStudent({
         variables: {
           input: {
             email: email,
             password: password,
             name: name,
-            phone: mobile
+            schoolID: parseInt(schoolID, 10),
+            grade: grade,
+            age: parseInt(age, 10)
           },
         },
       });
 
-      if (response.data?.registerCoach.status) {
-        localStorage.setItem('token', response.data.registerCoach.token);
+      if (response.data?.registerStudent.status) {
+        localStorage.setItem('token', response.data.registerStudent.token);
         localStorage.setItem('name', name);
-        localStorage.setItem('mobile', mobile);
+        localStorage.setItem('schoolID', schoolID);
+        localStorage.setItem('grade', grade);
+        localStorage.setItem('age', age.toString());
 
         notyf.success('Registration successful!');
         window.location.href = "/dashboard";
       } else {
-        notyf.error(response.data?.registerCoach.message || 'Error occurred during registration');
+        notyf.error(response.data?.registerStudent.message || 'Error occurred during registration');
       }
     } catch (err) {
       console.error("Error:", err);
@@ -131,21 +137,6 @@ const SuccessCoachEmail: React.FC = () => {
           <br/>
           <p className="left-text" > Account Verified Successfully</p>
         </div>
-
-        {/* <div className="area">
-          <ul className="circles">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-          </ul>
-        </div> */}
 
         {showConfetti && (
           <Confetti
@@ -167,23 +158,43 @@ const SuccessCoachEmail: React.FC = () => {
             type="text"
             id="name"
             className="input-field"
-            placeholder=" "
+            placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <label htmlFor="name" className="input-label">Name</label>
         </div>
 
         <div className="input-group">
           <input
             type="text"
-            id="mobile"
+            id="schoolID"
             className="input-field"
-            placeholder=" "
-            value={mobile}
-            onChange={(e) => setMobile(e.target.value)}
+            placeholder="School ID"
+            value={schoolID}
+            onChange={(e) => setSchoolID(e.target.value)}
           />
-          <label htmlFor="mobile" className="input-label">Mobile Number</label>
+        </div>
+
+        <div className="input-group">
+          <input
+            type="text"
+            id="grade"
+            className="input-field"
+            placeholder="Grade"
+            value={grade}
+            onChange={(e) => setGrade(e.target.value)}
+          />
+        </div>
+
+        <div className="input-group">
+          <input
+            type="text"
+            id="age"
+            className="input-field"
+            placeholder="Age"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+          />
         </div>
 
         <div className="input-group">
@@ -191,11 +202,10 @@ const SuccessCoachEmail: React.FC = () => {
             type="password"
             id="password"
             className="input-field"
-            placeholder=" "
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <label htmlFor="password" className="input-label">Password</label>
         </div>
 
         <div className="input-group">
@@ -203,11 +213,10 @@ const SuccessCoachEmail: React.FC = () => {
             type="email"
             id="email"
             className="input-field"
-            placeholder=" "
+            placeholder="Email"
             value={email}
             disabled
           />
-          <label htmlFor="email" className="input-label">Email</label>
         </div>
 
         <button className="complete-button" onClick={handleComplete} disabled={loading}>
@@ -220,14 +229,8 @@ const SuccessCoachEmail: React.FC = () => {
           </div>
         )}
       </div>
-
-      {/* <img
-        src={FOOTERCOMMON}
-        alt="Footer"
-        className="footer-image-mobile-only"
-      /> */}
     </div>
   );
 };
 
-export default SuccessCoachEmail;
+export default SuccessStudentEmail;

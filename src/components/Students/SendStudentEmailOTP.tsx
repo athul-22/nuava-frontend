@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { gql, useMutation } from "@apollo/client";
-import "./SendCoachEmailOTP.css";
+import "./SendStudentEmailOTP.css";
 import { Notyf } from "notyf";
 import "notyf/notyf.min.css";
 import grid from "../../assets/GRID.svg";
 
-const SEND_COACH_EMAIL_OTP = gql`
-  mutation SendCoachEmailOTP($input: CoachOTPInput!) {
-    sendCoachEmailOTP(input: $input) {
-      status
+const REGISTER_STUDENT = gql`
+  mutation RegisterStudent($input: OtpInput!) {
+    sendStudentEmailOTP(input: $input) {
       message
+      status
     }
   }
 `;
 
-const VERIFY_COACH_EMAIL_OTP = gql`
-  mutation VerifyCoachEmailOTP($input: VerifyInput!) {
-    verifyCoachEmailOTP(input: $input) {
+const VERIFY_STUDENT_EMAIL_OTP = gql`
+  mutation VerifyEmailOTP($input: VerifyInput!) {
+    verifyEmailOTP(input: $input) {
       message
       status
       token
@@ -24,7 +24,7 @@ const VERIFY_COACH_EMAIL_OTP = gql`
   }
 `;
 
-const SendCoachEmailOTP: React.FC = () => {
+const SendStudentEmailOTP: React.FC = () => {
   const notyf = new Notyf({
     duration: 2000,
     position: {
@@ -59,11 +59,12 @@ const SendCoachEmailOTP: React.FC = () => {
     ],
   });
 
+  
+
   const [email, setEmail] = useState("");
-  const [passkey, setPasskey] = useState("");
   const [verificationCode, setVerificationCode] = useState<string[]>(Array(6).fill(""));
-  const [sendOTP, { loading: loadingSendOTP, error: errorSendOTP }] = useMutation(SEND_COACH_EMAIL_OTP);
-  const [verifyOTP, { loading: loadingVerifyOTP, error: errorVerifyOTP }] = useMutation(VERIFY_COACH_EMAIL_OTP);
+  const [sendOTP, { loading: loadingSendOTP, error: errorSendOTP }] = useMutation(REGISTER_STUDENT);
+  const [verifyOTP, { loading: loadingVerifyOTP, error: errorVerifyOTP }] = useMutation(VERIFY_STUDENT_EMAIL_OTP);
   const [showOTPForm, setShowOTPForm] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -79,8 +80,8 @@ const SendCoachEmailOTP: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !passkey) {
-      notyf.error("Please fill all fields!");
+    if (!email) {
+      notyf.error("Please enter your email!");
       return;
     }
 
@@ -88,26 +89,24 @@ const SendCoachEmailOTP: React.FC = () => {
       const response = await sendOTP({
         variables: {
           input: {
-            OTPInputs: {
-              purpose: "REGISTER",
-              email: email,
-            },
-            passkey: passkey,
+            email: email,
+            purpose: "REGISTER",
           },
         },
       });
 
-      if (response.data?.sendCoachEmailOTP.status) {
-        notyf.success("Email sent successfully");
+      if (response.data?.sendStudentEmailOTP.status) {
+        notyf.success("OTP sent successfully");
         setShowOTPForm(true);
       } else {
-        notyf.error(response.data?.sendCoachEmailOTP.message || "Error occurred");
+        notyf.error(response.data?.sendStudentEmailOTP.message || "Error occurred");
       }
     } catch (err) {
       console.error("Error:", err);
       notyf.error("An error occurred.");
     }
   };
+  
 
   const handleVerificationCodeChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newCode = [...verificationCode];
@@ -140,20 +139,19 @@ const SendCoachEmailOTP: React.FC = () => {
         },
       });
 
-      if (response.data?.verifyCoachEmailOTP.status) {
+      if (response.data?.verifyEmailOTP.status) {
         notyf.success("Email verified successfully");
-        localStorage.setItem("tempToken", response.data.verifyCoachEmailOTP.token);
+        localStorage.setItem("tempToken", response.data.verifyEmailOTP.token);
         localStorage.setItem("email", email);
-        window.location.href = "/coach/success";
+        window.location.href = "/student/success";
       } else {
-        notyf.error(response.data?.verifyCoachEmailOTP.message || "Error occurred");
+        notyf.error(response.data?.verifyEmailOTP.message || "Error occurred");
       }
     } catch (err) {
       console.error("Error:", err);
       notyf.error("An error occurred.");
     }
   };
-
   return (
     <div className="send-otp-container" style={{ backgroundColor: "white" }}>
       <div
@@ -182,17 +180,6 @@ const SendCoachEmailOTP: React.FC = () => {
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-
-                <div className="input-group">
-                  <input
-                    type="text"
-                    id="passkey"
-                    className="input-field"
-                    placeholder="Passkey"
-                    value={passkey}
-                    onChange={(e) => setPasskey(e.target.value)}
                   />
                 </div>
 
@@ -236,4 +223,4 @@ const SendCoachEmailOTP: React.FC = () => {
   );
 };
 
-export default SendCoachEmailOTP;
+export default SendStudentEmailOTP;
