@@ -92,7 +92,7 @@
 @media (max-width: 767px) {
   .welcome-text {
     text-align: left; 
-    margin-bottom: -60px;
+    margin-bottom: 20px;
     margin-left: 0;
   }
 
