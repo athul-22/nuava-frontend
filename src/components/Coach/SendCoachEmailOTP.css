@@ -3,6 +3,7 @@
   display: flex;
   background-size: cover;
   background-position: center;
+
 }
 
 .left-column {
@@ -81,7 +82,6 @@
   .form-container {
     position: relative;
     width: 500px; 
-   
   }
 
   .welcome-text {
@@ -158,6 +158,7 @@
   border: none;
   margin-top: 20px;
   transition: background-color 0.3s;
+  margin-bottom: -50px;
 }
 
 .submit-button:hover {
@@ -195,6 +196,7 @@
   align-items: center;
   flex-wrap: wrap;
   margin-top: 30px;
+  
 }
 
 .verification-code-input {
