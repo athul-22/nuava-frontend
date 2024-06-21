@@ -1,0 +1,341 @@
+.navbar {
+    background-color: #051da0;
+    display: inline-block;
+    margin: 20px;
+    border-radius: 50px;
+    height: 70px;
+    width: 98%;
+    overflow-x: hidden;
+  }
+  
+  .navbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 20px;
+    margin-top: -5px;
+  }
+  .profile-icon {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profile-icon-svg {
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .profile-icon-svg svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Text styles */
+  .sport-type-text {
+    margin-left: 16px;
+    color: white;
+  }
+  
+  .sport-type-text .light-text {
+    font-weight: 300;
+    font-size: 14px;
+  }
+  
+  .sport-type-text .medium-text {
+    font-weight: 500;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .medium-text svg {
+    margin-left: 8px;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Center section styles */
+  .center-menu {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    margin-right: -400px;
+  }
+  
+  .center-menu span {
+    color: white;
+    font-size: 18px;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+    cursor: pointer;
+  }
+  
+  .center-menu span:hover {
+    opacity: 1;
+  }
+  
+  /* Right section styles */
+  .right-section {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+    background-color: transparent;
+  }
+  
+  .new-tournament-button {
+    background-color: white;
+    color: #051da0;
+    font-weight: 500;
+    font-size: 18px;
+    border-radius: 25px;
+    padding: 8px 24px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .new-tournament-button:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .new-tournament-button svg {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Notification Bell Icon styles */
+  .notification-icon {
+    width: 34px;
+    height: 34px;
+    color: #000000;
+    background-color: white;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  /* Menu Icon for Mobile styles */
+  .menu-icon {
+    width: 24px;
+    height: 24px;
+    color: white;
+    display: none;
+    cursor: pointer;
+  }
+  
+  /* Popup styles */
+  .popup-container {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .popup-content {
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Sidebar styles */
+  .sidebar-menu {
+    padding: 16px;
+  }
+  
+  .sidebar-menu h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #051da0;
+  }
+  
+  .sidebar-menu ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar-menu ul li {
+    padding: 12px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .sidebar-menu ul li:last-child {
+    border-bottom: none;
+  }
+  
+  .sidebar-menu ul li a {
+    color: #051da0;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s;
+  }
+  
+  .sidebar-menu ul li a:hover {
+    color: #0a2ed1;
+  }
+  
+  .sidebar-menu .new-tournament-button {
+    width: 100%;
+    justify-content: center;
+    margin: 16px 0 0 0;
+  }
+
+  .icon{
+    height: 30px;
+    width: 50px;
+    cursor: pointer;
+  }
+  
+  /* Media Queries */
+  @media (max-width: 1024px) {
+    .navbar {
+      margin: 10px;
+      border-radius: 25px;
+    }
+  
+    .center-menu {
+      gap: 20px;
+    }
+  
+    .center-menu span {
+      font-size: 16px;
+    }
+  
+    .new-tournament-button {
+      font-size: 16px;
+      padding: 6px 16px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+
+    
+    .navbar {
+      padding: 12px;
+      margin: 20px;
+      width: 100px;
+    }
+  
+    .navbar-content {
+      flex-wrap: inherit;
+      margin-top: -12px;
+      margin-left: -20px;
+    }
+  
+    .center-menu {
+      display: none;
+    }
+  
+    .menu-icon {
+      display: block;
+      height: 30px;
+      width: 30px;
+      
+    }
+  
+    .new-tournament-button {
+      display: none;
+    }
+  
+    .right-section {
+      display: inline-flex;
+      justify-content: flex-end;
+      width: 100%;
+    }
+  
+    .sport-type-text .light-text {
+      font-size: 12px;
+    }
+  
+    .sport-type-text .medium-text {
+      font-size: 20px;
+    }
+  
+    .profile-icon-svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .icon{
+        height: 18px;
+        width: 18px;
+    }
+
+    .icon-container{
+        margin-top: -10px;
+        margin-left: 110px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+
+    .icon{
+        height: 18px;
+        width: 18px;
+    }
+    .navbar {
+      border-radius: 50px;
+      width: fit-content;
+      margin: 7px;
+      height: 47px;
+      overflow-y: hidden;
+    }
+
+    .size-6{
+        height: 18px;
+        width: 18px;
+    }
+  
+    .navbar-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    .profile-icon {
+      margin-top: -10px;
+    }
+  
+    .profile-icon-svg {
+      width: 30px;
+      height: 30px;
+    }
+  
+    .sport-type-text {
+      margin-left: 8px;
+      margin-top: -3px;
+    }
+  
+    .sport-type-text .light-text {
+      font-size: 10px;
+    }
+  
+    .sport-type-text .medium-text {
+      font-size: 16px;
+      margin-top: -6px;
+      font-size: 14px;
+    }
+  
+    .notification-icon,
+    .menu-icon {
+        margin-top: -10px;
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+    }
+  }
