@@ -12,6 +12,10 @@ const Onboarding: React.FC = () => {
     window.location.href = "/student/register";
   }
 
+  const Login = () =>{
+    window.location.href = "/login";
+  } 
+
   return (
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-6 sm:py-12">
       <img
@@ -43,7 +47,7 @@ const Onboarding: React.FC = () => {
           <button onClick={coachreg}  className="bg-transparent text-black border border-black px-4 md:px-8 py-2 md:py-3 rounded-[8px] mb-4 w-full">
             Register as a Coach
           </button>
-          <div className="text-black text-me text-left font-normal mt-5">
+          <div onClick={Login} className="text-black text-me text-left font-normal mt-5 cursor-pointer">
             Already have an account? <span className="font-bold">Login</span>
           </div>
         </div>

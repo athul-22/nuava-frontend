@@ -9,6 +9,8 @@ import SuccessCoachEmail from "./components/Coach/SuccessCoachEmail";
 // import Dashboad from "./components/Dashboard";
 import SendStudentEmailOTP from "./components/Students/SendStudentEmailOTP";
 import SuccessStudentEmail from './components/Students/SuccessStudentEmail';
+import CoachLogin from "./components/Coach/CoachLogin";
+import StudentLogin from './components/Students/StudentLogin';
 
 // Set up Apollo Client
 const client = new ApolloClient({
@@ -29,10 +31,18 @@ const App: React.FC = () => {
           <Route path="/coach/register" element={<SendCoachEmailOTP />} />
           <Route path="/coach/success" element={<SuccessCoachEmail />} />
           {/* <Route path="/success-coach-email" element={<SuccessCoachEmail />} /> */}
+          <Route path="/coach/login" element={<CoachLogin />} />
 
-          {/* STUDENTS ROUTE */}
+          {/* STUDENTS ROUTES */}
           <Route path="/student/register" element={<SendStudentEmailOTP />} />
           <Route path="/student/success" element={<SuccessStudentEmail />} />
+          <Route path="/student/login" element={<StudentLogin />} />
+          {/* COMMON ROUTES */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<h1>Dashboard</h1>} />
+          <Route path="/forgotpassword" element={<h1>Forgot Password</h1>} />
+          <Route path="/resetpassword" element={<h1>Reset Password</h1>} />
+
         </Routes>
       </BrowserRouter>
     </ApolloProvider>

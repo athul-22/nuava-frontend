@@ -3,7 +3,7 @@ import { gql, useMutation } from "@apollo/client";
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
-import "../styles/Login.css";
+import "../../styles/Login.css";
 import { Toast } from 'primereact/toast';
 
 const LOGIN_COACH = gql`
@@ -25,7 +25,7 @@ const FORGOT_PASSWORD = gql`
   }
 `;
 
-const Login: React.FC = () => {
+const CoachLogin: React.FC = () => {
   const showToast = (severity: string, summary: string, detail: string) => {
     if (toast.current) {
       toast.current.show({ severity, summary, detail, life: 3000 });
@@ -202,4 +202,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default CoachLogin;
