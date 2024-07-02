@@ -2,54 +2,33 @@ import React, { useRef, useState } from "react";
 import { Menu } from "primereact/menu";
 import { Toast } from "primereact/toast";
 import { Sidebar } from "primereact/sidebar";
-import "../styles/Navbar.css";
-import { Button } from 'primereact/button';
-import { MenuItem } from 'primereact/menuitem';
+import "../../styles/Navbar.css";
 
 const Navbar: React.FC = () => {
-  const menuLeft = useRef<Menu>(null);
   const [showPopup, setShowPopup] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
+  const menuRef = useRef(null);
   const toastRef = useRef(null);
 
-  const handleFootballSelection = () => {
-    window.location.href = '/dashboard/football';
-  };
+  const handleCreateTournament = () => {
+    window.location.href = '/tournament/create';
+  }
 
   const handleCalenderSelection = () => {
     window.location.href = '/calender';
   };
 
-  const handleCreateTournament = () => {
-    window.location.href = '/tournament/create';
+  const togglePopup = () => {
+    setShowPopup(!showPopup);
   };
 
+  const closePopup = () => {
+    setShowPopup(false);
+  };
 
-  const items: MenuItem[] = [
-    {
-      label: '',
-      items: [
-        {
-          label: 'Football',
-          icon: 'pi pi-angle-right',
-          command: handleFootballSelection
-        },
-        {
-          label: 'Cricket',
-          icon: 'pi pi-angle-right'
-        },
-        {
-          label: 'Tennis',
-          icon: 'pi pi-angle-right'
-        }
-      ]
-    }
-  ];
-
-  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (menuLeft.current) {
-      menuLeft.current.toggle(event);
-    }
+  const handleOptionClick = (option: string) => {
+    alert(`Selected option: ${option}`);
+    closePopup();
   };
 
   return (
@@ -73,15 +52,27 @@ const Navbar: React.FC = () => {
           <div className="sport-type-text">
             <span className="light-text">Type of sport:</span>
             <div className="medium-text">
-              <Menu model={items} popup ref={menuLeft} id="popup_menu_left" />
-              <Button
-                label="Select"
-                icon="pi pi-angle-down"
-                className="mr-2"
-                onClick={handleButtonClick}
-                aria-controls="popup_menu_left"
-                aria-haspopup
-              />
+              <p style={{fontSize:'20px'}}>Football</p>
+
+              {/* <Select
+                  label="Sport Type"
+                  placeholder="Football"
+                  data={['Football']}
+                /> */}
+              {/* <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="cursor-pointer"
+                // onClick={togglePopup}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                />
+              </svg> */}
             </div>
           </div>
         </div>
@@ -135,7 +126,7 @@ const Navbar: React.FC = () => {
               />
             </svg>
 
-            {/* CALENDAR */}
+            {/* CALENDER */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

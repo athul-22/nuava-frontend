@@ -14,7 +14,7 @@
     justify-content: space-between;
     width: 100%;
     padding: 0 20px;
-    margin-top: -5px;
+    margin-top: 10px;
   }
   .profile-icon {
     display: flex;
@@ -66,7 +66,7 @@
     display: flex;
     align-items: center;
     gap: 50px;
-    margin-right: -400px;
+    margin-right: -200px;
   }
   
   .center-menu span {
@@ -82,10 +82,10 @@
   }
   
   /* Right section styles */
-  .right-section {
+  .right-section-navbar {
     display: flex;
     align-items: center;
-    flex-direction: row;
+  
     gap: 20px;
     background-color: transparent;
   }
@@ -196,8 +196,9 @@
   }
 
   .icon{
-    height: 30px;
-    width: 50px;
+    height: 45px;
+    width: 45px;
+    padding-left: 20px;
     cursor: pointer;
   }
   
@@ -224,17 +225,25 @@
   
   @media (max-width: 768px) {
 
+    body{
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+    
+    }
     
     .navbar {
       padding: 12px;
       margin: 20px;
-      width: 100px;
+      width: 96%;
+      height: 60px;
     }
   
     .navbar-content {
       flex-wrap: inherit;
-      margin-top: -12px;
+      margin-top: 1px;
       margin-left: -20px;
+
     }
   
     .center-menu {
@@ -243,8 +252,8 @@
   
     .menu-icon {
       display: block;
-      height: 30px;
-      width: 30px;
+      /* height: 30px;
+      width: 30px; */
       
     }
   
@@ -263,7 +272,7 @@
     }
   
     .sport-type-text .medium-text {
-      font-size: 20px;
+      font-size: 17px;
     }
   
     .profile-icon-svg {
@@ -278,10 +287,12 @@
 
     .icon-container{
         margin-top: -10px;
-        margin-left: 110px;
+        margin-left: 100px;
     }
   }
   
+
+
   @media (max-width: 480px) {
 
     .icon{
@@ -290,9 +301,10 @@
     }
     .navbar {
       border-radius: 50px;
-      width: fit-content;
+      /* width: fit-content; */
       margin: 7px;
-      height: 47px;
+      height: 50px;
+
       overflow-y: hidden;
     }
 
@@ -305,6 +317,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      /* width: 90%; */
+      margin-top: 5px;
+      /* margin: 5px; */
     }
   
     .profile-icon {
@@ -326,7 +341,7 @@
     }
   
     .sport-type-text .medium-text {
-      font-size: 16px;
+      font-size: 12px;
       margin-top: -6px;
       font-size: 14px;
     }

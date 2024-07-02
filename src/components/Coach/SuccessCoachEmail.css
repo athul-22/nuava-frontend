@@ -88,9 +88,9 @@
 .right-section {
   margin-left: 100px;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   justify-content: center;
-  width: 30%;
+  width: 60%;
   background-color: white;
   padding: 20px;
   box-sizing: border-box;
@@ -145,7 +145,7 @@
 }
 
 .complete-button:hover {
-  background-color: #003a9c;
+  background-color: #051da0;
 }
 
 .footer-image-mobile-only {
@@ -168,7 +168,7 @@
     width: 70px;
   }
   body {
-    background-color: #003a9c;
+    background-color: #051da0;
   }
 
   .left-text{

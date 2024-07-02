@@ -12,6 +12,11 @@ import SuccessStudentEmail from './components/Students/SuccessStudentEmail';
 import CoachLogin from "./components/Coach/CoachLogin";
 import StudentLogin from './components/Students/StudentLogin';
 import Dashboard from './components/Dashboard'
+import NewTournament from './components/NewTournament'
+import FootballDashboard from './components/Football/FootballDashboard'
+import Calender from "./components/Calender";
+import URLPage from "./components/URLPage";
+
 
 // Set up Apollo Client
 const client = new ApolloClient({
@@ -43,7 +48,10 @@ const App: React.FC = () => {
           <Route path="/dashboard" element={<Dashboard/>} />
           <Route path="/forgotpassword" element={<h1>Forgot Password</h1>} />
           <Route path="/resetpassword" element={<h1>Reset Password</h1>} />
-
+          <Route path="/tournament/create" element={<NewTournament />} />
+          <Route path="/dashboard/football" element={<FootballDashboard />} />
+          <Route path="/calender" element={<Calender />} />
+          <Route path="/urls" element={<URLPage />} />
         </Routes>
       </BrowserRouter>
     </ApolloProvider>

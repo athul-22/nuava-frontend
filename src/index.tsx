@@ -5,6 +5,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { MantineProvider } from '@mantine/core';
+import 'primereact/resources/themes/saga-blue/theme.css';  
+import 'primereact/resources/primereact.min.css';        
+import 'primeicons/primeicons.css';                      
+
 
 const theme = createTheme({
   // Customize your theme here if needed
@@ -16,10 +21,12 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
+    <MantineProvider>
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <App />
     </ThemeProvider>
+    </MantineProvider>
   </React.StrictMode>
 );
 
