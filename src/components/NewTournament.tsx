@@ -15,7 +15,7 @@ import { IconField } from "primereact/iconfield";
 import { InputIcon } from "primereact/inputicon";
 import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+// import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 // import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 // import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 // import { TimePicker } from "@mui/x-date-pickers/TimePicker";
@@ -30,6 +30,7 @@ import {
   TimePicker,
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AutoComplete } from 'primereact/autocomplete';
 // import TextField from '@mui/material/TextField';
 // import { Dayjs } from 'dayjs';
 
@@ -43,8 +44,8 @@ interface Student {
 }
 
 interface YourSchoolType {
-  code: string;
   name: string;
+  code: string;
 }
 
 interface TournamentDay {
@@ -59,7 +60,13 @@ interface IntervalField {
   endTime: Dayjs | null;
 }
 
+interface YourSchoolType {
+  name: string;
+  code: string;
+}
+
 const NewTournament: React.FC = () => {
+  
   type Severity = "success" | "info" | "warn" | "error";
 
   const showToast = (severity: Severity, summary: string, detail: string) => {
@@ -68,33 +75,137 @@ const NewTournament: React.FC = () => {
     }
   };
 
+  const [schools, setSchools] = useState<YourSchoolType[]>([
+    { name: "School 1", code: "u" },
+    { name: "School 2", code: "v" },
+    { name: "School 3", code: "w" },
+    { name: "School 4", code: "x" },
+  ]);
+
+
   const toast = useRef<Toast>(null);
   const stepperRef = useRef<any>(null);
   const [teamDialogVisible, setTeamDialogVisible] = useState(false);
   const [chipsValue, setChipsValue] = useState<string[]>([]);
   // const [dates, setDates] = useState<Date[]>([]);
   const [selectedGender, setSelectedGender] = useState(null);
-  const [selectedSchool, setSelectedSchool] = useState(null);
-  const [students, setStudents] = useState<Student[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedSchool, setSelectedSchool] = useState<YourSchoolType | null>(null);
+    const [searchTerm, setSearchTerm] = useState("");
   const [selectedStudents, setSelectedStudents] = useState<Student[]>([]);
   const [teams, setTeams] = useState<{ name: string; students: Student[] }[]>(
     []
   );
   const [teamName, setTeamName] = useState("");
-  const [selectedSchoolsList, setSelectedSchoolsList] = useState<
-    YourSchoolType[]
-  >([]);
+  const [selectedSchoolsList, setSelectedSchoolsList] = useState<YourSchoolType[]>([]);
   const [tournamentName, setTournamentName] = useState("");
   const [location, setLocation] = useState("");
   const [matchDuration, setMatchDuration] = useState("");
   const [intervalBetweenMatches, setIntervalBetweenMatches] = useState("");
   const [tournamentDays, setTournamentDays] = useState<TournamentDay[]>([]);
+  
+  const [userSchool, setUserSchool] = useState<YourSchoolType | null>(null);
+  const [filteredSchools, setFilteredSchools] = useState<YourSchoolType[]>([]);
+
+  const [students, setStudents] = useState<Student[]>([]);
+
+  const [selectedSchools, setSelectedSchools] = useState<YourSchoolType[]>([]);
 
   // const [intervalFields, setIntervalFields] = useState([]);
   // const [intervalFields, setIntervalFields] = useState<IntervalField[]>([]);
   const [dates, setDates] = useState<Date[]>([]);
   const [intervalFields, setIntervalFields] = useState<IntervalField[]>([]);
+
+  const searchSchool = (event: { query: string }) => {
+    let filtered: YourSchoolType[];
+    if (!event.query.trim().length) {
+      filtered = schools.filter((school: YourSchoolType) => 
+        !selectedSchools.some((selected: YourSchoolType) => selected.code === school.code)
+      );
+    } else {
+      filtered = schools.filter((school: YourSchoolType) => 
+        school.name.toLowerCase().startsWith(event.query.toLowerCase()) &&
+        !selectedSchools.some((selected: YourSchoolType) => selected.code === school.code)
+      );
+    }
+    
+    if (filtered.length === 0) {
+      filtered.push({ name: `Add "${event.query}" as a new school`, code: 'new' });
+    }
+    
+    setFilteredSchools(filtered);
+  };
+
+  // const onSchoolSelect = (e: { value: YourSchoolType }) => {
+  //   if (e.value.code === 'new') {
+  //     // Add new school
+  //     const newSchoolName = e.value.name.replace('Add "', '').replace('" as a new school', '');
+  //     const newSchool: YourSchoolType = { name: newSchoolName, code: `new-${Date.now()}` };
+  //     setSchools(prevSchools => [...prevSchools, newSchool]);
+  //     setSelectedSchools(prevSelected => [...prevSelected, newSchool]);
+  //   } else {
+  //     // Add existing school if not already selected
+  //     if (!selectedSchools.some((school: YourSchoolType) => school.code === e.value.code)) {
+  //       setSelectedSchools(prevSelected => [...prevSelected, e.value]);
+  //     }
+  //   }
+  //   // Clear the selection after adding
+  //   setSelectedSchool(null);
+  // };
+
+
+  const onSchoolSelect = (e: { value: YourSchoolType }) => {
+    if (e.value.code === 'new') {
+      // Add new school
+      const newSchoolName = e.value.name.replace('Add "', '').replace('" as a new school', '');
+      const newSchool: YourSchoolType = { name: newSchoolName, code: `new-${Date.now()}` };
+      setSchools(prevSchools => [...prevSchools, newSchool]);
+      setSelectedSchools(prevSelected => [...prevSelected, newSchool]);
+    } else {
+      // Add existing school if not already selected
+      setSelectedSchools(prevSelected => {
+        if (!prevSelected.some(school => school.code === e.value.code)) {
+          return [...prevSelected, e.value];
+        }
+        return prevSelected;
+      });
+    }
+    // Clear the selection after adding
+    setSelectedSchool(null);
+  };
+
+  useEffect(() => {
+    const email = localStorage.getItem('email');
+    if (email) {
+      const domain = email.split('@')[1];
+      let school: YourSchoolType | null = null;
+      
+      switch (domain) {
+        case 'school1.com':
+          school = schools.find(s => s.name === 'School 1') || null;
+          break;
+        case 'school2.com':
+          school = schools.find(s => s.name === 'School 2') || null;
+          break;
+        case 'school3.com':
+          school = schools.find(s => s.name === 'School 3') || null;
+          break;
+        case 'school4.com':
+          school = schools.find(s => s.name === 'School 4') || null;
+          break;
+      }
+      
+      if (school) {
+        setUserSchool(school);
+        setSelectedSchools(prevSelected => {
+          const schoolToAdd: YourSchoolType = school!; // Use non-null assertion here
+          if (!prevSelected.some(s => s.code === schoolToAdd.code)) {
+            return [...prevSelected, schoolToAdd];
+          }
+          return prevSelected;
+        });
+      }
+    }
+  }, [schools]);
 
   const generateIntervalFields = (startDate: Dayjs, endDate: Dayjs) => {
     const fields: IntervalField[] = [];
@@ -149,13 +260,8 @@ const NewTournament: React.FC = () => {
     { name: "Girls", code: "g" },
   ];
 
-  const schools = [
-    { name: "School 1", code: "u" },
-    { name: "School 2", code: "v" },
-    { name: "School 1", code: "w" },
-    { name: "School 2", code: "x" },
-  ];
-
+  
+  
   useEffect(() => {
     const fetchStudents = async () => {
       const token = localStorage.getItem("token");
@@ -222,7 +328,7 @@ const NewTournament: React.FC = () => {
   //   student.name.toLowerCase().includes(searchTerm.toLowerCase())
   // );
 
-  const filteredStudents = (students || []).filter((student) =>
+  const filteredStudents = students.filter((student: Student) =>
     student.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -253,20 +359,26 @@ const NewTournament: React.FC = () => {
           field.startTime !== null && field.endTime !== null
         )
         .map((field) => ({
-          date: field.date.startOf("day").toISOString(),
+          date: field.date.startOf('day').toISOString(),
           startTime: field.startTime.toISOString(),
           endTime: field.endTime.toISOString(),
         })),
       matchDuration: parseInt(matchDuration),
-      participatingSchoolNames: selectedSchoolsList.map(
-        (school) => school.name
-      ),
+      participatingSchoolNames: selectedSchoolsList.map((school) => school.name),
     };
   };
+
+  
   const handleSubmit = async () => {
     const token = localStorage.getItem("token");
     const input = prepareCreateTournamentInput();
     console.log("Tournament input:", input);
+
+    if (!input.name || !input.location || input.tournamentDays.length === 0 || 
+      !input.matchDuration || input.participatingSchoolNames.length === 0) {
+    showToast("error", "Error", "Please fill all required fields");
+    return;
+    }
 
     try {
       const response = await fetch("http://localhost:3000/graphql", {
@@ -396,6 +508,7 @@ const NewTournament: React.FC = () => {
     }
   };
 
+  
   return (
     <div className="card flex flex-column justify-content-center align-items-start">
       <FootballNavbar />
@@ -607,7 +720,7 @@ const NewTournament: React.FC = () => {
           <StepperPanel header="School Details">
             <div className="flex flex-column">
               <div className="p-fluid">
-                <Dropdown
+                {/* <Dropdown
                   value={selectedSchool}
                   onChange={(e) => {
                     setSelectedSchool(e.value);
@@ -623,30 +736,35 @@ const NewTournament: React.FC = () => {
                   optionLabel="name"
                   placeholder="Select a School"
                   className="input-box-pr-select"
-                />
+                /> */}
+                <AutoComplete
+  value={selectedSchool}
+  suggestions={filteredSchools}
+  completeMethod={searchSchool}
+  field="name"
+  dropdown
+  forceSelection
+  onChange={(e) => setSelectedSchool(e.value)}
+  onSelect={onSchoolSelect}
+  placeholder="Select or add a School"
+  className="input-box-pr-select"
+/>
 
-                <div
-                  className="selected-schools-container"
-                  style={{ marginTop: "20px", width: "480px" }}
-                >
-                  <h3>Selected Schools:</h3>
-                  {selectedSchoolsList.map((school, index) => (
-                    <div key={index} className="selected-school">
-                      <span>{school.name}</span>
-                      <Button
-                        icon="pi pi-times"
-                        className="p-button-rounded p-button-danger p-ml-2 "
-                        onClick={() =>
-                          setSelectedSchoolsList(
-                            selectedSchoolsList.filter(
-                              (s) => s.code !== school.code
-                            )
-                          )
-                        }
-                      />
-                    </div>
-                  ))}
-                </div>
+<div className="selected-schools-container" style={{ marginTop: "20px", width: "590px" }}>
+  <h3>Selected Schools:</h3>
+  {selectedSchools.map((school: YourSchoolType, index: number) => (
+    <div key={index} className="selected-school">
+      <span>{school.name}</span>
+      <Button
+        icon="pi pi-times"
+        className="p-button-rounded p-button-danger p-ml-2"
+        onClick={() => setSelectedSchools(prevSelected => 
+          prevSelected.filter((s: YourSchoolType) => s.code !== school.code)
+        )}
+      />
+    </div>
+  ))}
+</div>
 
                 <br className="brbr" />
                 <Dropdown
@@ -777,6 +895,7 @@ const NewTournament: React.FC = () => {
                                 outline: "none",
                                 borderRadius: "20px",
                                 width: "220px",
+                                marginLeft:'160px'
                               }}
                             />
                           </div>

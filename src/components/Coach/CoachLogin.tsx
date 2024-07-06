@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { gql, useMutation } from "@apollo/client";
-import { Button } from 'primereact/button';
-import { Dialog } from 'primereact/dialog';
-import { InputText } from 'primereact/inputtext';
+import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
+import { InputText } from "primereact/inputtext";
 import "../../styles/Login.css";
-import { Toast } from 'primereact/toast';
+import { Toast } from "primereact/toast";
 
 const LOGIN_COACH = gql`
   mutation LoginCoach($input: LoginCoachInput!) {
@@ -51,9 +51,81 @@ const CoachLogin: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  async function fetchDetails() {
+    const query = `
+      query {
+        coach {
+          email
+          id
+          name
+          phone
+          schoolID
+        }
+      }`;
+  
+    const headers = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`,
+    };
+  
+    try {
+      const response = await fetch("http://localhost:3000/graphql", {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({ query: query }),
+      });
+  
+      if (!response.ok) {
+        console.error("Network response was not ok:", response.statusText);
+        throw new Error("Network response was not ok");
+      }
+  
+      const data = await response.json();
+      console.log("Fetched coach details:", data); // Log the fetched data
+      return data;
+    } catch (err) {
+      console.error("Error fetching coach details:", err);
+      throw err;
+    }
+  }
+  
+  
+
+  // const handleLogin = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const response = await loginCoach({
+  //       variables: {
+  //         input: {
+  //           email: email,
+  //           password: password,
+  //         },
+  //       },
+  //     });
+
+  //     if (response.data?.loginCoach.status) {
+  //       localStorage.setItem("token", response.data.loginCoach.token);
+  //       showToast("success", "Login Successful", "Redirecting to dashboard...");
+
+  //       // window.location.href = "/dashboard";
+  //     } else {
+  //       showToast(
+  //         "error",
+  //         "Login Failed",
+  //         response.data?.loginCoach.message || "Error occurred during login"
+  //       );
+  //     }
+  //   } catch (err) {
+  //     console.error("Error:", err);
+  //     showToast("error", "Error", "An error occurred during login.");
+  //   }
+  // };
+
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     try {
       const response = await loginCoach({
         variables: {
@@ -63,23 +135,47 @@ const CoachLogin: React.FC = () => {
           },
         },
       });
-
+  
       if (response.data?.loginCoach.status) {
+        // Store the token in local storage
         localStorage.setItem("token", response.data.loginCoach.token);
-        showToast('success', 'Login Successful', 'Redirecting to dashboard...');
-        window.location.href = "/dashboard";
+        showToast("success", "Login Successful", "Redirecting to dashboard...");
+        
+        // Fetch coach details
+        const coachDetails = await fetchDetails();
+  
+        if (coachDetails?.data?.coach) {
+          // Store coach details in local storage
+          const { name, phone, email, id, schoolID } = coachDetails.data.coach;
+          localStorage.setItem("name", name);
+          localStorage.setItem("mobile", phone);
+          localStorage.setItem("email", email);
+          localStorage.setItem("id", id.toString());
+          localStorage.setItem("schoolID", schoolID);
+  
+          // Redirect to dashboard
+          window.location.href = "/dashboard";
+        } else {
+          showToast("error", "Error", "Failed to fetch coach details");
+        }
       } else {
-        showToast('error', 'Login Failed', response.data?.loginCoach.message || 'Error occurred during login');
+        showToast(
+          "error",
+          "Login Failed",
+          response.data?.loginCoach.message || "Error occurred during login"
+        );
       }
     } catch (err) {
       console.error("Error:", err);
-      showToast('error', 'Error', 'An error occurred during login.');
+      showToast("error", "Error", "An error occurred during login.");
     }
   };
+  
+  
 
   const createNewAccount = () => {
     window.location.href = "/coach/register";
-  }
+  };
 
   const handleForgotPasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,26 +190,31 @@ const CoachLogin: React.FC = () => {
       });
 
       if (response.data?.forgotPassword.status) {
-        showToast('success', 'Success', response.data.forgotPassword.message);
+        showToast("success", "Success", response.data.forgotPassword.message);
       } else {
-        showToast('error', 'Error', response.data?.forgotPassword.message || 'Failed to reset password');
+        showToast(
+          "error",
+          "Error",
+          response.data?.forgotPassword.message || "Failed to reset password"
+        );
         setModalOpen(true);
       }
     } catch (err) {
-      
       console.error("Error:", err);
-      showToast('error', 'Error', 'An error occurred while resetting password');
+      showToast("error", "Error", "An error occurred while resetting password");
     }
 
     setModalOpen(false);
   };
 
-  
-
   return (
     <div className="login-container-coach-login">
       <div className="left-column-coach-login"></div>
-      <div className={`right-column-coach-login ${isMobile ? 'mobile-container-coach-login' : ''}`}>
+      <div
+        className={`right-column-coach-login ${
+          isMobile ? "mobile-container-coach-login" : ""
+        }`}
+      >
         <div className="welcome-container-coach-login">
           <div className="welcome-text-coach-login">
             <p className="welcome-subtitle-coach-login">Welcome to</p>
@@ -141,13 +242,26 @@ const CoachLogin: React.FC = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              <div className="forgot-password-coach-login" onClick={() => setModalOpen(true)}>
+              <div
+                className="forgot-password-coach-login"
+                onClick={() => setModalOpen(true)}
+              >
                 <span>Forgot password?</span>
               </div>
-              <Button type="submit" label={loading ? "Logging in..." : "Login"} className="submit-button-coach-login" disabled={loading} />
+              <Button
+                type="submit"
+                label={loading ? "Logging in..." : "Login"}
+                className="submit-button-coach-login"
+                disabled={loading}
+              />
               <div className="new-account-coach-login">
                 <span style={{ color: "grey" }}>New here?</span>{" "}
-                <span onClick={createNewAccount} className="create-account-coach-login">Create an account</span>
+                <span
+                  onClick={createNewAccount}
+                  className="create-account-coach-login"
+                >
+                  Create an account
+                </span>
               </div>
             </form>
           </div>
@@ -158,8 +272,8 @@ const CoachLogin: React.FC = () => {
         header="Forgot Password"
         visible={modalOpen}
         onHide={() => setModalOpen(false)}
-        style={{ width: '30vw', borderRadius: '20px' }}
-        breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+        style={{ width: "30vw", borderRadius: "20px" }}
+        breakpoints={{ "960px": "75vw", "641px": "100vw" }}
         draggable={false}
       >
         <form onSubmit={handleForgotPasswordSubmit} className="p-fluid">
@@ -172,11 +286,11 @@ const CoachLogin: React.FC = () => {
               onChange={(e) => setForgotPasswordEmail(e.target.value)}
               required
               style={{
-                border: '1px solid #ced4da',
-                height: '60px',
-                fontSize: '18px',
-                paddingLeft: '10px',
-                outline: 'none',
+                border: "1px solid #ced4da",
+                height: "60px",
+                fontSize: "18px",
+                paddingLeft: "10px",
+                outline: "none",
               }}
               className="custom-input"
             />
@@ -187,11 +301,11 @@ const CoachLogin: React.FC = () => {
             label="Submit"
             className="p-mt-2"
             style={{
-              marginTop: '20px',
-              height: '60px',
-              backgroundColor: 'black',
-              fontSize: '18px',
-              color: 'white',
+              marginTop: "20px",
+              height: "60px",
+              backgroundColor: "black",
+              fontSize: "18px",
+              color: "white",
             }}
           />
         </form>

@@ -1,29 +1,49 @@
 import React, { useRef, useState } from "react";
 import { Menu } from "primereact/menu";
-import { Toast } from "primereact/toast";
 import { Sidebar } from "primereact/sidebar";
+import { Button } from "primereact/button";
+import { classNames } from "primereact/utils";
+import { Avatar } from "primereact/avatar";
+import { Toast } from "primereact/toast";
+import { MenuItem } from "primereact/menuitem";
 import "../styles/Navbar.css";
-import { Button } from 'primereact/button';
-import { MenuItem } from 'primereact/menuitem';
 
 const Navbar: React.FC = () => {
   const menuLeft = useRef<Menu>(null);
+  const profileMenu = useRef<Menu>(null);
   const [showPopup, setShowPopup] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
-  const toastRef = useRef(null);
+  const toastRef = useRef<Toast>(null);
+
+  const [selectedSport, setSelectedSport] = useState<string>(
+    localStorage.getItem("selectedSport") || "Select"
+  );
 
   const handleFootballSelection = () => {
-    window.location.href = '/dashboard/football';
+    
+    setSelectedSport("Football");
+    localStorage.setItem("selectedSport", "Football");
+    window.location.href = "/dashboard/football";
+  };
+
+  const handleInterHouseSelection = () => {
+    setSelectedSport('Inter-House Matches');
+    localStorage.setItem('selectedSport', 'Inter-House Matches');
+    
   };
 
   const handleCalenderSelection = () => {
-    window.location.href = '/calender';
+    window.location.href = "/calender";
   };
 
   const handleCreateTournament = () => {
-    window.location.href = '/tournament/create';
+    window.location.href = "/tournament/create";
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "http://localhost:3001";
+  };
 
   const items: MenuItem[] = [
     {
@@ -35,19 +55,154 @@ const Navbar: React.FC = () => {
           command: handleFootballSelection
         },
         {
-          label: 'Cricket',
-          icon: 'pi pi-angle-right'
+          label: 'Inter-House Matches',
+          icon: 'pi pi-angle-right',
+          command: handleInterHouseSelection
         },
-        {
-          label: 'Tennis',
-          icon: 'pi pi-angle-right'
-        }
       ]
     }
   ];
 
-  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (menuLeft.current) {
+  const user_name = localStorage.getItem("name");
+
+  const Profileitems: MenuItem[] = [
+    {
+      command: () => {
+        toastRef.current?.show({
+          severity: "info",
+          summary: "Info",
+          detail: "Item Selected",
+          life: 3000,
+        });
+      },
+      template: (item: MenuItem, options: any) => {
+        return (
+          <button
+            onClick={(e) => options.onClick(e)}
+            className={classNames(
+              options.className,
+              "w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround"
+            )}
+            id="profile-menu-img-section"
+          >
+            <Avatar
+              image="https://img-new.cgtrader.com/items/4506145/4d6ab481d2/large/football-player-avatar-3d-icon-3d-model-4d6ab481d2.jpg"
+              className="mr-20"
+              shape="circle"
+              id="proile-menu-avatar"
+            />
+
+            <div className="flex flex-column align">
+              <span className="font-bold" id="profile-menu-name">
+                {user_name}
+              </span>{" "}
+              <br></br>
+              {/* <span className="text-sm" id="profile-menu-email">email id</span> */}
+              <button id="profile-menu-profile-button">View Profile</button>
+            </div>
+          </button>
+        );
+      },
+    },
+    {
+      separator: true,
+    },
+    {
+      label: "Saved",
+      icon: "pi pi-bookmark",
+      template: (item: MenuItem, options: any) => {
+        return (
+          <>
+            <hr className="my-4" />
+            <button
+              onClick={(e) => options.onClick(e)}
+              className={classNames(
+                options.className,
+                "w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround"
+              )}
+              id="profile-button"
+              style={{ marginTop: "10px" }}
+            >
+              <i
+                className={classNames("pi pi pi-bookmark mr-2", {
+                  "text-primary": options.selected,
+                })}
+                style={{ color: "black", marginRight: "10px" }}
+              ></i>
+              <span>Saved</span>
+            </button>
+          </>
+        );
+      },
+    },
+    {
+      label: "Settings",
+      icon: "pi pi-cog",
+      template: (item: MenuItem, options: any) => {
+        return (
+          <>
+            <button
+              onClick={(e) => options.onClick(e)}
+              className={classNames(
+                options.className,
+                "w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround"
+              )}
+              id="profile-button"
+              style={{ marginBottom: "10px" }}
+            >
+              <i
+                className={classNames("pi pi-cog mr-2", {
+                  "text-primary": options.selected,
+                })}
+                style={{ color: "black", marginRight: "10px" }}
+              ></i>
+              <span>Settings</span>
+            </button>
+          </>
+        );
+      },
+    },
+    {
+      label: "Logout",
+      icon: "pi pi-sign-out",
+      command: handleLogout,
+      template: (item: MenuItem, options: any) => {
+        return (
+          <>
+            <hr className="my-4" />
+            <button
+              onClick={(e) => options.onClick(e)}
+              className={classNames(
+                options.className,
+                "w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround"
+              )}
+              id="logout-button"
+            >
+              <i
+                className={classNames("pi pi-sign-out mr-2", {
+                  "text-primary": options.selected,
+                })}
+                style={{
+                  color: "red",
+                  marginRight: "10px",
+                  paddingLeft: "4px",
+                }}
+              ></i>
+              <span>Logout</span>
+            </button>
+          </>
+        );
+      },
+    },
+  ];
+
+  const handleButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement | SVGSVGElement, MouseEvent>,
+    menuType: "profile" | "sport"
+  ) => {
+    if (menuType === "profile" && profileMenu.current) {
+      profileMenu.current.toggle(event);
+    } else if (menuType === "sport" && menuLeft.current) {
       menuLeft.current.toggle(event);
     }
   };
@@ -55,13 +210,20 @@ const Navbar: React.FC = () => {
   return (
     <div className="navbar">
       <div className="navbar-content">
-        {/* Left section with profile icon and text */}
+        <Menu
+          model={Profileitems}
+          popup
+          ref={profileMenu}
+          id="popup_menu_profile"
+          style={{ marginTop: "100px" }}
+        />
         <div className="profile-icon">
-          <div className="profile-icon-svg">
+          <div className="profile-icon-svg" aria-controls="popup_menu_profile">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="#051da0"
+              onClick={(event) => handleButtonClick(event, "profile")}
             >
               <path
                 fillRule="evenodd"
@@ -75,10 +237,10 @@ const Navbar: React.FC = () => {
             <div className="medium-text">
               <Menu model={items} popup ref={menuLeft} id="popup_menu_left" />
               <Button
-                label="Select"
+                label={selectedSport}
                 icon="pi pi-angle-down"
                 className="mr-2"
-                onClick={handleButtonClick}
+                onClick={(event) => handleButtonClick(event, "sport")}
                 aria-controls="popup_menu_left"
                 aria-haspopup
               />
@@ -86,7 +248,7 @@ const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Center section with selection menu */}
+        {/* Center section with navigation links */}
         <div className="center-menu">
           <span>Home</span>
           <span>Matches</span>
@@ -97,7 +259,10 @@ const Navbar: React.FC = () => {
         {/* Right section with buttons and icons */}
         <div className="right-section-navbar">
           {/* New Tournament Button */}
-          <button className="new-tournament-button" onClick={handleCreateTournament}>
+          <button
+            className="new-tournament-button"
+            onClick={handleCreateTournament}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -135,7 +300,7 @@ const Navbar: React.FC = () => {
               />
             </svg>
 
-            {/* CALENDAR */}
+            {/* Calendar Icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -205,6 +370,7 @@ const Navbar: React.FC = () => {
             <button
               className="new-tournament-button"
               style={{ backgroundColor: "blue" }}
+              onClick={handleCreateTournament}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -1,3 +1,5 @@
+
+
 /* General styling */
 .calendar-container {
     display: flex;
@@ -74,3 +76,134 @@
     }
   }
   
+
+.event-title{
+  height: 45px;
+  width: 90%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding-left: 10px;
+  margin-bottom: 10px;
+}  
+
+.event-title:focus{
+  outline: none;
+  
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+
+
+.start-date-picker{
+  height: 40px;
+  margin-left: 20px;
+  margin-top: 20px;
+  border: 1px solid #eee;
+  border-radius: 20px;
+}
+
+/* .react-datetime-picker_wrapper{
+} */
+
+.input-box-pr-calendar-cal{
+  /* max-width: 460px; */
+  width: 70%;
+  border: 1px solid silver;
+  background-color: transparent;
+  height: 55px;
+  border-radius: 4px;
+  outline: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  /* padding-left: 15px; */
+  margin-left: 20px;
+}
+
+.p-inputtext{
+  padding-left: 15px;
+  
+}
+
+.input-box-pr-calendar-cal-end{
+  width: 70%;
+  border: 1px solid silver;
+  background-color: transparent;
+  height: 55px;
+  border-radius: 4px;
+  outline: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  /* padding-left: 15px; */
+  margin-left: 30px;
+}
+
+.input-box-pr-calendar-time{
+  margin-left: 20px;
+  padding-left: 20px;
+}
+
+.cal-event-btn{
+  height: 40px;
+  width: 520px;
+  background-color: #051da0;
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+  align-items: center;
+  margin-top: 50PX;
+}
+
+.MuiInputBase-root{
+  width: 380px;
+}
+
+
+
+.large-checkbox {
+  width: 20px;
+  height: 20px;
+  
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  border-radius: 20px;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid grey;
+}
+
+.large-checkbox:checked::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  background-color: #051da0;
+
+}
+
+.cal-event-btn-edit{
+  height: 40px;
+  width: 520px;
+  background-color: #051da0;
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+  align-items: center;
+  margin-top: 10PX;
+
+}
+
+
+.cal-event-btn-del{
+  height: 40px;
+  width: 520px;
+  background-color: #d30015;
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+  align-items: center;
+  margin-top: 10PX;
+}

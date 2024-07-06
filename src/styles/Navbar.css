@@ -354,3 +354,88 @@
       cursor: pointer;
     }
   }
+
+
+  #logout-button {
+    justify-content: space-between;
+    background-color: white;
+    color: red;
+    font-size: 16px;
+    border-radius: 25px;
+    padding: 5px 24px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s, color 0.3s;
+    
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #ccc;
+
+}
+
+
+#profile-button{
+  justify-content: space-between;
+    background-color: white;
+    color: rgb(69, 69, 69);
+    font-size: 16px;
+    padding: 5px 24px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* #profile-button:hover {
+    background-color: #423f3f;
+} */
+
+#profile-menu-img-section{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px;
+}
+
+#profile-menu-logo-section{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* gap: 10px; */
+  margin: 10px;
+}
+
+
+#profile-menu-name{
+  font-size: 18px;
+  color: black;
+    padding-bottom: -10px;
+}
+
+#profile-menu-email{
+  font-size: 14px;
+  color: grey;
+  margin-top: -10px;
+}
+
+#proile-menu-avatar{
+  height: 50px;
+  width: 50px;
+}
+
+#profile-menu-profile-button{
+  font-size: 12px;
+  color: #051da0;
+  background-color: #e9ecf7;
+  padding: 5px;
+  border-radius: 10px;
+  margin-top: -50px;
+  padding-top: -30px;
+  margin-left: -5px;
+}

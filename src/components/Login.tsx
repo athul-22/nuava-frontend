@@ -26,6 +26,9 @@ const FORGOT_PASSWORD = gql`
 `;
 
 const Login: React.FC = () => {
+
+  // SETTING DASHBOARD SELECT MENU AS ""
+  localStorage.setItem("selectedSport", "Select");
   const showToast = (severity: string, summary: string, detail: string) => {
     if (toast.current) {
       toast.current.show({ severity, summary, detail, life: 3000 });

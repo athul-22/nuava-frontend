@@ -1,0 +1,36 @@
+.bracket {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .round {
+    display: flex;
+    flex-direction: column;
+    margin: 0 10px;
+  }
+  
+  .match {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  .team {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+  }
+  
+  .winner {
+    background-color: #e6ffe6; /* Light green */
+  }
+  
+  .loser {
+    background-color: #ffe6e6; /* Light red */
+  }
+  
