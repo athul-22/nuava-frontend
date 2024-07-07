@@ -369,7 +369,7 @@ const CalendarComponent: React.FC = () => {
 
   return (
     <div>
-      <Navbar />
+      <Navbar buttontext="Create Tournament"/>
       <div className="calendar-container">
         <div className="sidebar">
           <button className="create-btn" onClick={opencreateEventdialog}>

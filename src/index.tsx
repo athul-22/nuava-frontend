@@ -12,7 +12,6 @@ import 'primeicons/primeicons.css';
 
 
 const theme = createTheme({
-  // Customize your theme here if needed
 });
 
 const root = ReactDOM.createRoot(

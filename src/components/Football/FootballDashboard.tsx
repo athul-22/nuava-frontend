@@ -70,7 +70,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
-     <Navbar />
+     <Navbar buttontext="Create Tournament"/>
     <div className="dashboard-container">
      
       <div className="banner-container">

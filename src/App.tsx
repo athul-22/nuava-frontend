@@ -17,6 +17,8 @@ import FootballDashboard from './components/Football/FootballDashboard'
 import Calender from "./components/Calender";
 import URLPage from "./components/URLPage";
 import Brackets from './components/Brackets'
+import IHMatches from './components/IH Matches/IHMatches'
+import CreateMatch from './components/IH Matches/CreateMatch'
 
 
 // Set up Apollo Client
@@ -53,6 +55,8 @@ const App: React.FC = () => {
           <Route path="/dashboard/football" element={<FootballDashboard />} />
           <Route path="/calender" element={<Calender />} />
           <Route path="/brackets" element={<Brackets />} />
+          <Route path="/dashboard/inter-house-matches" element={<IHMatches />} />
+          <Route path="/create-match" element={<CreateMatch />} />
           <Route path="/urls" element={<URLPage />} />
         </Routes>
       </BrowserRouter>

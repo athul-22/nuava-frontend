@@ -6,13 +6,9 @@ import { classNames } from "primereact/utils";
 import { Avatar } from "primereact/avatar";
 import { Toast } from "primereact/toast";
 import { MenuItem } from "primereact/menuitem";
-import "../styles/Navbar.css";
+import "../../styles/Navbar.css";
 
-interface NavbarProps {
-  buttontext: string;
-}
-
-const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
+const IHMNavbar: React.FC = () => {
   const menuLeft = useRef<Menu>(null);
   const profileMenu = useRef<Menu>(null);
   const [showPopup, setShowPopup] = useState(false);
@@ -41,11 +37,7 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
   };
 
   const handleCreateTournament = () => {
-    if (buttontext === "Create match"){
-      window.location.href = "/create-match";
-    }else{
-      window.location.href = "/tournament/create";
-    }
+    window.location.href = "/tournament/create";
   };
 
   const handleLogout = () => {
@@ -63,7 +55,7 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
           command: handleFootballSelection
         },
         {
-          label: 'Inter-House',
+          label: 'Inter-House Matches',
           icon: 'pi pi-angle-right',
           command: handleInterHouseSelection
         },
@@ -283,7 +275,7 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
                 clipRule="evenodd"
               />
             </svg>
-            {buttontext}
+            New Matches
           </button>
 
           {/* Notification Bell Icon */}
@@ -403,4 +395,4 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
   );
 };
 
-export default Navbar;
+export default IHMNavbar;

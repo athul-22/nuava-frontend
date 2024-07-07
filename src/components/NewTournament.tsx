@@ -30,7 +30,7 @@ import {
   TimePicker,
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { AutoComplete } from 'primereact/autocomplete';
+import { AutoComplete } from "primereact/autocomplete";
 // import TextField from '@mui/material/TextField';
 // import { Dayjs } from 'dayjs';
 
@@ -66,7 +66,6 @@ interface YourSchoolType {
 }
 
 const NewTournament: React.FC = () => {
-  
   type Severity = "success" | "info" | "warn" | "error";
 
   const showToast = (severity: Severity, summary: string, detail: string) => {
@@ -82,15 +81,16 @@ const NewTournament: React.FC = () => {
     { name: "School 4", code: "x" },
   ]);
 
-
   const toast = useRef<Toast>(null);
   const stepperRef = useRef<any>(null);
   const [teamDialogVisible, setTeamDialogVisible] = useState(false);
   const [chipsValue, setChipsValue] = useState<string[]>([]);
   // const [dates, setDates] = useState<Date[]>([]);
   const [selectedGender, setSelectedGender] = useState(null);
-  const [selectedSchool, setSelectedSchool] = useState<YourSchoolType | null>(null);
-    const [searchTerm, setSearchTerm] = useState("");
+  const [selectedSchool, setSelectedSchool] = useState<YourSchoolType | null>(
+    null
+  );
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedStudents, setSelectedStudents] = useState<Student[]>([]);
   const [teams, setTeams] = useState<{ name: string; students: Student[] }[]>(
     []
@@ -102,7 +102,7 @@ const NewTournament: React.FC = () => {
   const [matchDuration, setMatchDuration] = useState("");
   const [intervalBetweenMatches, setIntervalBetweenMatches] = useState("");
   const [tournamentDays, setTournamentDays] = useState<TournamentDay[]>([]);
-  
+
   const [userSchool, setUserSchool] = useState<YourSchoolType | null>(null);
   const [filteredSchools, setFilteredSchools] = useState<YourSchoolType[]>([]);
 
@@ -115,23 +115,95 @@ const NewTournament: React.FC = () => {
   const [dates, setDates] = useState<Date[]>([]);
   const [intervalFields, setIntervalFields] = useState<IntervalField[]>([]);
 
+  const [fetchedTeams, setFetchedTeams] = useState<any[]>([]);
+  // const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
+  const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
+
+  const handleTeamSelect = (teamId: string) => {
+    setSelectedTeams(prevSelected => {
+      if (prevSelected.includes(teamId)) {
+        return prevSelected.filter(id => id !== teamId);
+      } else {
+        return [...prevSelected, teamId];
+      }
+    });
+  };
+
+  const fetchTeams = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch("http://localhost:3000/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `jwt ${token}`,
+        },
+        body: JSON.stringify({
+          query: `
+            query GetAllAvailablePlayers($filters: getAllTeamsFilter) {
+              getAllTeams(filters: $filters) {
+                id
+                name
+                coachID
+                typeOfSport
+                players {
+                  name
+                  age
+                }
+              }
+            }
+          `,
+          variables: {
+            filters: {
+              typeOfSport: "FOOTBALL"
+            }
+          },
+        }),
+      });
+  
+      const result = await response.json();
+      if (result.data && result.data.getAllTeams) {
+        setFetchedTeams(result.data.getAllTeams);
+      } else {
+        console.error("Error fetching teams:", result.errors);
+        showToast("error", "Error", "Failed to fetch teams");
+      }
+    } catch (error) {
+      console.error("Error fetching teams:", error);
+      showToast("error", "Error", "Error fetching teams");
+    }
+  };
+
+  useEffect(() => {
+    fetchTeams();
+  }, []);
+
   const searchSchool = (event: { query: string }) => {
     let filtered: YourSchoolType[];
     if (!event.query.trim().length) {
-      filtered = schools.filter((school: YourSchoolType) => 
-        !selectedSchools.some((selected: YourSchoolType) => selected.code === school.code)
+      filtered = schools.filter(
+        (school: YourSchoolType) =>
+          !selectedSchools.some(
+            (selected: YourSchoolType) => selected.code === school.code
+          )
       );
     } else {
-      filtered = schools.filter((school: YourSchoolType) => 
-        school.name.toLowerCase().startsWith(event.query.toLowerCase()) &&
-        !selectedSchools.some((selected: YourSchoolType) => selected.code === school.code)
+      filtered = schools.filter(
+        (school: YourSchoolType) =>
+          school.name.toLowerCase().startsWith(event.query.toLowerCase()) &&
+          !selectedSchools.some(
+            (selected: YourSchoolType) => selected.code === school.code
+          )
       );
     }
-    
+
     if (filtered.length === 0) {
-      filtered.push({ name: `Add "${event.query}" as a new school`, code: 'new' });
+      filtered.push({
+        name: `Add "${event.query}" as a new school`,
+        code: "new",
+      });
     }
-    
+
     setFilteredSchools(filtered);
   };
 
@@ -152,18 +224,22 @@ const NewTournament: React.FC = () => {
   //   setSelectedSchool(null);
   // };
 
-
   const onSchoolSelect = (e: { value: YourSchoolType }) => {
-    if (e.value.code === 'new') {
+    if (e.value.code === "new") {
       // Add new school
-      const newSchoolName = e.value.name.replace('Add "', '').replace('" as a new school', '');
-      const newSchool: YourSchoolType = { name: newSchoolName, code: `new-${Date.now()}` };
-      setSchools(prevSchools => [...prevSchools, newSchool]);
-      setSelectedSchools(prevSelected => [...prevSelected, newSchool]);
+      const newSchoolName = e.value.name
+        .replace('Add "', "")
+        .replace('" as a new school', "");
+      const newSchool: YourSchoolType = {
+        name: newSchoolName,
+        code: `new-${Date.now()}`,
+      };
+      setSchools((prevSchools) => [...prevSchools, newSchool]);
+      setSelectedSchools((prevSelected) => [...prevSelected, newSchool]);
     } else {
       // Add existing school if not already selected
-      setSelectedSchools(prevSelected => {
-        if (!prevSelected.some(school => school.code === e.value.code)) {
+      setSelectedSchools((prevSelected) => {
+        if (!prevSelected.some((school) => school.code === e.value.code)) {
           return [...prevSelected, e.value];
         }
         return prevSelected;
@@ -174,31 +250,31 @@ const NewTournament: React.FC = () => {
   };
 
   useEffect(() => {
-    const email = localStorage.getItem('email');
+    const email = localStorage.getItem("email");
     if (email) {
-      const domain = email.split('@')[1];
+      const domain = email.split("@")[1];
       let school: YourSchoolType | null = null;
-      
+
       switch (domain) {
-        case 'school1.com':
-          school = schools.find(s => s.name === 'School 1') || null;
+        case "school1.com":
+          school = schools.find((s) => s.name === "School 1") || null;
           break;
-        case 'school2.com':
-          school = schools.find(s => s.name === 'School 2') || null;
+        case "school2.com":
+          school = schools.find((s) => s.name === "School 2") || null;
           break;
-        case 'school3.com':
-          school = schools.find(s => s.name === 'School 3') || null;
+        case "school3.com":
+          school = schools.find((s) => s.name === "School 3") || null;
           break;
-        case 'school4.com':
-          school = schools.find(s => s.name === 'School 4') || null;
+        case "school4.com":
+          school = schools.find((s) => s.name === "School 4") || null;
           break;
       }
-      
+
       if (school) {
         setUserSchool(school);
-        setSelectedSchools(prevSelected => {
+        setSelectedSchools((prevSelected) => {
           const schoolToAdd: YourSchoolType = school!; // Use non-null assertion here
-          if (!prevSelected.some(s => s.code === schoolToAdd.code)) {
+          if (!prevSelected.some((s) => s.code === schoolToAdd.code)) {
             return [...prevSelected, schoolToAdd];
           }
           return prevSelected;
@@ -260,8 +336,6 @@ const NewTournament: React.FC = () => {
     { name: "Girls", code: "g" },
   ];
 
-  
-  
   useEffect(() => {
     const fetchStudents = async () => {
       const token = localStorage.getItem("token");
@@ -275,22 +349,26 @@ const NewTournament: React.FC = () => {
           },
           body: JSON.stringify({
             query: `
-              query GetAllStudents {
-                getAllStudents {
-                  age
-                  grade
-                  email
-                  id
-                  name
-                  schoolID
-                }
-              }
+              query GetAllAvailablePlayers($input: AvailablePlayersInput!) {
+                    getAllAvailablePlayers(input: $input) {
+                          id
+                          email
+                          name
+                          schoolID
+                          grade
+                          age
+                    }
+                  }
             `,
-          }),
+            variables: { 
+              input: {
+                typeOfSport: "FOOTBALL"
+             },
+          }}),
         });
 
         const result = await response.json();
-        setStudents(result.data.getAllStudents);
+        setStudents(result.data.getAllAvailablePlayers);
       } catch (error) {
         showToast("error", "Error", "Error fetching students");
         console.error("Error fetching students: ", error);
@@ -355,29 +433,38 @@ const NewTournament: React.FC = () => {
       typeOfSport: "FOOTBALL",
       intervalBetweenMatches: parseInt(intervalBetweenMatches),
       tournamentDays: intervalFields
-        .filter((field): field is IntervalField & { startTime: Dayjs; endTime: Dayjs } => 
-          field.startTime !== null && field.endTime !== null
+        .filter(
+          (
+            field
+          ): field is IntervalField & { startTime: Dayjs; endTime: Dayjs } =>
+            field.startTime !== null && field.endTime !== null
         )
         .map((field) => ({
-          date: field.date.startOf('day').toISOString(),
+          date: field.date.startOf("day").toISOString(),
           startTime: field.startTime.toISOString(),
           endTime: field.endTime.toISOString(),
         })),
       matchDuration: parseInt(matchDuration),
-      participatingSchoolNames: selectedSchoolsList.map((school) => school.name),
+      participatingSchoolNames: selectedSchools.map((school) => school.name),
+
     };
   };
-
   
+
   const handleSubmit = async () => {
     const token = localStorage.getItem("token");
     const input = prepareCreateTournamentInput();
     console.log("Tournament input:", input);
 
-    if (!input.name || !input.location || input.tournamentDays.length === 0 || 
-      !input.matchDuration || input.participatingSchoolNames.length === 0) {
-    showToast("error", "Error", "Please fill all required fields");
-    return;
+    if (
+      !input.name ||
+      !input.location ||
+      input.tournamentDays.length === 0 ||
+      !input.matchDuration ||
+      input.participatingSchoolNames.length === 0
+    ) {
+      showToast("error", "Error", "Please fill all required fields");
+      return;
     }
 
     try {
@@ -423,7 +510,7 @@ const NewTournament: React.FC = () => {
         );
       } else if (result.data && result.data.createTournament.status) {
         showToast("success", "Success", result.data.createTournament.message);
-        // Handle successful creation (e.g., redirect to tournament page)
+        window.location.href = "/dashboard/football";
       } else {
         showToast(
           "error",
@@ -508,18 +595,17 @@ const NewTournament: React.FC = () => {
     }
   };
 
-  
   return (
     <div className="card flex flex-column justify-content-center align-items-start">
-      <FootballNavbar />
+      <FootballNavbar buttontext="Create Tournament" />
 
       <div
         className="w-full text-center mb-4"
         style={{ marginTop: "30px", textAlign: "left", marginLeft: "120px" }}
       >
-        <h1 className="mb-4" style={{ fontSize: "25px", fontWeight: 700 }}>
+        {/* <h1 className="mb-4" style={{ fontSize: "25px", fontWeight: 700 }}>
           Create Tournament
-        </h1>
+        </h1> */}
         <h2
           style={{
             fontSize: "20px",
@@ -560,7 +646,7 @@ const NewTournament: React.FC = () => {
                     cursor: "pointer",
                     borderRadius: "15px",
                     border: "1px dashed #051da0",
-                    width: "30%",
+                    width: "24%",
                     height: "200px",
                   }}
                 >
@@ -622,7 +708,7 @@ const NewTournament: React.FC = () => {
                       />
                       <InputText
                         id="team"
-                        placeholder="Search Team"
+                        placeholder="Search Student"
                         className="p-mb-4 p-ml-2 pop-search-box"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -675,14 +761,14 @@ const NewTournament: React.FC = () => {
                       <Column field="age" header="Age" />
                       <Column field="grade" header="Grade" />
                       <Column field="email" header="Email" />
-                      <Column field="id" header="ID" />
-                      <Column field="schoolID" header="School ID" />
+                      {/* <Column field="id" header="ID" /> */}
+                      {/* <Column field="schoolID" header="School ID" /> */}
                     </DataTable>
                   </div>
                 </Dialog>
               </div>
 
-              <div style={{ display: "flex", justifyContent: "left" }}>
+              {/* <div style={{ display: "flex", justifyContent: "left" }}>
                 {teams.map((team, index) => (
                   <div key={index} className="team-card">
                     <h3 className="team-name">{team.name}</h3>
@@ -696,7 +782,29 @@ const NewTournament: React.FC = () => {
                     </ul>
                   </div>
                 ))}
-              </div>
+              </div> */}
+
+<div style={{ display: "flex", flexWrap: "wrap", justifyContent: "left" }}>
+      {[...teams, ...fetchedTeams].map((team, index) => (
+        <div 
+          key={index} 
+          className={`team-card ${selectedTeams.includes(team.id) ? 'selected' : ''}`}
+          onClick={() => handleTeamSelect(team.id)}
+        >
+          <h3 className="team-name">{team.name}</h3>
+          <ul className="players-list">
+            {(team.students || team.players).map((player: any, playerIndex: number) => (
+              <li key={playerIndex} className="player-card">
+                <div className="player-name">{player.name}</div>
+                {/* <div className="player-age">{player.age} Years</div> */}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+
 
               <br className="brbr" />
               <br className="brbr" />
@@ -738,33 +846,42 @@ const NewTournament: React.FC = () => {
                   className="input-box-pr-select"
                 /> */}
                 <AutoComplete
-  value={selectedSchool}
-  suggestions={filteredSchools}
-  completeMethod={searchSchool}
-  field="name"
-  dropdown
-  forceSelection
-  onChange={(e) => setSelectedSchool(e.value)}
-  onSelect={onSchoolSelect}
-  placeholder="Select or add a School"
-  className="input-box-pr-select"
-/>
+                  value={selectedSchool}
+                  suggestions={filteredSchools}
+                  completeMethod={searchSchool}
+                  field="name"
+                  dropdown
+                  forceSelection
+                  onChange={(e) => setSelectedSchool(e.value)}
+                  onSelect={onSchoolSelect}
+                  placeholder="Select or add a School"
+                  className="input-box-pr-select"
+                />
 
-<div className="selected-schools-container" style={{ marginTop: "20px", width: "590px" }}>
-  <h3>Selected Schools:</h3>
-  {selectedSchools.map((school: YourSchoolType, index: number) => (
-    <div key={index} className="selected-school">
-      <span>{school.name}</span>
-      <Button
-        icon="pi pi-times"
-        className="p-button-rounded p-button-danger p-ml-2"
-        onClick={() => setSelectedSchools(prevSelected => 
-          prevSelected.filter((s: YourSchoolType) => s.code !== school.code)
-        )}
-      />
-    </div>
-  ))}
-</div>
+                <div
+                  className="selected-schools-container"
+                  style={{ marginTop: "20px", width: "590px" }}
+                >
+                  <h3>Selected Schools:</h3>
+                  {selectedSchools.map(
+                    (school: YourSchoolType, index: number) => (
+                      <div key={index} className="selected-school">
+                        <span>{school.name}</span>
+                        <Button
+                          icon="pi pi-times"
+                          className="p-button-rounded p-button-danger p-ml-2"
+                          onClick={() =>
+                            setSelectedSchools((prevSelected) =>
+                              prevSelected.filter(
+                                (s: YourSchoolType) => s.code !== school.code
+                              )
+                            )
+                          }
+                        />
+                      </div>
+                    )
+                  )}
+                </div>
 
                 <br className="brbr" />
                 <Dropdown
@@ -895,7 +1012,7 @@ const NewTournament: React.FC = () => {
                                 outline: "none",
                                 borderRadius: "20px",
                                 width: "220px",
-                                marginLeft:'160px'
+                                marginLeft: "160px",
                               }}
                             />
                           </div>

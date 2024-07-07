@@ -307,3 +307,21 @@
   border: 10px solid black;
   border-radius: 20px;
 } */
+
+
+
+.team-card {
+  /* existing styles */
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.team-card.selected {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}

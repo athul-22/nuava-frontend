@@ -1,28 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { SingleEliminationBracket, Match, SVGViewer,createTheme } from '@g-loot/react-tournament-brackets';
+import { SingleEliminationBracket, Match, SVGViewer, createTheme } from '@g-loot/react-tournament-brackets';
+import Navbar from './Navbar';
 
 interface Participant {
-  id: number;
+  id: string;
   name: string;
-  resultText: string;
-  isWinner: boolean | null;
-  status: null;
+  resultText: string | null;
+  isWinner: boolean;
+  status: string | null;
 }
 
 interface Bracket {
-  id: number;
+  id: string;
   name: string;
-  nextMatchId: number | null;
+  nextMatchId: string | null;
   tournamentRoundText: string;
   startTime: string;
   state: string;
   participants: Participant[];
 }
 
-const BracketsList = () => {
+interface CustomMatchProps {
+  match: {
+    participants: Participant[];
+  };
+}
+
+const BracketsList: React.FC = () => {
   const [brackets, setBrackets] = useState<Bracket[]>([]);
   const [loading, setLoading] = useState(true);
+  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,18 +47,21 @@ const BracketsList = () => {
       try {
         const response = await axios.post('http://localhost:3000/graphql', {
           query: `
-            query GetBrackets($input: GetBracketsInput!) {
+            query Query($input: GetBracketsInput!) {
               getBrackets(input: $input) {
                 id
-                tournamentId
-                team1Id
-                team2Id
-                team1Name
-                team2Name
-                team1Score
-                team2Score
-                startDate
-                endDate
+                name
+                nextMatchId
+                tournamentRoundText
+                startTime
+                state
+                participants {
+                  id
+                  name
+                  resultText
+                  isWinner
+                  status
+                }
               }
             }
           `,
@@ -54,79 +74,109 @@ const BracketsList = () => {
         });
 
         const apiData = response.data.data.getBrackets;
-        const transformedData = transformData(apiData);
-        setBrackets(transformedData);
+        setBrackets(apiData);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
-  const transformData = (data: any[]): Bracket[] => {
-    return data.map((match) => ({
-      id: match.id,
-      name: `${match.team1Name} vs ${match.team2Name}`,
-      nextMatchId: null, // Adjust this based on your data
-      tournamentRoundText: 'Quarterfinal', // Adjust this based on your data
-      startTime: new Date(parseInt(match.startDate)).toISOString(),
-      state: 'DONE', // Adjust this based on your data
-      participants: [
-        {
-          id: match.team1Id,
-          name: match.team1Name,
-          resultText: match.team1Score.toString(),
-          isWinner: match.team1Score > match.team2Score,
-          status: null,
-        },
-        {
-          id: match.team2Id,
-          name: match.team2Name,
-          resultText: match.team2Score.toString(),
-          isWinner: match.team2Score > match.team1Score,
-          status: null,
-        }
-      ]
-    }));
+  const mapTournamentRoundText = (round: string) => {
+    switch (round) {
+      case '1':
+        return 'Quarterfinal';
+      case '2':
+        return 'Semifinal';
+      case '3':
+        return 'Final';
+      default:
+        return round;
+    }
   };
+
+  const mappedBrackets = brackets.map(bracket => ({
+    ...bracket,
+    tournamentRoundText: mapTournamentRoundText(bracket.tournamentRoundText),
+  }));
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  const WhiteTheme = createTheme({
-    textColor: { main: '#000000', highlighted: '#07090D', dark: '#3E414D' },
-    matchBackground: { wonColor: '#daebf9', lostColor: '#96c6da' },
+  const LightTheme = createTheme({
+    textColor: { main: '#000000', highlighted: '#000000', dark: '#000000' },
+    matchBackground: { wonColor: '#ffffff', lostColor: '#ffffff' },
     score: {
-      background: { wonColor: '#87b2c4', lostColor: '#87b2c4' },
-      text: { highlightedWonColor: '#7BF59D', highlightedLostColor: '#FB7E94' },
+      background: { wonColor: '#4ADE80', lostColor: '#F87171' },
+      text: { highlightedWonColor: '#FFFFFF', highlightedLostColor: '#FFFFFF' },
     },
     border: {
-      color: '#CED1F2',
-      highlightedColor: '#da96c6',
+      color: '#E5E7EB',
+      highlightedColor: 'silver',
     },
-    roundHeader: { backgroundColor: '#da96c6', fontColor: '#000' },
-    connectorColor: '#CED1F2',
-    connectorColorHighlight: '#da96c6',
-    svgBackground: '#FAFAFA',
+    roundHeader: { backgroundColor: '#F3F4F6', fontColor: '#000000' },
+    connectorColor: '#E5E7EB',
+    connectorColorHighlight: '#4ADE80',
+    svgBackground: '#FFFFFF',
   });
-  
-  return (
-    <div style={{ backgroundColor: '#f9f9f9', padding: '20px' }}>
-      <SingleEliminationBracket
-        matches={brackets}
-        theme={WhiteTheme}
-        matchComponent={Match}
-        svgWrapper={({ children, ...props }: any) => (
-          <SVGViewer width={500} height={500} {...props}>
-            {children}
-          </SVGViewer>
-        )}
+
+  const CustomMatch: React.FC<CustomMatchProps> = ({ ...props }) => {
+    const { participants } = props.match;
+    const resultAvailable = participants.some((p: Participant) => p.resultText !== null);
+    const isWinner = participants.find((p: Participant) => p.isWinner);
+    const leftBorderColor = resultAvailable
+      ? isWinner
+        ? '#4ADE80' // Green for winner
+        : '#F87171' // Red for loser
+      : '#E5E7EB'; // Silver for no result
+
+    return (
+      <Match
+        {...props}
+        style={{
+          borderLeft: `10px solid ${leftBorderColor}`,
+          backgroundColor: participants[0].status === null
+            ? '#C0C0C0' // Silver background for no status
+            : isWinner
+              ? '#ECFDF5' // Light green for winner
+              : '#FEF2F2', // Light red for loser
+          color: participants[0].status === null ? '#000000' : '#FFFFFF', // Black text for no status, white otherwise
+        }}
       />
-    </div>
+    );
+  };
+
+  return (
+    <>
+      <Navbar buttontext="Create Tournament"/>
+      <div style={{
+        backgroundColor: '#FFFFFF',
+        height: '50vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <SingleEliminationBracket
+          matches={mappedBrackets}
+          theme={LightTheme}
+          matchComponent={CustomMatch}
+          svgWrapper={({ children, ...props }: any) => (
+            <SVGViewer
+              width={windowSize.width}
+              height={windowSize.height} // Set the SVGViewer height to window height
+              {...props}
+              background="#FFFFFF"
+              SVGBackground="#FFFFFF"
+            >
+              {children}
+            </SVGViewer>
+          )}
+        />
+      </div>
+    </>
   );
 };
 
