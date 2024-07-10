@@ -54,7 +54,7 @@ const REGISTER_STUDENT = gql`
 
 // Create an Apollo client instance with the temporary token in the headers
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3000/graphql',
+  uri: 'https://nuavasports.com/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {

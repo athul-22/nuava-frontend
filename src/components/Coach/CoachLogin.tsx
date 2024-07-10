@@ -69,7 +69,7 @@ const CoachLogin: React.FC = () => {
     };
   
     try {
-      const response = await fetch("http://localhost:3000/graphql", {
+      const response = await fetch("https://nuavasports.com/graphql", {
         method: "POST",
         headers: headers,
         body: JSON.stringify({ query: query }),

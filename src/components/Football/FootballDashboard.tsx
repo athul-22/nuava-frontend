@@ -30,7 +30,7 @@ const GET_ALL_TOURNAMENTS = gql`
 `;
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3000/graphql',
+  uri: 'https://nuavasports.com/graphql',
 });
 
 

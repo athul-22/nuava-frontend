@@ -19,11 +19,13 @@ import URLPage from "./components/URLPage";
 import Brackets from './components/Brackets'
 import IHMatches from './components/IH Matches/IHMatches'
 import CreateMatch from './components/IH Matches/CreateMatch'
+import About from './components/About'
+import Contact from './components/Contact'
 
 
 // Set up Apollo Client
 const client = new ApolloClient({
-  uri: 'http://localhost:3000/graphql',
+  uri: 'https://nuavasports.com/graphql',
   cache: new InMemoryCache(),
 });
 
@@ -58,6 +60,8 @@ const App: React.FC = () => {
           <Route path="/dashboard/inter-house-matches" element={<IHMatches />} />
           <Route path="/create-match" element={<CreateMatch />} />
           <Route path="/urls" element={<URLPage />} />
+          <Route path="/about" element={<About/>} />
+          <Route path="/contact" element={<Contact/>} />
         </Routes>
       </BrowserRouter>
     </ApolloProvider>

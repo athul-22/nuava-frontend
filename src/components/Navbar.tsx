@@ -34,6 +34,7 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
     setSelectedSport('Inter-House Matches');
     localStorage.setItem('selectedSport', 'Inter-House Matches');
     window.location.href = "/dashboard/inter-house-matches";
+    
   };
 
   const handleCalenderSelection = () => {
@@ -48,14 +49,17 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
     }
   };
 
+  const handleCreateMatch = () => {
+    window.location.href = "/create-match";
+  }
+
   const handleLogout = () => {
     localStorage.clear();
-    window.location.href = "http://localhost:3001";
+    window.location.href = "https://nuavasports.com/";
   };
 
   const items: MenuItem[] = [
     {
-      label: '',
       items: [
         {
           label: 'Football',
@@ -269,6 +273,26 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
           {/* New Tournament Button */}
           <button
             className="new-tournament-button"
+            onClick={handleCreateMatch}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="size-6"
+            >
+              <path
+                fillRule="evenodd"
+                d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z"
+                clipRule="evenodd"
+              />
+            </svg>
+            {/* {buttontext} */}
+            New Match
+          </button>
+
+          <button
+            className="new-tournament-button"
             onClick={handleCreateTournament}
           >
             <svg
@@ -283,8 +307,10 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
                 clipRule="evenodd"
               />
             </svg>
-            {buttontext}
+            {/* {buttontext} */}
+            New Tournament
           </button>
+
 
           {/* Notification Bell Icon */}
           <div

@@ -439,3 +439,11 @@ hr {
   padding-top: -30px;
   margin-left: -5px;
 }
+
+.p-submenu-header{
+  display: none;
+}
+
+#popup_menu_left{
+  margin-top: 10px;
+}

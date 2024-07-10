@@ -45,7 +45,7 @@ const BracketsList: React.FC = () => {
     const fetchData = async () => {
       const token = localStorage.getItem('token');
       try {
-        const response = await axios.post('http://localhost:3000/graphql', {
+        const response = await axios.post('https://nuavasports.com/graphql', {
           query: `
             query Query($input: GetBracketsInput!) {
               getBrackets(input: $input) {

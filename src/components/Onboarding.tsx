@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useState } from "react";
 import bg from "../assets/BG.jpg";
 import grid from "../assets/GRID.svg";
@@ -12,7 +13,6 @@ import SPORTSEQP from "../assets/SPORTSEQP.png";
 import { Avatar } from "primereact/avatar";
 import { AvatarGroup } from "primereact/avatargroup";
 import { Dialog } from "primereact/dialog";
-import { Button } from "primereact/button";
 import Avatar1 from "../assets/AVATAR/1.png";
 import Avatar2 from "../assets/AVATAR/2.png";
 import Avatar3 from "../assets/AVATAR/3.png";
@@ -26,6 +26,9 @@ import Circle_5 from "../assets/ONBOARDING/5.png";
 import Circle_6 from "../assets/ONBOARDING/6.png";
 import Circle_7 from "../assets/ONBOARDING/7.png";
 import Circle_8 from "../assets/ONBOARDING/8.png";
+import { Menu } from 'primereact/menu';
+import { Button } from 'primereact/button';
+import OnboardingNav from "./OnboardingNav";
 
 const Onboarding: React.FC = () => {
   const [showCoachDialog, setShowCoachDialog] = useState(false);
@@ -46,6 +49,7 @@ const Onboarding: React.FC = () => {
 
   const coachDialogContent = () => (
     <div className="dialog-content" style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+     
       <center><Button
         label="Register"
         onClick={() => window.location.href = "/coach/register"}
@@ -80,8 +84,12 @@ const Onboarding: React.FC = () => {
   );
 
   return (
+    <>
+    <div style={{display:'flex',justifyContent:'center'}}>
+    <OnboardingNav/>
+    </div>
     <div className="onboard-container">
-      <img src={bg} alt="" className="onboard-bg" width="1308" />
+      {/* <img src={bg} alt="" className="onboard-bg" width="1308" /> */}
       <div
         className="onboard-overlay"
         style={{ backgroundImage: `url(${grid})` }}
@@ -90,19 +98,19 @@ const Onboarding: React.FC = () => {
       <div className="onboard-content">
         <div className="onboard-text-box">
           <div className="onboard-title">
-            <img src={ONB2} height="120px" width="120px" className="football" />
-            <img src={ONB3} height="100px" width="100px" className="bat" />
-            YOUR ULTIMATE
+            <span className="gradient-text" style={{}}>NUAVA</span>
             <br className="onboard-hide-md" />
-            <span className="gradient-text">SPORTS COMPANION</span>
+            
           </div>
           <div className="onboard-subtitle">
+          <span className="tagline typing-effect" >SPORTS DIGITIZED.</span>
+          <br></br>
             Stay in the loop with live matches,
             <br className="onboard-hide-md" />
             coach updates & more
           </div>
 
-          <img src={ONB1} height="100px" width="100px" className="tennis" />
+          {/* <img src={ONB1} height="100px" width="100px" className="tennis" />
           <button
             onClick={StudentReg}
             className="onboard-button onboard-student-btn"
@@ -114,38 +122,42 @@ const Onboarding: React.FC = () => {
             className="onboard-button onboard-coach-btn"
           >
             Continue as a Coach
-          </button>
-          <div className="features-title">Features</div>
+          </button> */}
+          <div className="features-title ">Features</div>
+
+         
+
           <div className="features-container">
             <div className="feature">
               <div className="feature-icon">
-                <img src={SPORTSEQP} height="130px" width="130px" />
+                <img src={SPORTSEQP} height="100px" width="100px" />
               </div>
               <div className="feature-text">Inter house organization</div>
             </div>
             <div className="feature">
               <div className="feature-icon">
-                <img src={CUP} height="130px" width="130px" />
+                <img src={CUP} height="100px" width="100px" />
               </div>
               <div className="feature-text">Create tournament</div>
             </div>
             <div className="feature">
               <div className="feature-icon">
-                <img src={REPORT} height="130px" width="130px" />
+                <img src={REPORT} height="100px" width="100px"  />
               </div>
               <div className="feature-text">Track statistics</div>
             </div>
             <div className="feature">
               <div className="feature-icon">
-                <img src={TIME} height="130px" width="130px" />
+                <img src={TIME} height="100px" width="100px"  />
               </div>
               <div className="feature-text">Live updates</div>
             </div>
           </div>
+
           <div className="container-c">
             <div className="circles-c">
               {/* <img src={Circle_1} alt="" className="circle_1"/> */}
-              <img src={Circle_8} alt="" className="circle_8" />
+              {/* <img src={Circle_8} alt="" className="circle_8" /> */}
 
               {/* <img src={Circle_5} alt="" className="circle_5"/> */}
               <div className="circle-c circle1-c"></div>
@@ -153,53 +165,38 @@ const Onboarding: React.FC = () => {
               <div className="circle-c circle3-c"></div>
               {/* <img src={Circle_2} alt="" className="circle_2"/> */}
 
-              <img src={Circle_6} alt="" className="circle_6" />
-              <img src={Circle_7} alt="" className="circle_7" />
+              {/* <img src={Circle_6} alt="" className="circle_6" />
+              <img src={Circle_7} alt="" className="circle_7" /> */}
             </div>
 
             <div className="content-c">
               <h1>Ready to use Nuava</h1>
-              <p>Join our waitlist</p>
+              <p>Digitize the entire Sports with us!</p>
               <div className="card flex justify-content-center">
-                <AvatarGroup
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: "20px",
-                    marginBottom: "20px",
-                  }}
-                >
-                  <Avatar image={Avatar1} size="large" shape="circle" />
-                  <Avatar image={Avatar2} size="large" shape="circle" />
-                  <Avatar image={Avatar3} size="large" shape="circle" />
-                  <Avatar image={Avatar4} size="large" shape="circle" />
-                  <Avatar image={Avatar5} size="large" shape="circle" />
-                  <Avatar label="+48" shape="circle" size="large" />
-                </AvatarGroup>
+                
               </div>
               <button className="btn-c">Join our waitlist</button>
               {/* <img src={Circle_4} alt="" className="circle_4"/> */}
-              <img src={Circle_3} alt="" className="circle_3" />
+              {/* <img src={Circle_3} alt="" className="circle_3" /> */}
             </div>
           </div>
 
           <div className="footer">
             <div className="footer-content">
               {/* <img src="path_to_logo.png" alt="Logo" className="footer-logo" /> */}
-              <p className="footer-text">NUAVA SPORTS</p>
-              <div className="footer-social-icons">
+              <p className="footer-text">Nuava Sports</p>
+              {/* <div className="footer-social-icons">
                 <i className="pi pi-facebook" />
                 <i className="pi pi-twitter" />
                 <i className="pi pi-instagram" />
                 <i className="pi pi-linkedin" />
-              </div>
+              </div> */}
               <div className="footer-links">
                 <Button label="Home" className="p-button-text" />
                 <Button label="About Us" className="p-button-text" />
                 <Button label="Contact Us" className="p-button-text" />
-                <Button label="Updates" className="p-button-text" />
-                <Button label="Careers" className="p-button-text" />
+                {/* <Button label="Updates" className="p-button-text" /> */}
+                {/* <Button label="Careers" className="p-button-text" /> */}
               </div>
             </div>
           </div>
@@ -224,6 +221,7 @@ const Onboarding: React.FC = () => {
         {studentDialogContent()}
       </Dialog>
     </div>
+    </>
   );
 };
 
