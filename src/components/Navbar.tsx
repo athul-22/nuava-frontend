@@ -37,16 +37,20 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
     
   };
 
+  const handleOverviewSelection = () => {
+    setSelectedSport('Overview');
+    localStorage.setItem('selectedSport', 'Overview');
+    window.location.href = "/dashboard";
+  };
+
   const handleCalenderSelection = () => {
     window.location.href = "/calender";
   };
 
   const handleCreateTournament = () => {
-    if (buttontext === "Create match"){
-      window.location.href = "/create-match";
-    }else{
+    
       window.location.href = "/tournament/create";
-    }
+    
   };
 
   const handleCreateMatch = () => {
@@ -61,6 +65,11 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
   const items: MenuItem[] = [
     {
       items: [
+        {
+          label: 'Overview',
+          icon: 'pi pi-objects-column',
+          command: handleOverviewSelection
+        },
         {
           label: 'Football',
           icon: 'pi pi-angle-right',
@@ -342,8 +351,9 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
               strokeWidth={1.5}
               stroke="currentColor"
               className="size-6 icon"
-              style={{ color: "white" }}
+              style={{ color: "white" ,marginLeft:'-15px',marginRight:'20px'}}
               onClick={handleCalenderSelection}
+              
             >
               <path
                 strokeLinecap="round"

@@ -417,7 +417,7 @@ const CalendarComponent: React.FC = () => {
         visible={visible}
         style={{
           width: "35vw",
-          height: "600px",
+          height: "650px",
           display: "flex",
           justifyContent: "center",
         }}

@@ -120,6 +120,30 @@
   margin-left: 20px;
 }
 
+.input-box-pr-calendar-cal-create-match{
+  /* max-width: 460px; */
+  width: 460px;
+  border: 1px solid #eee;
+  border-radius: 40px;
+  background-color: transparent;
+  height: 55px;
+  border-radius: 4px;
+  outline: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  /* padding-left: 15px; */
+  margin-left: 5px;
+  
+
+}
+
+.input-box-pr-calendar-cal-create-match:focus{
+  border: none;
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
 .p-inputtext{
   padding-left: 15px;
   
@@ -145,7 +169,7 @@
 
 .cal-event-btn{
   height: 40px;
-  width: 520px;
+  width: 100%;
   background-color: #051da0;
   color: white;
   border-radius: 10px;
@@ -155,7 +179,7 @@
 }
 
 .MuiInputBase-root{
-  width: 380px;
+  width: 315px;
 }
 
 
@@ -186,7 +210,7 @@
 
 .cal-event-btn-edit{
   height: 40px;
-  width: 520px;
+  width: 320px;
   background-color: #051da0;
   color: white;
   border-radius: 10px;
@@ -207,3 +231,6 @@
   align-items: center;
   margin-top: 10PX;
 }
+
+
+

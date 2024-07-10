@@ -33,6 +33,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { AutoComplete } from "primereact/autocomplete";
 // import TextField from '@mui/material/TextField';
 // import { Dayjs } from 'dayjs';
+import { RadioButton } from "primereact/radiobutton";
 
 interface Student {
   age: number;
@@ -96,7 +97,9 @@ const NewTournament: React.FC = () => {
     []
   );
   const [teamName, setTeamName] = useState("");
-  const [selectedSchoolsList, setSelectedSchoolsList] = useState<YourSchoolType[]>([]);
+  const [selectedSchoolsList, setSelectedSchoolsList] = useState<
+    YourSchoolType[]
+  >([]);
   const [tournamentName, setTournamentName] = useState("");
   const [location, setLocation] = useState("");
   const [matchDuration, setMatchDuration] = useState("");
@@ -119,10 +122,39 @@ const NewTournament: React.FC = () => {
   // const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
 
+  const [newSchoolDialogVisible, setNewSchoolDialogVisible] = useState(false);
+  const [newSchoolName, setNewSchoolName] = useState("");
+
+  const handleAddNewSchool = () => {
+    if (newSchoolName.trim()) {
+      const newSchool: YourSchoolType = {
+        name: newSchoolName.trim(),
+        code: `new-${Date.now()}`,
+      };
+      setSchools((prevSchools) => [...prevSchools, newSchool]);
+      setSelectedSchools((prevSelected) => [...prevSelected, newSchool]);
+      setNewSchoolName("");
+      setNewSchoolDialogVisible(false);
+    }
+  };
+
+  // const onSchoolSelect = (e: { value: YourSchoolType }) => {
+  //   if (!selectedSchools.some(school => school.code === e.value.code)) {
+  //     setSelectedSchools(prevSelected => [...prevSelected, e.value]);
+  //   }
+  //   setSelectedSchool(null);
+  // };
+
+  const removeSelectedSchool = (schoolToRemove: YourSchoolType) => {
+    setSelectedSchools((prevSelected) =>
+      prevSelected.filter((school) => school.code !== schoolToRemove.code)
+    );
+  };
+
   const handleTeamSelect = (teamId: string) => {
-    setSelectedTeams(prevSelected => {
+    setSelectedTeams((prevSelected) => {
       if (prevSelected.includes(teamId)) {
-        return prevSelected.filter(id => id !== teamId);
+        return prevSelected.filter((id) => id !== teamId);
       } else {
         return [...prevSelected, teamId];
       }
@@ -155,12 +187,12 @@ const NewTournament: React.FC = () => {
           `,
           variables: {
             filters: {
-              typeOfSport: "FOOTBALL"
-            }
+              typeOfSport: "FOOTBALL",
+            },
           },
         }),
       });
-  
+
       const result = await response.json();
       if (result.data && result.data.getAllTeams) {
         setFetchedTeams(result.data.getAllTeams);
@@ -224,28 +256,44 @@ const NewTournament: React.FC = () => {
   //   setSelectedSchool(null);
   // };
 
+  // const onSchoolSelect = (e: { value: YourSchoolType }) => {
+  //   if (e.value.code === "new") {
+  //     // Add new school
+  //     const newSchoolName = e.value.name
+  //       .replace('Add "', "")
+  //       .replace('" as a new school', "");
+  //     const newSchool: YourSchoolType = {
+  //       name: newSchoolName,
+  //       code: `new-${Date.now()}`,
+  //     };
+  //     setSchools((prevSchools) => [...prevSchools, newSchool]);
+  //     setSelectedSchools((prevSelected) => [...prevSelected, newSchool]);
+  //   } else {
+  //     // Add existing school if not already selected
+  //     setSelectedSchools((prevSelected) => {
+  //       if (!prevSelected.some((school) => school.code === e.value.code)) {
+  //         return [...prevSelected, e.value];
+  //       }
+  //       return prevSelected;
+  //     });
+  //   }
+  //   // Clear the selection after adding
+  //   setSelectedSchool(null);
+  // };
+
   const onSchoolSelect = (e: { value: YourSchoolType }) => {
-    if (e.value.code === "new") {
-      // Add new school
-      const newSchoolName = e.value.name
-        .replace('Add "', "")
-        .replace('" as a new school', "");
-      const newSchool: YourSchoolType = {
-        name: newSchoolName,
-        code: `new-${Date.now()}`,
-      };
-      setSchools((prevSchools) => [...prevSchools, newSchool]);
-      setSelectedSchools((prevSelected) => [...prevSelected, newSchool]);
-    } else {
-      // Add existing school if not already selected
+    console.log("Selected school:", e.value);
+    if (
+      e.value &&
+      !selectedSchools.some((school) => school.code === e.value.code)
+    ) {
       setSelectedSchools((prevSelected) => {
-        if (!prevSelected.some((school) => school.code === e.value.code)) {
-          return [...prevSelected, e.value];
-        }
-        return prevSelected;
+        console.log("Previous selected schools:", prevSelected);
+        const newSelected = [...prevSelected, e.value];
+        console.log("New selected schools:", newSelected);
+        return newSelected;
       });
     }
-    // Clear the selection after adding
     setSelectedSchool(null);
   };
 
@@ -360,11 +408,12 @@ const NewTournament: React.FC = () => {
                     }
                   }
             `,
-            variables: { 
+            variables: {
               input: {
-                typeOfSport: "FOOTBALL"
-             },
-          }}),
+                typeOfSport: "FOOTBALL",
+              },
+            },
+          }),
         });
 
         const result = await response.json();
@@ -446,10 +495,8 @@ const NewTournament: React.FC = () => {
         })),
       matchDuration: parseInt(matchDuration),
       participatingSchoolNames: selectedSchools.map((school) => school.name),
-
     };
   };
-  
 
   const handleSubmit = async () => {
     const token = localStorage.getItem("token");
@@ -784,27 +831,35 @@ const NewTournament: React.FC = () => {
                 ))}
               </div> */}
 
-<div style={{ display: "flex", flexWrap: "wrap", justifyContent: "left" }}>
-      {[...teams, ...fetchedTeams].map((team, index) => (
-        <div 
-          key={index} 
-          className={`team-card ${selectedTeams.includes(team.id) ? 'selected' : ''}`}
-          onClick={() => handleTeamSelect(team.id)}
-        >
-          <h3 className="team-name">{team.name}</h3>
-          <ul className="players-list">
-            {(team.students || team.players).map((player: any, playerIndex: number) => (
-              <li key={playerIndex} className="player-card">
-                <div className="player-name">{player.name}</div>
-                {/* <div className="player-age">{player.age} Years</div> */}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
-
-
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "left",
+                }}
+              >
+                {[...teams, ...fetchedTeams].map((team, index) => (
+                  <div
+                    key={index}
+                    className={`team-card ${
+                      selectedTeams.includes(team.id) ? "selected" : ""
+                    }`}
+                    onClick={() => handleTeamSelect(team.id)}
+                  >
+                    <h3 className="team-name">{team.name}</h3>
+                    <ul className="players-list">
+                      {(team.students || team.players).map(
+                        (player: any, playerIndex: number) => (
+                          <li key={playerIndex} className="player-card">
+                            <div className="player-name">{player.name}</div>
+                            {/* <div className="player-age">{player.age} Years</div> */}
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                ))}
+              </div>
 
               <br className="brbr" />
               <br className="brbr" />
@@ -827,24 +882,7 @@ const NewTournament: React.FC = () => {
           </StepperPanel>
           <StepperPanel header="School Details">
             <div className="flex flex-column">
-              <div className="p-fluid">
-                {/* <Dropdown
-                  value={selectedSchool}
-                  onChange={(e) => {
-                    setSelectedSchool(e.value);
-                    if (
-                      !selectedSchoolsList.some(
-                        (school) => school.code === e.value.code
-                      )
-                    ) {
-                      setSelectedSchoolsList([...selectedSchoolsList, e.value]);
-                    }
-                  }}
-                  options={schools}
-                  optionLabel="name"
-                  placeholder="Select a School"
-                  className="input-box-pr-select"
-                /> */}
+              {/* <div className="p-fluid">
                 <AutoComplete
                   value={selectedSchool}
                   suggestions={filteredSchools}
@@ -881,19 +919,83 @@ const NewTournament: React.FC = () => {
                       </div>
                     )
                   )}
+                </div> */}
+
+              <div className="p-fluid">
+                <div>
+                  {/* <Dropdown
+      value={selectedSchool}
+      options={schools}
+      onChange={(e) => setSelectedSchool(e.value)}
+      optionLabel="name"
+      placeholder="Select a School"
+      className="input-box-pr-select mr-2"
+    /> */}
+                  <Dropdown
+                    value={selectedSchool}
+                    options={schools}
+                    onChange={onSchoolSelect}
+                    optionLabel="name"
+                    placeholder="Select a School"
+                    className="input-box-pr-select mr-2"
+                  />
+                  <Button
+                    label="Add New School +"
+                    // icon="pi pi-plus"
+                    onClick={() => setNewSchoolDialogVisible(true)}
+                    className="p-button-outlined add-new-school-button"
+                  />
                 </div>
 
-                <br className="brbr" />
-                <Dropdown
-                  value={selectedGender}
-                  onChange={(e) => setSelectedGender(e.value)}
-                  options={gender}
-                  optionLabel="name"
-                  placeholder="Select a Gender"
-                  className="input-box-pr-select"
-                />
+                <div className="selected-schools-container mt-4">
+                  <h3>Selected Schools:</h3>
+                  {selectedSchools.map(
+                    (school: YourSchoolType, index: number) => (
+                      <div key={index} className="selected-school">
+                        <span>{school.name}</span>
+                        <Button
+                          icon="pi pi-times"
+                          className="p-button-rounded p-button-danger p-button-text"
+                          onClick={() => removeSelectedSchool(school)}
+                        />
+                      </div>
+                    )
+                  )}
+                </div>
+
+                <Dialog
+                  header="Add New School"
+                  visible={newSchoolDialogVisible}
+                  onHide={() => setNewSchoolDialogVisible(false)}
+                  style={{ width: "30vw", height: "25vh" }}
+                  footer={
+                    <div>
+                      <Button
+                        label="Add"
+                        icon="pi pi-check"
+                        style={{
+                          color: "white",
+                          backgroundColor: "#051da0",
+                          padding: "5px 20px",
+                        }}
+                        onClick={handleAddNewSchool}
+                        autoFocus
+                      />
+                    </div>
+                  }
+                >
+                  <div className="p-fluid">
+                    <InputText
+                      value={newSchoolName}
+                      onChange={(e) => setNewSchoolName(e.target.value)}
+                      placeholder="Enter school name"
+                      className="input-box-pr"
+                      style={{ border: "1px solid #eee", marginTop: "10px" }}
+                    />
+                  </div>
+                </Dialog>
               </div>
-              <br className="brbr" />
+
               <br className="brbr" />
               <div className="flex pt-4 justify-content-between">
                 <Button
@@ -939,7 +1041,32 @@ const NewTournament: React.FC = () => {
                     onChange={(e) => setTournamentName(e.target.value)}
                   />
                 </IconField>
-                <br className="brbr" />
+                <div className="gender-selection">
+  <h3>Select Gender</h3>
+  <div className="p-formgroup-inline">
+    <div className="p-field-radiobutton">
+      <RadioButton
+        inputId="gender1"
+        name="gender"
+        value="BOYS"
+        onChange={(e) => setSelectedGender(e.value)}
+        checked={selectedGender === "BOYS"}
+      />
+      <label htmlFor="gender1" className="p-ml-2">Boys</label>
+    </div>
+    <div className="p-field-radiobutton">
+      <RadioButton
+        inputId="gender2"
+        name="gender"
+        value="GIRLS"
+        onChange={(e) => setSelectedGender(e.value)}
+        checked={selectedGender === "GIRLS"}
+      />
+      <label htmlFor="gender2" className="p-ml-2">Girls</label>
+    </div>
+  </div>
+</div>
+<br className="brbr" />
                 <div className="mt-4">
                   <label>Tournament Dates</label>
                   <div className="flex">
