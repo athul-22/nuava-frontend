@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Menu } from "primereact/menu";
 import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
@@ -18,13 +18,23 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const toastRef = useRef<Toast>(null);
+  const [showCreateButton, setShowCreateButton] = useState(false);
+
+  useEffect(()=> {
+    if (localStorage.getItem('selectedSport') === 'Inter-House Matches') {
+      setShowCreateButton(true);
+    } else if (localStorage.getItem('selectedSport') === 'Football') {
+      setShowCreateButton(true);
+    }else{
+      setShowCreateButton(false);
+    }
+  })
 
   const [selectedSport, setSelectedSport] = useState<string>(
     localStorage.getItem("selectedSport") || "Select"
   );
 
   const handleFootballSelection = () => {
-    
     setSelectedSport("Football");
     localStorage.setItem("selectedSport", "Football");
     window.location.href = "/dashboard/football";
@@ -34,7 +44,6 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
     setSelectedSport('Inter-House Matches');
     localStorage.setItem('selectedSport', 'Inter-House Matches');
     window.location.href = "/dashboard/inter-house-matches";
-    
   };
 
   const handleOverviewSelection = () => {
@@ -48,19 +57,39 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
   };
 
   const handleCreateTournament = () => {
-    
       window.location.href = "/tournament/create";
-    
   };
 
   const handleCreateMatch = () => {
     window.location.href = "/create-match";
   }
 
+  const handleCreateButtonClick = () => {
+    if (localStorage.getItem('selectedSport') === 'Inter-House Matches') {
+      window.location.href = "/create-match";
+    } else if (localStorage.getItem('selectedSport') === 'Football') {
+      window.location.href = "/tournament/create";
+    }
+  }
+
   const handleLogout = () => {
     localStorage.clear();
     window.location.href = "https://nuavasports.com/";
   };
+
+  const handleViewProfileClick = () => {
+    window.location.href = "/profile";
+  }
+
+  const homeClickMenu = () => {
+    if (localStorage.getItem('selectedSport') === 'Inter-House Matches') {
+      window.location.href = "/dashboard/inter-house-matches";
+    }else if (localStorage.getItem('selectedSport') === 'Football') {
+      window.location.href = "/dashboard/football";
+    }else{
+      window.location.href = "/dashboard";
+    }
+  }
 
   const items: MenuItem[] = [
     {
@@ -119,7 +148,7 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
               </span>{" "}
               <br></br>
               {/* <span className="text-sm" id="profile-menu-email">email id</span> */}
-              <button id="profile-menu-profile-button">View Profile</button>
+              <button id="profile-menu-profile-button" onClick={handleViewProfileClick}>View Profile</button>
             </div>
           </button>
         );
@@ -128,34 +157,34 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
     {
       separator: true,
     },
-    {
-      label: "Saved",
-      icon: "pi pi-bookmark",
-      template: (item: MenuItem, options: any) => {
-        return (
-          <>
-            <hr className="my-4" />
-            <button
-              onClick={(e) => options.onClick(e)}
-              className={classNames(
-                options.className,
-                "w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround"
-              )}
-              id="profile-button"
-              style={{ marginTop: "10px" }}
-            >
-              <i
-                className={classNames("pi pi pi-bookmark mr-2", {
-                  "text-primary": options.selected,
-                })}
-                style={{ color: "black", marginRight: "10px" }}
-              ></i>
-              <span>Saved</span>
-            </button>
-          </>
-        );
-      },
-    },
+    // {
+    //   label: "Saved",
+    //   icon: "pi pi-bookmark",
+    //   template: (item: MenuItem, options: any) => {
+    //     return (
+    //       <>
+    //         <hr className="my-4" />
+    //         <button
+    //           onClick={(e) => options.onClick(e)}
+    //           className={classNames(
+    //             options.className,
+    //             "w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround"
+    //           )}
+    //           id="profile-button"
+    //           style={{ marginTop: "10px" }}
+    //         >
+    //           {/* <i
+    //             className={classNames("pi pi pi-bookmark mr-2", {
+    //               "text-primary": options.selected,
+    //             })}
+    //             style={{ color: "black", marginRight: "10px" }}
+    //           ></i> */}
+    //           {/* <span>Saved</span> */}
+    //         </button>
+    //       </>
+    //     );
+    //   },
+    // },
     {
       label: "Settings",
       icon: "pi pi-cog",
@@ -271,16 +300,16 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
 
         {/* Center section with navigation links */}
         <div className="center-menu">
-          <span>Home</span>
+          <span onClick={homeClickMenu}>Home</span>
           <span>Matches</span>
           <span>Results</span>
-          <span>Live</span>
+          {/* <span>Live</span> */}
         </div>
 
         {/* Right section with buttons and icons */}
         <div className="right-section-navbar">
           {/* New Tournament Button */}
-          <button
+          {/* <button
             className="new-tournament-button"
             onClick={handleCreateMatch}
           >
@@ -296,13 +325,13 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
                 clipRule="evenodd"
               />
             </svg>
-            {/* {buttontext} */}
+            {buttontext}
             New Match
-          </button>
+          </button> */}
 
-          <button
+          {showCreateButton && (<button
             className="new-tournament-button"
-            onClick={handleCreateTournament}
+            onClick={handleCreateButtonClick}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -316,9 +345,9 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
                 clipRule="evenodd"
               />
             </svg>
-            {/* {buttontext} */}
-            New Tournament
-          </button>
+            {buttontext}
+           
+          </button>)}
 
 
           {/* Notification Bell Icon */}

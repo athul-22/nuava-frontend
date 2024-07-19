@@ -16,6 +16,10 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { Toast } from "primereact/toast";
 import { Flex } from "@mantine/core";
 import { Dropdown } from "primereact/dropdown";
+import TextField from "@mui/material/TextField";
+import TimePickerComponent from "./TimePickerComponent";
+import { FiEdit, FiTrash2, FiX } from 'react-icons/fi';
+
 
 const localizer = momentLocalizer(moment);
 
@@ -31,6 +35,19 @@ const eventTypeOptions = [
   { label: "Fixture Event", value: "Fixture Event" },
 ];
 
+interface EventDetailsDialogProps {
+  visible: boolean;
+  onHide: () => void;
+  event: {
+    title: string;
+    description: string;
+    start: Date;
+    end: Date;
+  } | null;
+  onEdit: () => void;
+  onDelete: () => void;
+}
+
 const CalendarComponent: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [eventDetailsVisible, setEventDetailsVisible] = useState(false);
@@ -45,6 +62,16 @@ const CalendarComponent: React.FC = () => {
   const [events, setEvents] = useState<any[]>([]);
   const [eventType, setEventType] = useState<string>("Normal Event");
   const toast = useRef<any>(null);
+
+  const [isOpen1, setIsOpen1] = useState(false);
+
+  const toggleOpen1 = () => {
+    setIsOpen1(!isOpen1);
+  };
+
+  const handleClose1 = () => {
+    setIsOpen1(false);
+  };
 
   const showToast = (severity: string, summary: string, detail: string) => {
     if (toast.current) {
@@ -101,7 +128,7 @@ const CalendarComponent: React.FC = () => {
         title: event.title,
         start: new Date(parseInt(event.startDate, 10)),
         end: new Date(parseInt(event.endDate, 10)),
-        description: JSON.parse(event.details)?.description || '',
+        description: JSON.parse(event.details)?.description || "",
         allDay: event.isAllDay,
         typeOfEvent: event.typeOfEvent,
       }));
@@ -118,19 +145,19 @@ const CalendarComponent: React.FC = () => {
       showToast("error", "Error", "Enter all the fields");
       return;
     }
-  
+
     const combinedStartDate = moment(startDate)
       .hours(startTime.hours())
       .minutes(startTime.minutes())
       .seconds(0)
       .milliseconds(0);
-  
+
     const combinedEndDate = moment(endDate)
       .hours(endTime.hours())
       .minutes(endTime.minutes())
       .seconds(0)
       .milliseconds(0);
-  
+
     const input = {
       title,
       description, // Change this line
@@ -138,7 +165,7 @@ const CalendarComponent: React.FC = () => {
       endDate: combinedEndDate.toISOString(), // Use ISO format
       isAllDay,
     };
-  
+
     const mutation = `
       mutation Mutation($input: CreateEventInput!) {
         createEvent(input: $input) {
@@ -147,14 +174,14 @@ const CalendarComponent: React.FC = () => {
         }
       }
     `;
-  
+
     const token = localStorage.getItem("token");
-  
+
     if (!token) {
       showToast("error", "Error", "Login to see the events");
       return;
     }
-  
+
     try {
       const response = await fetch("https://nuavasports.com/graphql", {
         method: "POST",
@@ -167,15 +194,15 @@ const CalendarComponent: React.FC = () => {
           variables: { input },
         }),
       });
-  
+
       const result = await response.json();
-  
+
       if (result.errors) {
         console.error("GraphQL Errors:", result.errors);
         showToast("error", "Error", result.errors[0].message);
         return;
       }
-  
+
       if (result.data.createEvent.status) {
         showToast("success", "Event created successfully", "");
         fetchEvents();
@@ -186,7 +213,7 @@ const CalendarComponent: React.FC = () => {
       console.error("Error creating event:", error);
       showToast("error", "Error", "Some error occurred");
     }
-  
+
     setVisible(false);
   };
 
@@ -202,29 +229,28 @@ const CalendarComponent: React.FC = () => {
       showToast("error", "Error", "Enter all the fields");
       return;
     }
-  
+
     const combinedStartDate = moment(startDate)
       .hours(startTime.hours())
       .minutes(startTime.minutes())
       .seconds(0)
       .milliseconds(0);
-  
+
     const combinedEndDate = moment(endDate)
       .hours(endTime.hours())
       .minutes(endTime.minutes())
       .seconds(0)
       .milliseconds(0);
 
-  
     const input = {
       eventId: selectedEvent.id,
       title,
-      desciprtion:description,
+      desciprtion: description,
       startDate: combinedStartDate.toISOString(), // Use ISO format
       endDate: combinedEndDate.toISOString(), // Use ISO format
       isAllDay,
     };
-  
+
     const mutation = `
       mutation Mutation($input: EditEventInput!) {
         editEvent(input: $input) {
@@ -363,13 +389,36 @@ const CalendarComponent: React.FC = () => {
   };
 
   const eventStyleGetter = (event: any) => {
-    const backgroundColor = eventTypeColors[event.typeOfEvent as keyof typeof eventTypeColors] || '#3174ad';
+    const backgroundColor =
+      eventTypeColors[event.typeOfEvent as keyof typeof eventTypeColors] ||
+      "#3174ad";
     return { style: { backgroundColor } };
   };
 
+  // EVENT DETIALS DIALOG
+  const formatDuration = (start: Date, end: Date) => {
+    const duration = moment.duration(moment(end).diff(moment(start)));
+    return `${duration.asHours().toFixed(1)} hours`;
+  };
+
+  const eventDetailsHeader = (
+    <div className="flex justify-content-between align-items-center">
+      <span className="text-xl font-bold">Event Details</span>
+      <div>
+        <Button icon="pi pi-pencil" className="p-button-text p-button-sm" style={{color:'grey'}} onClick={handleEditEvent} />
+        <Button icon="pi pi-trash" className="p-button-text p-button-sm p-button-danger" style={{color:'red'}} onClick={handleDeleteEvent} />
+        {/* <Button icon="pi pi-times" className="p-button-text p-button-sm" style={{color:'grey'}} onClick={() => setEventDetailsVisible(false)} /> */}
+      </div>
+    </div>
+  );
+
+  function onHide(): void {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <div>
-      <Navbar buttontext="Create Tournament"/>
+      <Navbar buttontext="Create Tournament / Match" />
       <div className="calendar-container">
         <div className="sidebar">
           <button className="create-btn" onClick={opencreateEventdialog}>
@@ -393,7 +442,15 @@ const CalendarComponent: React.FC = () => {
             <h4>Event Types</h4>
             {Object.entries(eventTypeColors).map(([type, color]) => (
               <div key={type}>
-                <span style={{ backgroundColor: color, display: 'inline-block', width: '20px', height: '20px', marginRight: '10px' }}></span>
+                <span
+                  style={{
+                    backgroundColor: color,
+                    display: "inline-block",
+                    width: "20px",
+                    height: "20px",
+                    marginRight: "10px",
+                  }}
+                ></span>
                 <label>{type}</label>
               </div>
             ))}
@@ -449,13 +506,51 @@ const CalendarComponent: React.FC = () => {
           </div>
           <div className="p-field">
             <label htmlFor="startTime">Start Time </label>
-            <LocalizationProvider dateAdapter={AdapterMoment}>
+            {/* <LocalizationProvider dateAdapter={AdapterMoment}>
               <TimePicker
+                open={isOpen1}
+                onOpen={toggleOpen1}
                 value={startTime}
+                onClose={handleClose1}
                 onChange={(newValue) => setStartTime(newValue)}
                 sx={{ marginLeft: "15px" }}
+                
               />
-            </LocalizationProvider>
+            </LocalizationProvider> */}
+
+            {/* <LocalizationProvider dateAdapter={AdapterMoment}>
+      <TimePicker
+        // label={label}
+        open={isOpen1}
+        onClose={handleClose1}
+        value={startTime}
+        onChange={(newValue) => setStartTime(newValue)}
+        sx={{ marginLeft: "15px" }}
+        slots={{
+          textField: (params) => (
+            <TextField
+              {...params}
+              onClick={toggleOpen1}
+              onFocus={handleClose1}
+            />
+          ),
+        }}
+        slotProps={{
+          inputAdornment: {
+            onClick: (e) => {
+              e.stopPropagation();
+              toggleOpen1();
+            },
+          },
+        }}
+      />
+    </LocalizationProvider> */}
+
+            <TimePickerComponent
+              // label="Select Time"
+              value={startTime}
+              onChange={(newValue) => setStartTime(newValue)}
+            />
           </div>
           <div className="p-field">
             <label htmlFor="endDate">End Date</label>
@@ -468,13 +563,20 @@ const CalendarComponent: React.FC = () => {
           </div>
           <div className="p-field">
             <label htmlFor="endTime">End Time</label>
-            <LocalizationProvider dateAdapter={AdapterMoment}>
+            {/* <LocalizationProvider dateAdapter={AdapterMoment}>
               <TimePicker
                 value={endTime}
                 onChange={(newValue) => setEndTime(newValue)}
                 sx={{ marginLeft: "29px" }}
               />
-            </LocalizationProvider>
+            </LocalizationProvider> */}
+
+            <TimePickerComponent
+              // label="Select Time"
+              sx={{ marginLeft: "29px" }}
+              value={endTime}
+              onChange={(newValue) => setEndTime(newValue)}
+            />
           </div>
           {/* <div className="p-field">
             <label htmlFor="eventType">Event Type</label>
@@ -513,113 +615,27 @@ const CalendarComponent: React.FC = () => {
       </Dialog>
 
       <Dialog
-        header="Event Details"
-        visible={eventDetailsVisible}
-        style={{
-          width: "35vw",
-          height: "600px",
-          display: "flex",
-          justifyContent: "center",
-        }}
-        onHide={() => setEventDetailsVisible(false)}
-      >
-        <div style={{ marginLeft: "30px" }}>
-          <div className="p-field">
-            <InputText
-              placeholder="Event title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="event-title"
-            />
+  header={eventDetailsHeader}
+  visible={eventDetailsVisible}
+  style={{ width: '35vw' }}
+  onHide={() => setEventDetailsVisible(false)}
+>
+        {selectedEvent && (
+          <div className="p-4">
+            <h2 className="text-xl font-bold mb-2" style={{fontSize:'24px',fontWeight:'bold'}}>{selectedEvent.title}</h2>
+            <p className="mb-4">{selectedEvent.description}</p>
+            <div className="mb-2">
+              <br>
+              </br>
+              <strong><i className="pi pi-clock" style={{ color: 'grey' }}></i> Start Date:</strong> {new Date(selectedEvent.start).toLocaleDateString()}
+            </div>
+            <div>
+              <strong><i className="pi pi-hourglass" style={{ color: 'grey' }}></i> Duration:</strong> {formatDuration(new Date(selectedEvent.start), new Date(selectedEvent.end))}
+            </div>
           </div>
-          <div className="p-field">
-            <InputText
-              placeholder="Event Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="event-title"
-            />
-          </div>
-          <div className="p-field" style={{ marginTop: "30px" }}>
-            <label htmlFor="startDate">Start Date</label>
-            <Calendar
-              className="input-box-pr-calendar-cal"
-              value={startDate}
-              onChange={(e) => setStartDate(e.value as Date | null)}
-              dateFormat="yy-mm-dd"
-            />
-          </div>
-          <div className="p-field">
-            <label htmlFor="startTime">Start Time </label>
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <TimePicker
-                value={startTime}
-                onChange={(newValue) => setStartTime(newValue)}
-                sx={{ marginLeft: "15px" }}
-              />
-            </LocalizationProvider>
-          </div>
-          <div className="p-field">
-            <label htmlFor="endDate">End Date</label>
-            <Calendar
-              className="input-box-pr-calendar-cal-end"
-              value={endDate}
-              onChange={(e) => setEndDate(e.value as Date | null)}
-              dateFormat="yy-mm-dd"
-            />
-          </div>
-          <div className="p-field">
-            <label htmlFor="endTime">End Time</label>
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <TimePicker
-                value={endTime}
-                onChange={(newValue) => setEndTime(newValue)}
-                sx={{ marginLeft: "29px" }}
-              />
-            </LocalizationProvider>
-          </div>
-          {/* <div className="p-field">
-            <label htmlFor="eventType">Event Type</label>
-            <Dropdown
-              value={eventType}
-              options={eventTypeOptions}
-              onChange={(e) => setEventType(e.value)}
-              placeholder="Select Event Type"
-            />
-          </div> */}
-          <div
-            className="p-field-checkbox"
-            style={{ marginTop: "30px", display: "flex" }}
-          >
-            <input
-              type="checkbox"
-              id="isAllDay"
-              checked={isAllDay}
-              onChange={(e) => setIsAllDay(e.target.checked)}
-              className="large-checkbox"
-            />
-
-            <label
-              htmlFor="isAllDay"
-              style={{ marginLeft: "12px", paddingTop: "-50px" }}
-            >
-              All Day
-            </label>
-          </div>
-          <Flex justify="space-between" style={{ marginTop: "20px" }}>
-            <Button
-              label="Save changes"
-              onClick={handleEditEvent}
-              className="cal-event-btn-edit"
-            />
-            <Button
-              label="Delete"
-              onClick={handleDeleteEvent}
-              className="cal-event-btn-del"
-            />
-          </Flex>
-        </div>
+        )}
       </Dialog>
+
       <Toast ref={toast} position="top-right" />
     </div>
   );

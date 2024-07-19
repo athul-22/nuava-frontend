@@ -1,0 +1,65 @@
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.profile-header h1 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.profile-actions button {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-left: 10px;
+}
+
+.profile-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile-left, .profile-center, .profile-right {
+  flex: 1;
+  margin: 0 10px;
+}
+
+.profile-recognitions, .profile-info, .upcoming-events {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.recognition-card, .event-card {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.profile-right img {
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.profile-right div {
+  font-size: 1.2rem;
+  font-weight: bold;
+}

@@ -1,0 +1,83 @@
+.live-match-container {
+    font-family: Arial, sans-serif;
+    padding: 1rem;
+    width: 50%;
+    margin: 0 auto;
+  }
+  
+  .live-match-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .live-button {
+    margin-bottom: 1rem;
+  }
+  
+  .match-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  
+  .match-header {
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  .tournament-name-live-match {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .match-location-live-match {
+    color: #666;
+  }
+  
+  .match-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+  }
+  
+  .team-info {
+    text-align: center;
+  }
+  
+  .team-logo {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+  }
+  
+  .team-name {
+    font-weight: bold;
+    margin-top: 0.5rem;
+  }
+  
+  .match-score {
+    font-size: 6rem;
+    font-weight: bold;
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .match-type {
+    
+    border-radius: 20px;
+    background-color: #fef3c7;
+    text-align: center;
+    padding: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .scorers {
+    margin-top: 1rem;
+  }
+  
+  .scorer {
+    display: flex;
+    justify-content: space-between;
+  }

@@ -480,6 +480,7 @@ const NewTournament: React.FC = () => {
       startDate: dates[0].toISOString(),
       endDate: dates[1].toISOString(),
       typeOfSport: "FOOTBALL",
+      gender:selectedGender,
       intervalBetweenMatches: parseInt(intervalBetweenMatches),
       tournamentDays: intervalFields
         .filter(
@@ -612,6 +613,7 @@ const NewTournament: React.FC = () => {
                 players: selectedStudents.map((student) =>
                   parseInt(student.id, 10)
                 ),
+                gender: selectedGender,
                 typeOfSport: "FOOTBALL",
               },
             },
@@ -644,7 +646,7 @@ const NewTournament: React.FC = () => {
 
   return (
     <div className="card flex flex-column justify-content-center align-items-start">
-      <FootballNavbar buttontext="Create Tournament" />
+      <FootballNavbar buttontext="Create Tournament / Match" />
 
       <div
         className="w-full text-center mb-4"
@@ -946,7 +948,8 @@ const NewTournament: React.FC = () => {
                     className="p-button-outlined add-new-school-button"
                   />
                 </div>
-
+                    <br></br>
+                    <br></br>
                 <div className="selected-schools-container mt-4">
                   <h3>Selected Schools:</h3>
                   {selectedSchools.map(
@@ -957,6 +960,7 @@ const NewTournament: React.FC = () => {
                           icon="pi pi-times"
                           className="p-button-rounded p-button-danger p-button-text"
                           onClick={() => removeSelectedSchool(school)}
+                          
                         />
                       </div>
                     )
@@ -1042,31 +1046,35 @@ const NewTournament: React.FC = () => {
                   />
                 </IconField>
                 <div className="gender-selection">
-  <h3>Select Gender</h3>
-  <div className="p-formgroup-inline">
-    <div className="p-field-radiobutton">
-      <RadioButton
-        inputId="gender1"
-        name="gender"
-        value="BOYS"
-        onChange={(e) => setSelectedGender(e.value)}
-        checked={selectedGender === "BOYS"}
-      />
-      <label htmlFor="gender1" className="p-ml-2">Boys</label>
-    </div>
-    <div className="p-field-radiobutton">
-      <RadioButton
-        inputId="gender2"
-        name="gender"
-        value="GIRLS"
-        onChange={(e) => setSelectedGender(e.value)}
-        checked={selectedGender === "GIRLS"}
-      />
-      <label htmlFor="gender2" className="p-ml-2">Girls</label>
-    </div>
-  </div>
-</div>
-<br className="brbr" />
+                  <h3>Select Gender</h3>
+                  <div className="p-formgroup-inline">
+                    <div className="p-field-radiobutton">
+                      <RadioButton
+                        inputId="gender1"
+                        name="gender"
+                        value="BOYS"
+                        onChange={(e) => setSelectedGender(e.value)}
+                        checked={selectedGender === "BOYS"}
+                      />
+                      <label htmlFor="gender1" className="p-ml-2">
+                        Boys
+                      </label>
+                    </div>
+                    <div className="p-field-radiobutton">
+                      <RadioButton
+                        inputId="gender2"
+                        name="gender"
+                        value="GIRLS"
+                        onChange={(e) => setSelectedGender(e.value)}
+                        checked={selectedGender === "GIRLS"}
+                      />
+                      <label htmlFor="gender2" className="p-ml-2">
+                        Girls
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <br className="brbr" />
                 <div className="mt-4">
                   <label>Tournament Dates</label>
                   <div className="flex">
@@ -1211,7 +1219,7 @@ const NewTournament: React.FC = () => {
                     fontSize: "18px",
                     borderRadius: "10px",
                   }}
-                  label="Create Tournament"
+                  label="Create Tournament / Match"
                   className="action-button"
                   severity="secondary"
                   icon="pi pi-sparkles"

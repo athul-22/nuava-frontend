@@ -210,7 +210,7 @@
 
 .cal-event-btn-edit{
   height: 40px;
-  width: 320px;
+  width: 90%;
   background-color: #051da0;
   color: white;
   border-radius: 10px;
@@ -223,7 +223,7 @@
 
 .cal-event-btn-del{
   height: 40px;
-  width: 520px;
+  width: 90%;
   background-color: #d30015;
   color: white;
   border-radius: 10px;

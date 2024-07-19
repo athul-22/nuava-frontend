@@ -1,36 +1,44 @@
-.bracket {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-  }
-  
-  .round {
-    display: flex;
-    flex-direction: column;
-    margin: 0 10px;
-  }
-  
-  .match {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    padding: 10px;
-    background-color: #f9f9f9;
-  }
-  
-  .team {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px 0;
-  }
-  
-  .winner {
-    background-color: #e6ffe6; /* Light green */
-  }
-  
-  .loser {
-    background-color: #ffe6e6; /* Light red */
-  }
-  
+.tournament-bracket {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  gap: 40px; /* Adjust the gap to control space between rounds */
+}
+
+.round {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.match {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.team {
+  padding: 10px 20px;
+  border: 2px solid #000;
+  border-radius: 5px;
+  margin: 10px 0;
+  width: 200px; /* Fixed width for uniformity */
+  text-align: center; /* Center align team names */
+}
+
+.winner {
+  background-color: #c8e6c9; /* Light green for winners */
+  border-color: #4caf50; /* Dark green border for winners */
+}
+
+.loser {
+  background-color: #ffcdd2; /* Light red for losers */
+  border-color: #f44336; /* Dark red border for losers */
+}
+
+h3 {
+  margin-bottom: 20px;
+  font-size: 1.2em;
+}

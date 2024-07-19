@@ -66,7 +66,7 @@
     display: flex;
     align-items: center;
     gap: 50px;
-    margin-right: -200px;
+    /* margin-right: -200px; */
   }
   
   .center-menu span {

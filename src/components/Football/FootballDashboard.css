@@ -37,7 +37,7 @@
   .tournament-card {
     display: inline-block;
     width: 450px;
-    height: 200px;
+    /* height: 200px; */
     padding: 20px;
     margin-right: 20px;
     border-radius: 20px;
@@ -80,4 +80,95 @@
     margin-bottom: 20px;
     margin-top: 50px;
     margin-left: 20px;
+  }
+
+
+
+  .tournament-card {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .tournament-name {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+  
+  .bracket-card {
+    background-color: #ffffff;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .bracket-name {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .bracket-info {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+  }
+  
+  .participants {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .participant {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 4px;
+    width: 48%;
+  }
+  
+  .participant-name {
+    font-weight: bold;
+  }
+  
+  .participant-result {
+    font-size: 12px;
+    color: #888;
+  }
+  
+  .winner-tag {
+    background-color: #4caf50;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    display: inline-block;
+    margin-top: 5px;
+  }
+  
+  .skeleton {
+    animation: skeleton-loading 1s linear infinite alternate;
+  }
+  
+  @keyframes skeleton-loading {
+    0% {
+      background-color: hsl(200, 20%, 80%);
+    }
+    100% {
+      background-color: hsl(200, 20%, 95%);
+    }
+  }
+  
+  .mb-1 {
+    margin-bottom: 0.25rem;
+  }
+  
+  .mb-2 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .participants-skeleton {
+    display: flex;
+    justify-content: space-between;
   }

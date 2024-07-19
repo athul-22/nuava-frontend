@@ -1,4 +1,5 @@
 // src/App.tsx
+// @ts-ignore
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
@@ -16,12 +17,13 @@ import NewTournament from './components/NewTournament'
 import FootballDashboard from './components/Football/FootballDashboard'
 import Calender from "./components/Calender";
 import URLPage from "./components/URLPage";
-import Brackets from './components/Brackets'
 import IHMatches from './components/IH Matches/IHMatches'
 import CreateMatch from './components/IH Matches/CreateMatch'
 import About from './components/About'
 import Contact from './components/Contact'
-
+import Brackets from "./components/Brackets.jsx";
+import Profile from "./components/Profile";
+import Matches from "./components/Football/Matches";
 
 // Set up Apollo Client
 const client = new ApolloClient({
@@ -36,7 +38,6 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Onboarding />} />
           {/* <Route path="/login" element={<Login />} /> */}
-
           {/* COACH ROUTES */}
           {/* <Route path="/send-coach-email-otp" element={<SendCoachEmailOTP />} /> */}
           <Route path="/coach/register" element={<SendCoachEmailOTP />} />
@@ -61,7 +62,9 @@ const App: React.FC = () => {
           <Route path="/create-match" element={<CreateMatch />} />
           <Route path="/urls" element={<URLPage />} />
           <Route path="/about" element={<About/>} />
+          <Route path="/profile" element={<Profile/>} />
           <Route path="/contact" element={<Contact/>} />
+          <Route path="/football/matches" element={<Matches/>} />
         </Routes>
       </BrowserRouter>
     </ApolloProvider>

@@ -29,6 +29,7 @@ import Circle_8 from "../assets/ONBOARDING/8.png";
 import { Menu } from 'primereact/menu';
 import { Button } from 'primereact/button';
 import OnboardingNav from "./OnboardingNav";
+import Footer from "./Footer";
 
 const Onboarding: React.FC = () => {
   const [showCoachDialog, setShowCoachDialog] = useState(false);
@@ -181,25 +182,10 @@ const Onboarding: React.FC = () => {
             </div>
           </div>
 
-          <div className="footer">
-            <div className="footer-content">
-              {/* <img src="path_to_logo.png" alt="Logo" className="footer-logo" /> */}
-              <p className="footer-text">Nuava Sports</p>
-              {/* <div className="footer-social-icons">
-                <i className="pi pi-facebook" />
-                <i className="pi pi-twitter" />
-                <i className="pi pi-instagram" />
-                <i className="pi pi-linkedin" />
-              </div> */}
-              <div className="footer-links">
-                <Button label="Home" className="p-button-text" />
-                <Button label="About Us" className="p-button-text" />
-                <Button label="Contact Us" className="p-button-text" />
-                {/* <Button label="Updates" className="p-button-text" /> */}
-                {/* <Button label="Careers" className="p-button-text" /> */}
-              </div>
-            </div>
-          </div>
+          <div style={{width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}>
+      <Footer/>
+      </div>
+     
         </div>
       </div>
 
