@@ -24,6 +24,7 @@ import Contact from './components/Contact'
 import Brackets from "./components/Brackets.jsx";
 import Profile from "./components/Profile";
 import Matches from "./components/Football/Matches";
+import MatchesMain from "./components/Matches";
 
 // Set up Apollo Client
 const client = new ApolloClient({
@@ -65,6 +66,7 @@ const App: React.FC = () => {
           <Route path="/profile" element={<Profile/>} />
           <Route path="/contact" element={<Contact/>} />
           <Route path="/football/matches" element={<Matches/>} />
+          <Route path="/matches" element={<MatchesMain/>} />
         </Routes>
       </BrowserRouter>
     </ApolloProvider>

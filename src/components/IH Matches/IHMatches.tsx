@@ -42,7 +42,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      authorization: token ? `jwt ${token}` : "",
     }
   }
 });
@@ -91,17 +91,17 @@ const IHMatches: React.FC = () => {
                   </div>
                   <div className="match-content">
                     <div className="team">
-                      <p style={{fontSize:'20px',backgroundColor:'#eee',height:'50px',width:'50px',paddingTop:'10px',display:'flex',justifyContent:'center',borderRadius:'50%'}}>{details.house1Name}</p>
+                      <p style={{fontSize:'20px',height:'50px',width:'50px',paddingTop:'10px',display:'flex',justifyContent:'center',borderRadius:'50%'}}>{details.house1Name}</p>
                     </div>
                     <div className="match-info">
                       <p className="match-time">{formatDate(match.startDate)}</p>
                       {details.venue && <p className="match-venue">{details.venue}</p>}
                     </div>
                     <div className="team">
-                      <p style={{fontSize:'20px',backgroundColor:'#eee',height:'50px',width:'50px',paddingTop:'10px',display:'flex',justifyContent:'center',borderRadius:'50%'}}>{details.house2Name}</p>
+                      <p style={{fontSize:'20px',height:'50px',width:'50px',paddingTop:'10px',display:'flex',justifyContent:'center',borderRadius:'50%'}}>{details.house2Name}</p>
                     </div>
                   </div>
-                  <div className="match-details">
+                  <div className="match-details-ihm">
                     <center>
                       <p style={{color:'#b99d0b',backgroundColor:'#fefbdd',width:"100px",borderRadius:'20px'}} className="sport-type">
                         <strong></strong> {details.typeOfSport}

@@ -3,6 +3,10 @@ import React from "react";
 
 
 const Footer: React.FC = () => {
+
+  const handleHomeClick = () => {
+
+  }
     return (
         <div className="footer" >
             <div className="footer-content">
@@ -15,9 +19,9 @@ const Footer: React.FC = () => {
                 <i className="pi pi-linkedin" />
               </div> */}
               <div className="footer-links">
-                <Button label="Home" className="p-button-text" />
-                <Button label="About Us" className="p-button-text" />
-                <Button label="Contact Us" className="p-button-text" />
+                <Button label="Home" onClick={() => {window.location.href = '/'}} className="p-button-text" />
+                <Button label="About Us" className="p-button-text"onClick={() => {window.location.href = '/about'}}/>
+                <Button label="Contact Us" className="p-button-text" onClick={() => {window.location.href = '/contact'}}/>
                 {/* <Button label="Updates" className="p-button-text" /> */}
                 {/* <Button label="Careers" className="p-button-text" /> */}
               </div>

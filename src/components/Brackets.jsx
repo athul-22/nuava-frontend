@@ -5,7 +5,7 @@ import Navbar from './Navbar';
 import menuOptionsWithIcons from './menuOptionsWithIcons';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, List, ListItem, ListItemText } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 const PopperMenu = ({ isOpen, onClose, title, anchorEl, options, onOptionClick }) => {
   const [popperElement, setPopperElement] = useState(null);
@@ -62,11 +62,11 @@ const PopperMenu = ({ isOpen, onClose, title, anchorEl, options, onOptionClick }
 const CustomSeed = ({ seed, breakpoint, onFixtureClick }) => {
   const determineFixtureStyle = (fixture) => {
     switch (fixture.state) {
-      case 'PENDING':
+      case 'Pending':
         return { borderLeft: '5px solid grey' };
-      case 'STARTED':
-        return { borderLeft: '5px solid blue' };
-      case 'ENDED':
+      case 'Live':
+        return { borderLeft: '5px solid red' };
+      case 'Ended':
         return { borderLeft: '5px solid green' };
       default:
         return { borderLeft: '5px solid grey' };
@@ -77,20 +77,20 @@ const CustomSeed = ({ seed, breakpoint, onFixtureClick }) => {
     if (fixtureState === 'STARTED' || fixtureState === 'ENDED') {
       return team.isWinner ? { color: 'green', fontWeight: 'bold' } : { color: 'red' };
     }
-    return { color: 'grey',borderLeft: '5px solid grey',marginTop:'10px' };
+    return { color: 'grey', borderLeft: '5px solid grey', marginTop: '10px', fontSize: '20px' };
   };
 
   return (
-    <Seed mobileBreakpoint={breakpoint} style={{ fontSize: 12 }}>
+    <Seed mobileBreakpoint={breakpoint} style={{ fontSize: 16 }}>
       <SeedItem 
         style={{ 
           ...determineFixtureStyle(seed),
           backgroundColor: 'white', 
           color: 'black', 
-          padding: '10px', 
+          padding: '30px', 
           borderRadius: '5px', 
           border: '1px solid #eee',
-          cursor: 'pointer'
+          cursor: 'pointer',
         }}
         onClick={(e) => onFixtureClick(e, seed)}
       >
@@ -116,9 +116,9 @@ const BracketsComponent = () => {
   const [rounds, setRounds] = useState(null);
   const [loading, setLoading] = useState(true);
   const [swapDialogOpen, setSwapDialogOpen] = useState(false);
-  const [swapOptions, setSwapOptions] = useState([]);
-
-  const [fixtureDialogOpen, setFixtureDialogOpen] = useState(false);
+  const [selectedTeamToSwap, setSelectedTeamToSwap] = useState('');
+  const [selectedTargetTeam, setSelectedTargetTeam] = useState('');
+  const [allTeams, setAllTeams] = useState([]);
 
   const handleFixtureClick = (event, fixture) => {
     event.stopPropagation();
@@ -132,41 +132,38 @@ const BracketsComponent = () => {
     console.log(`${action} clicked for fixture:`, selectedFixture);
     if (action === 'handleStart') {
       localStorage.setItem('selectedFixture', JSON.stringify(selectedFixture));
+      localStorage.setItem('startfix', selectedFixture.id);
       window.location.href = '/football/matches';
     } else if (action === 'handleSwap') {
-      showSwapOptions(selectedFixture);
-    }
-    else if (action === 'fixtureInfo') {
-      setFixtureDialogOpen(true);
+      prepareSwapDialog();
     }
     setMenuOpen(false);
   };
 
-  const showSwapOptions = (fixture) => {
-    const otherFixtures = rounds.flatMap(round => 
-      round.seeds.filter(seed => seed.id !== fixture.id)
+  const prepareSwapDialog = () => {
+    const allTeamsExceptCurrent = rounds.flatMap(round => 
+      round.seeds.flatMap(seed => 
+        seed.id !== selectedFixture.id ? seed.teams : []
+      )
     );
-
-    const options = [];
-    fixture.teams.forEach(teamToSwap => {
-      otherFixtures.forEach(otherFixture => {
-        otherFixture.teams.forEach(otherTeam => {
-          options.push({
-            teamToSwap: teamToSwap,
-            targetFixture: otherFixture,
-            targetTeam: otherTeam
-          });
-        });
-      });
-    });
-
-    setSwapOptions(options);
+    setAllTeams(allTeamsExceptCurrent);
+    setSelectedTeamToSwap(selectedFixture.teams[0].id);
+    setSelectedTargetTeam('');
     setSwapDialogOpen(true);
   };
 
-  const handleSwap = async (swapOption) => {
+  const handleSwap = async () => {
+    if (!selectedTeamToSwap || !selectedTargetTeam) {
+      console.error('Please select both teams to swap');
+      return;
+    }
+
     try {
       const token = localStorage.getItem('token');
+      const targetFixture = rounds.flatMap(round => round.seeds).find(seed => 
+        seed.teams.some(team => team.id === selectedTargetTeam)
+      );
+
       const response = await fetch('https://nuavasports.com/graphql', {
         method: 'POST',
         headers: {
@@ -185,9 +182,9 @@ const BracketsComponent = () => {
           variables: { 
             input: { 
               fixtureId1: parseInt(selectedFixture.id),
-              fixtureId2: parseInt(swapOption.targetFixture.id),
-              team1Id: parseInt(swapOption.teamToSwap.id),
-              team2Id: parseInt(swapOption.targetTeam.id)
+              fixtureId2: parseInt(targetFixture.id),
+              team1Id: parseInt(selectedTeamToSwap),
+              team2Id: parseInt(selectedTargetTeam)
             } 
           },
         }),
@@ -232,7 +229,7 @@ const BracketsComponent = () => {
               }
             }
           }`,
-          variables: { input: { tournamentId: 5 } },
+          variables: { input: { tournamentId: 1 } },
         }),
       });
 
@@ -279,7 +276,7 @@ const BracketsComponent = () => {
         justifyContent: 'center',
         padding: '20px',
         backgroundColor: 'white',
-        fontSize:'24px'
+        fontSize: '24px'
       }}>
         {loading ? (
           <Skeleton height={40} count={10} />
@@ -298,40 +295,41 @@ const BracketsComponent = () => {
           onClose={() => setMenuOpen(false)} 
           title={selectedFixture ? `Match ${selectedFixture.id}` : ''}
           anchorEl={anchorEl}
-          // options={[
-          //   ...menuOptionsWithIcons,
-          //   { label: 'Swap Teams', onClick: 'handleSwap', icon: 'SwapIcon' }
-          // ]}
           options={menuOptionsWithIcons}
           onOptionClick={handleOptionClick}
         />
         <Dialog open={swapDialogOpen} onClose={() => setSwapDialogOpen(false)}>
-          <DialogTitle>Select a team to swap</DialogTitle>
+          <DialogTitle>Swap Teams</DialogTitle>
           <DialogContent>
-            <List>
-              {swapOptions.map((option, index) => (
-                <ListItem button key={index} onClick={() => handleSwap(option)}>
-                  <ListItemText primary={`Swap ${option.teamToSwap.name} with ${option.targetTeam.name} (Fixture ${option.targetFixture.id})`} />
-                </ListItem>
-              ))}
-            </List>
+            <FormControl fullWidth margin="normal">
+              <InputLabel style={{fontSize:'20px',marginLeft:'-10px'}}>Select Teams to Swap</InputLabel>
+              <br></br>
+              <Select
+                value={selectedTeamToSwap}
+                onChange={(e) => setSelectedTeamToSwap(e.target.value)}
+              >
+                {selectedFixture?.teams.map((team) => (
+                  <MenuItem key={team.id} value={team.id}>{team.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Select Target Team</InputLabel>
+              <Select
+                value={selectedTargetTeam}
+                onChange={(e) => setSelectedTargetTeam(e.target.value)}
+              >
+                {allTeams.map((team) => (
+                  <MenuItem key={team.id} value={team.id}>{team.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setSwapDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleSwap} color="primary">Swap</Button>
           </DialogActions>
         </Dialog>
-
-        <Dialog open={fixtureDialogOpen} onClose={() => setFixtureDialogOpen(false)}>
-          <DialogTitle>Select a team to swap</DialogTitle>
-          <DialogContent>
-           
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setFixtureDialogOpen(false)}>Cancel</Button>
-          </DialogActions>
-        </Dialog>
-
-
       </div>
     </>
   );

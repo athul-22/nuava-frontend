@@ -96,3 +96,45 @@
     font-weight: bold;
     
   }
+
+
+
+/* MATCHES CSS */
+
+.matches-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.match-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+}
+
+.match-header {
+  background-color: #f0f0f0;
+  border-radius: 10px 10px 0 0;
+  padding: 10px;
+}
+
+.match-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team {
+  flex: 1;
+  text-align: center;
+}
+
+.match-info {
+  flex: 2;
+  text-align: center;
+}

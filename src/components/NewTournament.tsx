@@ -613,7 +613,7 @@ const NewTournament: React.FC = () => {
                 players: selectedStudents.map((student) =>
                   parseInt(student.id, 10)
                 ),
-                gender: selectedGender,
+                // gender: selectedGender,
                 typeOfSport: "FOOTBALL",
               },
             },

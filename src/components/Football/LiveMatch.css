@@ -15,7 +15,7 @@
     margin-bottom: 1rem;
   }
   
-  .match-card {
+  .match-card-individual {
     background-color: white;
     border-radius: 0.5rem;
     overflow: hidden;
@@ -55,6 +55,11 @@
   .team-name {
     font-weight: bold;
     margin-top: 0.5rem;
+    padding: 30px;
+    text-align: center;
+    padding-top: 25%;
+    /* background-color: #edf5ff; */
+    border-radius: 50%;
   }
   
   .match-score {

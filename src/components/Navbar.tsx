@@ -301,7 +301,7 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
         {/* Center section with navigation links */}
         <div className="center-menu">
           <span onClick={homeClickMenu}>Home</span>
-          <span>Matches</span>
+          <span onClick={()=>{window.location.href = '/matches'}}>Matches</span>
           <span>Results</span>
           {/* <span>Live</span> */}
         </div>
@@ -432,7 +432,7 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
               <a href="#home">Home</a>
             </li>
             <li>
-              <a href="#matches">Matches</a>
+              <a href="http://localhost:3001/matches" >Matches</a>
             </li>
             <li>
               <a href="#results">Results</a>

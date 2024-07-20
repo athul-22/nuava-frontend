@@ -14,8 +14,8 @@
   }
   
   .banner-image {
-    height: 300px;
-    width: 600px;
+    height: 400px;
+    width: 800px;
     border-radius: 25px;
     object-fit: cover;
     margin-top: -40px;
@@ -23,6 +23,7 @@
   
   .tournaments-container {
     overflow-x: auto;
+    
     white-space: nowrap;
     padding: 20px;
     -webkit-overflow-scrolling: touch;
@@ -34,10 +35,10 @@
     display: none; /* WebKit */
   }
   
-  .tournament-card {
+  /* .tournament-card {
     display: inline-block;
     width: 450px;
-    /* height: 200px; */
+    height: 200px;
     padding: 20px;
     margin-right: 20px;
     border-radius: 20px;
@@ -46,7 +47,7 @@
     vertical-align: top;
     white-space: normal;
     text-align: center;
-  }
+  } */
   
   .tournament-name {
     background-color: #e9ecf7;
@@ -84,17 +85,18 @@
 
 
 
-  .tournament-card {
+  /* .tournament-card {
     background-color: #f5f5f5;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
-  
+   */
   .tournament-name {
-    font-size: 24px;
+    font-size: 18px;
     margin-bottom: 15px;
+    width: 90%;
   }
   
   .bracket-card {
@@ -171,4 +173,168 @@
   .participants-skeleton {
     display: flex;
     justify-content: space-between;
+  }
+
+
+  .dashboard-container {
+    padding: 20px;
+  }
+  
+  .banner-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  /* .banner-image {
+    width: 100%;
+    max-width: 1200px;
+  } */
+  
+  .up-match {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .tournaments-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .tournament-card {
+    width: fit-content;
+    display: flex;
+    
+    margin-bottom: 20px;
+  }
+  
+  .fixtures-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .fixture-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px;
+    flex: 1 1 45%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-align: center;
+    width: fit-content;
+    padding-left: 30px;
+padding-right: 30px;
+  }
+  
+  .fixture-card-live {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px;
+    /* flex: 1 1 45%; */
+    border-left: 10px solid red;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* position: relative; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-align: center;
+    width: fit-content;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  
+  .fixture-header {
+    /* display: flex; */
+    /* justify-content: space-between; */
+    width: 100%;
+    text-align: center;
+  }
+  
+  .fixture-title {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+
+  }
+  
+  .fixture-time {
+    color: rgb(255, 107, 107);
+    font-weight: bold;
+  }
+  
+  .fixture-info {
+    margin-bottom: 5px;
+    padding: 5px;
+    background-color: #fefbdd;
+    color: #b79900;
+    border-radius: 40px;
+    width: fit-content;
+  }
+  
+  .edit-button {
+    margin-left: 20px;
+    position: absolute;
+    top: 20px;
+    right:5px;
+    color: grey;
+    border: 1px solid silver;
+    border-radius: 50%;
+  }
+  
+  /* @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  } */
+  
+  .skeleton {
+    background: #f4f4f4;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px;
+    flex: 1 1 45%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .participants-skeleton {
+    display: flex;
+    justify-content: space-between;
+  }
+
+
+  .start-fxture{
+    padding: 10px 20px;
+    background-color: #001487;
+    color: white;
+    border-radius: 30px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .start-fxture:hover{
+   background-color: white;
+    border: 1px solid #051da0;
+    color: #051da0;
+  }
+
+  .view-fixture-updates{
+    padding: 10px 20px;
+    background-color: #ff4848;
+    color: white;
+    border-radius: 30px;
+    width: 100%;
+    margin-top: 10px;
   }
