@@ -57,7 +57,7 @@ const OnboardingNav: React.FC = () => {
             label="Coach"
             onClick={(e) => coachMenuRef.current?.toggle(e)}
             className="popup-menu-coach-class mobile-nav-popup-menu-coach-class"
-          />
+          /> 
           <Menu
             model={coachItems}
             popup
