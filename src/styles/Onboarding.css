@@ -190,7 +190,8 @@
 
   .onboard-subtitle {
     font-size: 1.2rem;
-    text-align: left;
+    margin-top: -10px;
+    /* text-align: left; */
   }
 
   .onboard-button {
@@ -216,25 +217,62 @@
 
   .onboard-content {
     padding: 2rem 1rem 1.5rem 1rem;
+    margin-top: -100px;
   }
 
   .features-title {
-    font-size: 1.5rem;
-    margin-top: 100px;
+    font-size: 2rem;
+    margin-top: -20px;
   }
 
   .features-container {
     flex-direction: column;
     align-items: center;
+    margin-top: -10px;
+  }
+
+  .feature-icon{
+    height: 50px;
+    width: 50px;
   }
 
   .feature {
-    width: 80%;
+    width: 90%;
     margin-bottom: 1rem;
+    height: 150px;
+  }
+
+  .feature-text{
+    font-size: 1rem;
+  }
+
+  .navbar-onboard{
+    width: 200px;
+  }
+
+  .container-c{
+    margin-top: 200px;
+    margin-bottom: 200px;
+  
+  }
+
+  .circle-c{
+    width: 50px;
+    height: 100px;
+  
   }
 }
 
 @media (min-width: 768px) {
+
+  .popup-menu-coach-class,
+.popup-menu-student-class {
+  height: 40px;
+  width: 100px;
+  background-color: #051da0;
+  color: white;
+  border-radius: 20px;
+}
   
   .tennis {
     margin-bottom: 160px;
@@ -340,7 +378,7 @@
 }
 
 
-.circle_2{
+/* .circle_2{
   height: 80px;
   width: 80px;
 margin-left: 900px;
@@ -351,7 +389,7 @@ margin-left: 900px;
   width: 50px;
   margin-left: 360px;
   margin-top: 50px;
-}
+} */
 
 
 /* .circle_4{
@@ -361,7 +399,7 @@ margin-left: 900px;
   margin-top: 50px;
 } */
 
-.circle_5{
+/* .circle_5{
   height: 90px;
   width: 90px;
   margin-left: 1000px;
@@ -394,7 +432,7 @@ margin-left: 900px;
   width: 80px;
   margin-left: 500px;
 
-}
+} */
 
 
 
@@ -514,25 +552,110 @@ margin-left: 900px;
 }
 
 @media (max-width: 768px) {
+  .gradient-text{
+    font-size: 6rem;
+  
+  }
+
+  .tagline{
+    font-size: 2rem;
+    padding-top: 10px;
+  }
   .navbar-content-onboard {
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
+    width: 95%;
+    font-size: 16px;
     justify-content: space-around;
   }
 
   .navbar-content-onboard a,
   .navbar-content-onboard .p-button {
-    margin: 0.5rem;
+    /* margin: 0.5rem; */
   }
-}
 
-.popup-menu-coach-class,
+  .circles-c{
+    height: 400px;
+    width: 400px;
+  }
+
+  .circle-c{
+    width: 150px;
+    height: 150px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+   
+  }
+
+  .circle1-c{
+    width: 250px;
+    height: 250px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .circle2-c{
+    width: 350px;
+    height: 350px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .content-c h1{
+    font-size: 2rem;
+  
+  }
+
+  .btn-c{
+    padding: 5px 10px;
+  }
+
+  .container-c{
+    margin-top:160px;
+  }
+  .footer{
+    margin-top: -600px;
+    border-radius: 20px;
+  }
+  .footer-text{
+    font-size: 1.5rem;
+  }
+
+  .footer-links{
+    font-size: 12px;
+  }
+
+  .navbar-onboard{
+    width: 90%;
+    height: 50px;
+    font-size: 16px;
+  }
+
+  .navbar-content-onboard{
+    font-size: 13px;
+    display: block;
+  }
+
+  .popup-menu-coach-class,
 .popup-menu-student-class {
-  height: 40px;
-  width: 100px;
+  height: 30px;
+  width: 80px;
   background-color: #051da0;
   color: white;
   border-radius: 20px;
+  font-size: 12px;
 }
+
+.nav-btn-contaier{
+  display: inline-block;
+
+}
+
+}
+
+/* ====================================================== */
 
 
 .nav-btn-contaier{
@@ -546,7 +669,7 @@ margin-left: 900px;
 }
 
 
-.highlighted-text {
+/* .highlighted-text {
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMjAwMTA5MDQvL0VOIgogICAgICAgICAgICAgICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+Cgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgICB3aWR0aD0iMWluIiBoZWlnaHQ9IjAuNWluIgogICAgIHZpZXdCb3g9IjAgMCAzMDAgMTUwIj4KICA8cGF0aAogICAgICAgIGZpbGw9IiNmZmUwMDAiIHN0cm9rZT0ibm9uZSIKICAgICAgICBkPSJNIDEyLjAwLDQ4LjAwCiAgICAgICAgICAgQyAxMi4wMCw1MC4wOSAxMS43OSw1NC45OSAxMi42MCw1Ni43MgogICAgICAgICAgICAgMTUuNTksNjMuMTggMjYuMDksNTYuNjQgMzMuMDAsNjMuMDAKICAgICAgICAgICAgIDMwLjg0LDYzLjE4IDIzLjA1LDYzLjg3IDIxLjgwLDY1LjAyCiAgICAgICAgICAgICAxOC4wMiw2Ny44OCAyMS4yOSw3Ni4zNSAyMS44MCw4MC4wMAogICAgICAgICAgICAgMjEuODAsODAuMDAgMjEuODAsODYuMDAgMjEuODAsODYuMDAKICAgICAgICAgICAgIDIxLjgwLDg2LjAwIDQwLjAwLDg3LjAwIDQwLjAwLDg3LjAwCiAgICAgICAgICAgICAzOS45Myw4OC44OCA0MC4wNiw5MS4wNCAzOC45OCw5Mi42OQogICAgICAgICAgICAgMzcuNTEsOTQuOTMgMzUuMTUsOTQuNzUgMzIuNTksOTYuMjAKICAgICAgICAgICAgIDI4LjMzLDk4LjYxIDI2Ljg3LDEwMi4yMiAyNy4zNCwxMDcuMDAKICAgICAgICAgICAgIDI3LjM0LDEwNy4wMCAzMC4wMiwxMjMuNDEgMzAuMDIsMTIzLjQxCiAgICAgICAgICAgICAzMS44MiwxMjUuNzUgNDAuMDEsMTI3Ljk1IDQzLjAwLDEyOC4wMAogICAgICAgICAgICAgNDMuMDAsMTI4LjAwIDg3LjAwLDEyOC4wMCA4Ny4wMCwxMjguMDAKICAgICAgICAgICAgIDg4LjA4LDEyMS41NiA5MS4xNiwxMjEuODAgOTcuMDAsMTIyLjA0CiAgICAgICAgICAgICA5Ny4wMCwxMjIuMDQgMTA5LjAwLDEyMy4wMCAxMDkuMDAsMTIzLjAwCiAgICAgICAgICAgICAxMDkuMDAsMTIzLjAwIDEyOC4wMCwxMjMuMDAgMTI4LjAwLDEyMy4wMAogICAgICAgICAgICAgMTI4LjAwLDEyMy4wMCAxODIuMDAsMTIyLjAwIDE4Mi4wMCwxMjIuMDAKICAgICAgICAgICAgIDE5NC41OCwxMjEuOTcgMTg4LjQyLDExOS4wMyAyMDEuMDAsMTE5LjAwCiAgICAgICAgICAgICAyMDEuMDAsMTE5LjAwIDI0My4wMCwxMTkuMDAgMjQzLjAwLDExOS4wMAogICAgICAgICAgICAgMjQzLjAwLDExOS4wMCAyNTguMDAsMTE4LjAwIDI1OC4wMCwxMTguMDAKICAgICAgICAgICAgIDI1OS41MywxMDkuMTAgMjY2LjAxLDExMy4zNyAyNzAuNDAsMTA5LjE1CiAgICAgICAgICAgICAyNzIuNjEsMTA3LjAzIDI3Mi4zMCwxMDAuODUgMjcyLjAwLDk4LjAwCiAgICAgICAgICAgICAyNzIuMDAsOTguMDAgMjgwLjAwLDk3LjAwIDI4MC4wMCw5Ny4wMAogICAgICAgICAgICAgMjgwLjAwLDk0LjEwIDI4MC4yNiw4OC41NSAyNzkuMjYsODYuMDIKICAgICAgICAgICAgIDI3Ni40OSw3OC45OCAyNjQuNjMsNzYuODggMjU4LjAwLDc2LjAwCiAgICAgICAgICAgICAyNjUuMTUsNjkuMTkgMjc2LjQwLDczLjAzIDI3NC44NSw2Mi4wNAogICAgICAgICAgICAgMjc0LjQ3LDU5LjM1IDI3My43Myw1OC44NSAyNzIuMDAsNTcuMDAKICAgICAgICAgICAgIDI4MS42OCw1My43NyAyODEuMDAsNTQuMjggMjgxLjAwLDQ0LjAwCiAgICAgICAgICAgICAyODEuMDAsNDQuMDAgMjU4LjAwLDQyLjM4IDI1OC4wMCw0Mi4zOAogICAgICAgICAgICAgMjUwLjAwLDQwLjg0IDI1MS40OCwzOC4wMyAyMzUuMDAsMzguMDAKICAgICAgICAgICAgIDIzNS4wMCwzOC4wMCAxODkuMDAsMzkuMDAgMTg5LjAwLDM5LjAwCiAgICAgICAgICAgICAxODkuMDAsMzkuMDAgMTc3LjAwLDM5LjgyIDE3Ny4wMCwzOS44MgogICAgICAgICAgICAgMTc3LjAwLDM5LjgyIDE1OS4wMCwzOC4wMCAxNTkuMDAsMzguMDAKICAgICAgICAgICAgIDE1OS4wMCwzOC4wMCAxMjguMDAsMzguMDAgMTI4LjAwLDM4LjAwCiAgICAgICAgICAgICAxMTYuOTAsMzguMDIgMTIwLjE2LDM5LjQwIDExMy4wMCw0MC42NwogICAgICAgICAgICAgMTEzLjAwLDQwLjY3IDk3LjAwLDQyLjE3IDk3LjAwLDQyLjE3CiAgICAgICAgICAgICA5Ny4wMCw0Mi4xNyA4Ny4wMCw0My44MyA4Ny4wMCw0My44MwogICAgICAgICAgICAgODcuMDAsNDMuODMgNTcuMDAsNDUuMDAgNTcuMDAsNDUuMDAKICAgICAgICAgICAgIDU3LjAwLDQ1LjAwIDMyLjAwLDQ4LjAwIDMyLjAwLDQ4LjAwCiAgICAgICAgICAgICAzMi4wMCw0OC4wMCAxMi4wMCw0OC4wMCAxMi4wMCw0OC4wMCBaIiAvPgo8L3N2Zz4K');
   background-position: 50% 50%;
   padding-left: 20px;
@@ -554,4 +677,75 @@ margin-left: 900px;
   padding-top: 5px;
   background-repeat: no-repeat;
   background-size: cover;
+} */
+
+
+/* .navbar-onboard {
+  
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+} */
+
+.navbar-onboard.scrolled {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-nav-menu-button{
+  display: none;
+
+}
+
+.navbar-content-onboard a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #000;
+}
+
+.nav-btn-contaier {
+  display: flex;
+  align-items: center;
+}
+
+.popup-menu-coach-class,
+.popup-menu-student-class {
+  margin-left: 10px;
+}
+
+/* Mobile Navbar Styles */
+@media (max-width: 768px) {
+  .mobile-nav-home, .mobile-nav-about, .mobile-nav-contact, .mobile-nav-popup-menu-coach-class, .mobile-nav-popup-menu-student-class {
+    display: none;
+  }
+
+  .mobile-nav-menu-button {
+    display:block;
+
+
+  }
+
+  .mobile-nav-sidebar {
+    padding: 20px;
+  }
+
+  .mobile-nav-sidebar-link {
+    display: block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #000;
+  }
+
+  .mobile-nav-sidebar-button {
+    display: block;
+    margin-bottom: 20px;
+    margin-left: 1px;
+    width:90%
+  }
+
+  .popup_menu_student, .popup_menu_coach,.popup_menu_coach_list {
+    font-size:12px ;
+   
+  }
+
 }
