@@ -18,7 +18,6 @@ import { Flex } from "@mantine/core";
 import { Dropdown } from "primereact/dropdown";
 import TextField from "@mui/material/TextField";
 import TimePickerComponent from "./TimePickerComponent";
-import { FiEdit, FiTrash2, FiX } from 'react-icons/fi';
 
 
 const localizer = momentLocalizer(moment);
