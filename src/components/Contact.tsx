@@ -1,40 +1,44 @@
 import React from "react";
 import OnboardingNav from "./OnboardingNav";
 import grid from "../assets/GRID.svg";
+import '../styles/Onboarding.css'
 
 const Contact: React.FC = () => {
   return (
+    <>
+    <div style={{ display: "flex", justifyContent: "center" }}>
+    <OnboardingNav />
+  </div>
+  <div className="onboard-container">
+    {/* <img src={bg} alt="" className="onboard-bg" width="1308" /> */}
     <div
-      style={{ 
-        backgroundImage: `url(${grid})`, 
-        display: "flex", 
-        // justifyContent: "center", 
-        alignItems: "center", 
-        flexDirection: "column", 
-        height: "100vh",
-        marginBottom:'400px'
-      }}
-    >
-      <OnboardingNav />
+      className="onboard-overlay"
+      style={{ backgroundImage: `url(${grid})` }}
+    ></div>
       <div style={{ textAlign: "center", marginTop: "200px", }}>
-        <p style={{ fontSize: "80px", color: "#051da0", fontWeight: "bold" }}>
+        <p style={{  }} className="contact-title">
           Contact Us
         </p>
-        <p style={{ fontSize: "30px", color: "grey", fontWeight: "bold" }}>
+        <p style={{ }} className="contact-subtitle">
           24*7 Support . We are here to help you
         </p>
       </div>
-      <div
+      <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+      <div className="contact-form-main"
         style={{
-          width: "600px",
+          width: "98%",
+          maxWidth:'600px',
           backgroundColor: "white",
           padding: "20px",
           borderRadius: "20px",
           // boxShadow: "0 0 10px rgba(0,0,0,0.1)",
           marginTop: "50px",
-          border:'1px solid #eee'
+          border:'1px solid #eee',
+          
+          
         }}
       >
+        
         <form>
           <div style={{ marginBottom: "10px" }}>
             <label htmlFor="email">Email ID</label>
@@ -95,8 +99,10 @@ const Contact: React.FC = () => {
             </button>
           </div>
         </form>
+        </div>
       </div>
     </div>
+    </>
   );
 };
 

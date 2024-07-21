@@ -94,7 +94,8 @@ const Onboarding: React.FC = () => {
       <div
         className="onboard-overlay"
         style={{ backgroundImage: `url(${grid})` }}
-      ></div>
+      >
+      </div>
 
       <div className="onboard-content">
         <div className="onboard-text-box">

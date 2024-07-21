@@ -287,8 +287,53 @@
   .onboard-hide-md {
     display: inline;
   }
+
+
+
+.aboutus-text{
+  font-size: 80px;
+  text-align: center;
+  color: #051da0;
+  font-weight: bolder;
+  margin-top: 100px;
 }
 
+
+.aboutus-text-tagline{
+  font-size: 30px;
+  text-align: center;
+  color: grey;
+  font-weight: bolder;
+}
+
+.subtitle-about{
+  margin-left: 50px;
+  font-size: 25px;
+  color: #051da0;
+  font-weight: bold;
+}
+
+.subtitle-content-about{
+  margin-left: 50px;
+  font-size: 20px;
+  color: grey;
+  width: 90%;
+}
+
+.subtitle-about-location{
+  margin-left: 50px;
+  font-size: 25px;
+  color: #051da0;
+  font-weight: bold;
+}
+
+
+}
+
+/* .about-team-main-container{
+  display:'inline-flex',
+
+} */
 
 /* body, html {
   margin: 0;
@@ -488,7 +533,7 @@ margin-left: 900px;
   z-index: 1000;
   background-color: transparent;
   backdrop-filter: blur(10px);
-  width: 70%;
+  /* width: 70%; */
   text-align: center;
   justify-content: center;
   align-items: center;
@@ -748,4 +793,103 @@ margin-left: 900px;
    
   }
 
+  .about-nav-onboard{
+    width: 100px;
+    margin-bottom: 100px;
+  }
+
+  .aboutus-text{
+    font-size: 40px;
+  text-align: center;
+  color: #051da0;
+  font-weight: bolder;
+  margin-top: 100px;
+  }
+
+  .aboutus-text-tagline{
+    font-size: 16px;
+    text-align: center;
+    color: grey;
+    font-weight: bolder;
+  }
+
+  .subtitle-about{
+    margin-left: 50px;
+    font-size: 18px;
+    color: #051da0;
+    font-weight: bold;
+  }
+
+  .subtitle-content-about{
+    margin-left: 50px;
+    font-size: 18px;
+    color: grey;
+    width: 90%;
+  }
+
+  .subtitle-about-location{
+    margin-left: 50px;
+    font-size: 25px;
+    color: #051da0;
+    font-weight: bold;
+    
+  }
+
+  .container-class-forabout{
+    margin-left: -30px;
+    width: 95%;
+  }
+
+  .subtitle-content-about{
+    font-size: 16px;
+    
+  }
+
+  .subtitle-about-location{
+    font-size: 20px;
+  }
+
+  .about-team-main{
+    width: 95%;
+  }
+
+  .contact-title{
+    font-size: 40px;
+    text-align: center;
+    color: #051da0;
+    font-weight: bolder;
+    margin-top: -100px;
+  }
+  .contact-subtitle{
+    font-size: 18px;
+    color: grey;
+    font-weight: bolder;
+  }
 }
+
+
+.about-team-main-container {
+  display: grid;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .about-team-main-container {
+    display: inline-flex;
+  }
+
+  .contact-title{
+    font-size: 80px;
+    color: #051da0;
+    font-weight: bolder;
+  }
+
+  .contact-subtitle{
+    font-size: 30px;
+    color: grey;
+    font-weight: bolder;
+  }
+}
+
+
+
