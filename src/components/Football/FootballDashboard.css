@@ -7,6 +7,52 @@
     margin-top: -40px;
     margin-left: -50px;
   }
+
+  .tournaments-container{
+    margin-left: -30px;
+  }
+
+  .tournament-name{
+    font-size: .2em;
+    margin-top: -10px;
+    width: 100%;
+  }
+
+  .fixture-card-live{
+    height: 200px;
+  }
+
+  .tournament-name {
+    font-size: 18px;
+    margin-bottom: 15px;
+    width: 90%;
+  }
+
+  .fixture-title {
+    font-size: .9rem;
+    margin-bottom: 10px;
+    font-weight: bolder;
+  }
+
+  .fixture-time{
+    font-size: 14px;
+  }
+
+  .view-fixture-updates{
+    padding: 5px 10px;
+    background-color: #ff5d5d;
+    color: white;
+    border-radius: 30px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .live-match-title-fd{
+    font-size:16px ;
+    color: grey;
+    margin-bottom: -20px;
+  }
+  
 }
 
 
@@ -18,6 +64,33 @@
     object-fit: cover;
     margin-top: -40px;
   }
+
+  .tournament-name {
+    font-size: 18px;
+    margin-bottom: 15px;
+    width: 90%;
+  }
+  
+  .fixture-title {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+
+  }
+
+  .view-fixture-updates{
+    padding: 10px 20px;
+    background-color: #ff5d5d;
+    color: white;
+    border-radius: 30px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .live-match-title-fd{
+    font-size:20px ;
+    color: grey;
+  }
+
 }
 
 
@@ -114,12 +187,7 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
    */
-  .tournament-name {
-    font-size: 18px;
-    margin-bottom: 15px;
-    width: 90%;
-  }
-  
+ 
   .bracket-card {
     background-color: #ffffff;
     border-radius: 6px;
@@ -219,7 +287,7 @@
   
   .tournaments-container {
     display: flex;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
   }
   
   .tournament-card {
@@ -279,11 +347,7 @@ padding-right: 30px;
     text-align: center;
   }
   
-  .fixture-title {
-    font-size: 1.25rem;
-    margin-bottom: 10px;
-
-  }
+  
   
   .fixture-time {
     color: rgb(255, 107, 107);
@@ -351,11 +415,3 @@ padding-right: 30px;
     color: #051da0;
   }
 
-  .view-fixture-updates{
-    padding: 10px 20px;
-    background-color: #ff4848;
-    color: white;
-    border-radius: 30px;
-    width: 100%;
-    margin-top: 10px;
-  }

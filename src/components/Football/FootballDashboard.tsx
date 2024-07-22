@@ -159,7 +159,7 @@ const Dashboard: React.FC = () => {
           <img src={Banner} onClick={BannerClick} alt='Football' className="banner-image" />
         </div>
         <div className="live-matches-container">
-          <p className='live-match-title' style={{ color: 'grey',fontSize:'20px' }}>LIVE MATCHES</p>
+          <p className='live-match-title-fd' style={{  }}>LIVE MATCHES</p>
           <div className="tournaments-container">
             {loading && (
               <>
@@ -189,7 +189,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <p className='up-match-title'style={{ color: 'grey',fontSize:'20px',fontWeight:'bold' }}>UPCOMING MATCHES (<span style={{ color: 'grey' }}>{tournaments.length}</span>)</p>
+        <p className='live-match-title-fd' >UPCOMING MATCHES (<span style={{ color: 'grey' }}>{tournaments.length}</span>)</p>
         <div className="tournaments-container">
           {loading && (
             <>
