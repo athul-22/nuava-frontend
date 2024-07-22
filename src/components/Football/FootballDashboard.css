@@ -52,6 +52,12 @@
     color: grey;
     margin-bottom: -20px;
   }
+
+  .fixture-edit-btn{
+    margin-top: -12px;
+    margin-left: 10px;
+    border: none;
+  }
   
 }
 
@@ -369,7 +375,7 @@ padding-right: 30px;
     top: 20px;
     right:5px;
     color: grey;
-    border: 1px solid silver;
+    /* border: 1px solid silver; */
     border-radius: 50%;
   }
   

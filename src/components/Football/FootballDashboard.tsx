@@ -158,8 +158,39 @@ const Dashboard: React.FC = () => {
         <div className="banner-container">
           <img src={Banner} onClick={BannerClick} alt='Football' className="banner-image" />
         </div>
+
+        <p className='live-match-title-fd' >UPCOMING MATCHES (<span style={{ color: 'grey' }}>{tournaments.length}</span>)</p>
+        <div className="tournaments-container">
+          {loading && (
+            <>
+              {renderSkeletonCard()}
+              {renderSkeletonCard()}
+              {renderSkeletonCard()}
+            </>
+          )}
+          {error && <p className="error">Error loading tournaments: {error.message}</p>}
+          {tournaments.map((tournament, index) => (
+            <div key={index} className="tournament-card">
+              {tournament.fixtures.filter(fixture => fixture.status !== 'live').map((fixture) => (
+                <div key={fixture.id} className="fixture-card">
+                  <h2 className="tournament-name">{tournament.tournamentName}</h2>
+                  <div className="fixture-header">
+                    <h3 className="fixture-title">{fixture.team1} <span style={{color:'grey',marginLeft:'10px',marginRight:'10px'}}>VS</span> {fixture.team2}</h3>
+                    <Button icon="pi pi-pencil" onClick={() => handleEditClick(fixture)} className="p-button-rounded edit-button fixture-edit-btn" />
+                  </div>
+                  <p className="fixture-time">{formatDate(fixture.startDate)}</p>
+                  <p className="fixture-info">{fixture.location}</p>
+                  {/* <p className="fixture-info">{fixture.round} - {fixture.isBye ? 'Bye' : '7-A-Side'}</p> */}
+                  <button className='start-fxture' onClick={() => handleStartMatchClick(fixture.id)}>Start Match</button>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+
+
         <div className="live-matches-container">
-          <p className='live-match-title-fd' style={{  }}>LIVE MATCHES</p>
+          <p className='live-match-title-fd' style={{  }}>LIVE MATCHES </p>
           <div className="tournaments-container">
             {loading && (
               <>
@@ -189,34 +220,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <p className='live-match-title-fd' >UPCOMING MATCHES (<span style={{ color: 'grey' }}>{tournaments.length}</span>)</p>
-        <div className="tournaments-container">
-          {loading && (
-            <>
-              {renderSkeletonCard()}
-              {renderSkeletonCard()}
-              {renderSkeletonCard()}
-            </>
-          )}
-          {error && <p className="error">Error loading tournaments: {error.message}</p>}
-          {tournaments.map((tournament, index) => (
-            <div key={index} className="tournament-card">
-              {tournament.fixtures.filter(fixture => fixture.status !== 'live').map((fixture) => (
-                <div key={fixture.id} className="fixture-card">
-                  <h2 className="tournament-name">{tournament.tournamentName}</h2>
-                  <div className="fixture-header">
-                    <h3 className="fixture-title">{fixture.team1} <span style={{color:'grey',marginLeft:'10px',marginRight:'10px'}}>VS</span> {fixture.team2}</h3>
-                    <Button icon="pi pi-pencil" onClick={() => handleEditClick(fixture)} className="p-button-rounded edit-button" />
-                  </div>
-                  <p className="fixture-time">{formatDate(fixture.startDate)}</p>
-                  <p className="fixture-info">{fixture.location}</p>
-                  {/* <p className="fixture-info">{fixture.round} - {fixture.isBye ? 'Bye' : '7-A-Side'}</p> */}
-                  <button className='start-fxture' onClick={() => handleStartMatchClick(fixture.id)}>Start Match</button>
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
+        
       </div>
 
       <Dialog header="Edit Fixture" visible={editDialogVisible} onHide={() => setEditDialogVisible(false)}>

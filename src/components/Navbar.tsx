@@ -430,17 +430,15 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
 
           <ul>
             <li>
-              <a onClick={homeClickMenu} href="#">Home</a>
+              <span onClick={homeClickMenu} >Home</span>
             </li>
             <li>
-              <a href="" onClick={()=>{window.location.href = '/matches'}}>Matches</a>
+              <span  onClick={()=>{window.location.href = '/matches'}}>Matches</span>
             </li>
             <li>
-              <a href="#results">Results</a>
+              <span >Results</span>
             </li>
-            <li>
-              <a href="#live">Live</a>
-            </li>
+            
             <button
               className="new-tournament-button"
               style={{ backgroundColor: "blue" }}
