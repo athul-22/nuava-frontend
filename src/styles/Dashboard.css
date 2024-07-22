@@ -1,0 +1,29 @@
+@media (max-width: 768px) {
+
+    .dash-main-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .calender-dash{
+        width: 80%;
+        margin: 15px;
+        
+    }
+}
+
+
+@media (min-width: 768px) {
+    .calender-dash{
+        
+        width: 63%;
+        padding: 0 10px;
+        margin: 80px;
+
+    }
+
+    .dash-main-container{
+        display: flex;
+
+    }
+}

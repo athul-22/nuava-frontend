@@ -7,6 +7,7 @@ import moment from "moment";
 import { Card, CardContent, Typography, Alert } from "@mui/material";
 import { Skeleton } from "primereact/skeleton";
 import "primeicons/primeicons.css";
+import '../styles/Dashboard.css'
 
 const localizer = momentLocalizer(moment);
 
@@ -197,14 +198,28 @@ const Dashboard: React.FC = () => {
           style={{ borderRadius: "15px" }}
         /> */}
       </div>
+      <div>
+        {/* <Typography
+          variant="h5"
+          style={{
+            textAlign: "left",
+            marginBottom: "20px",
+            color: "grey",
+            marginLeft:'80px',
+           
+          }}
+        >
+          Dashboard
+        </Typography> */}
+      </div>
       {(coachError || eventError) && (
         <Alert severity="error" style={{ marginBottom: "20px" }}>
           {coachError && <div>Error loading coaches: {coachError}</div>}
           {eventError && <div>Error loading events: {eventError}</div>}
         </Alert>
       )}
-      <div style={{ display: "flex" }}>
-        <div style={{ width: "63%", padding: "0 10px", margin: "80px" }}>
+      <div className="dash-main-container">
+        <div className="calender-dash">
           {loadingEvents ? (
             renderCalendarSkeleton()
           ) : (
@@ -242,7 +257,7 @@ const Dashboard: React.FC = () => {
           }}
         >
           <Typography
-            variant="h5"
+            variant="h6"
             gutterBottom
             style={{
               padding: "20px 0",
@@ -362,7 +377,7 @@ const Dashboard: React.FC = () => {
           )}
         </div>
       </div>
-      <div
+      {/* <div
         style={{
           width: "100%",
           display: "flex",
@@ -371,7 +386,7 @@ const Dashboard: React.FC = () => {
         }}
       >
         <Footer />
-      </div>
+      </div> */}
     </div>
   );
 };

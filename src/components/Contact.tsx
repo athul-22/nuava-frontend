@@ -8,7 +8,7 @@ const Contact: React.FC = () => {
     <>
     <div style={{ display: "flex", justifyContent: "center" }}>
     <OnboardingNav />
-  </div>
+  </div>   
   <div className="onboard-container">
     {/* <img src={bg} alt="" className="onboard-bg" width="1308" /> */}
     <div

@@ -427,12 +427,13 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
       >
         <div className="sidebar-menu">
           <h2>Explore</h2>
+
           <ul>
             <li>
-              <a href="#home">Home</a>
+              <a onClick={homeClickMenu} href="#">Home</a>
             </li>
             <li>
-              <a href="http://localhost:3001/matches" >Matches</a>
+              <a href="" onClick={()=>{window.location.href = '/matches'}}>Matches</a>
             </li>
             <li>
               <a href="#results">Results</a>

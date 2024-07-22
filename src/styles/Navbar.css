@@ -235,8 +235,10 @@
     .navbar {
       padding: 12px;
       margin: 20px;
-      width: 96%;
+      /* width: 94%; */
       height: 60px;
+      display: flex;
+      justify-content: center;
     }
   
     .navbar-content {
