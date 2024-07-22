@@ -94,6 +94,7 @@
   background-color: white;
   padding: 20px;
   box-sizing: border-box;
+
 }
 
 .input-group {
@@ -181,6 +182,7 @@
 
   .right-section {
     margin-left: 0px;
+    
   }
 
   .success-coach-email-container {

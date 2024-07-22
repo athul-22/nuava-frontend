@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import bg from "../assets/BG.jpg";
 import "../styles/Onboarding.css";
+import Footer from "./Footer";
 
 interface TeamMember {
   name: string;
@@ -90,20 +91,30 @@ const About: React.FC = () => {
           <br></br>
         </div>
 
-        <div style={{ width: "100%", textAlign: "center" }} className="about-team-main">
-          <h2 style={{color: "#051da0",fontWeight: "bold",fontSize: "40px",marginTop: "50px",}}>Team</h2>
+        <div
+          style={{ width: "100%", textAlign: "center" }}
+          className="about-team-main"
+        >
+          <h2
+            style={{
+              color: "#051da0",
+              fontWeight: "bold",
+              fontSize: "40px",
+              marginTop: "50px",
+            }}
+          >
+            Team
+          </h2>
           <div className="about-team-main-container grid md:inline-flex justify-center">
-  {teamMembers.map((member) => (
-    <ProfileCard
-      key={member.name}
-      member={member}
-      onInfoClick={handleClickOpen}
-    />
-  ))}
-</div>
-
+            {teamMembers.map((member) => (
+              <ProfileCard
+                key={member.name}
+                member={member}
+                onInfoClick={handleClickOpen}
+              />
+            ))}
+          </div>
         </div>
-
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>{selectedMember?.name}</DialogTitle>
           <DialogContent>
@@ -115,6 +126,8 @@ const About: React.FC = () => {
             </Button>
           </DialogActions>
         </Dialog>
+
+       
       </div>
     </>
   );
