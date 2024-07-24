@@ -27,8 +27,8 @@ const IHMNavbar: React.FC = () => {
   };
 
   const handleInterHouseSelection = () => {
-    setSelectedSport('Inter-House Matches');
-    localStorage.setItem('selectedSport', 'Inter-House Matches');
+    setSelectedSport('Inter-House');
+    localStorage.setItem('selectedSport', 'Inter-House');
     window.location.href = "/dashboard/inter-house-matches";
   };
 
@@ -55,7 +55,7 @@ const IHMNavbar: React.FC = () => {
           command: handleFootballSelection
         },
         {
-          label: 'Inter-House Matches',
+          label: 'Inter-House',
           icon: 'pi pi-angle-right',
           command: handleInterHouseSelection
         },

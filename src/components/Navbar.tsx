@@ -19,16 +19,21 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
   const [showSidebar, setShowSidebar] = useState(false);
   const toastRef = useRef<Toast>(null);
   const [showCreateButton, setShowCreateButton] = useState(false);
+  const [userType, setUserType] = useState(false);
 
-  useEffect(()=> {
-    if (localStorage.getItem('selectedSport') === 'Inter-House Matches') {
+  useEffect(() => {
+    if (localStorage.getItem("selectedSport") === "Inter-House") {
       setShowCreateButton(true);
-    } else if (localStorage.getItem('selectedSport') === 'Football') {
+    } else if (localStorage.getItem("selectedSport") === "Football") {
       setShowCreateButton(true);
-    }else{
+    } else {
       setShowCreateButton(false);
     }
-  })
+
+    if (localStorage.getItem("usertype") === "coach") {
+      setUserType(true);
+    }
+  });
 
   const [selectedSport, setSelectedSport] = useState<string>(
     localStorage.getItem("selectedSport") || "Select"
@@ -41,14 +46,14 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
   };
 
   const handleInterHouseSelection = () => {
-    setSelectedSport('Inter-House Matches');
-    localStorage.setItem('selectedSport', 'Inter-House Matches');
+    setSelectedSport("Inter-House");
+    localStorage.setItem("selectedSport", "Inter-House");
     window.location.href = "/dashboard/inter-house-matches";
   };
 
   const handleOverviewSelection = () => {
-    setSelectedSport('Overview');
-    localStorage.setItem('selectedSport', 'Overview');
+    setSelectedSport("Overview");
+    localStorage.setItem("selectedSport", "Overview");
     window.location.href = "/dashboard";
   };
 
@@ -57,20 +62,22 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
   };
 
   const handleCreateTournament = () => {
-      window.location.href = "/tournament/create";
+    window.location.href = "/tournament/create";
   };
 
   const handleCreateMatch = () => {
     window.location.href = "/create-match";
-  }
+  };
+
+  
 
   const handleCreateButtonClick = () => {
-    if (localStorage.getItem('selectedSport') === 'Inter-House Matches') {
+    if (localStorage.getItem("selectedSport") === "Inter-House") {
       window.location.href = "/create-match";
-    } else if (localStorage.getItem('selectedSport') === 'Football') {
+    } else if (localStorage.getItem("selectedSport") === "Football") {
       window.location.href = "/tournament/create";
     }
-  }
+  };
 
   const handleLogout = () => {
     localStorage.clear();
@@ -79,38 +86,38 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
 
   const handleViewProfileClick = () => {
     window.location.href = "/profile";
-  }
+  };
 
   const homeClickMenu = () => {
-    if (localStorage.getItem('selectedSport') === 'Inter-House Matches') {
+    if (localStorage.getItem("selectedSport") === "Inter-House") {
       window.location.href = "/dashboard/inter-house-matches";
-    }else if (localStorage.getItem('selectedSport') === 'Football') {
+    } else if (localStorage.getItem("selectedSport") === "Football") {
       window.location.href = "/dashboard/football";
-    }else{
+    } else {
       window.location.href = "/dashboard";
     }
-  }
+  };
 
   const items: MenuItem[] = [
     {
       items: [
         {
-          label: 'Overview',
-          icon: 'pi pi-objects-column',
-          command: handleOverviewSelection
+          label: "Overview",
+          icon: "pi pi-objects-column",
+          command: handleOverviewSelection,
         },
         {
-          label: 'Football',
-          icon: 'pi pi-angle-right',
-          command: handleFootballSelection
+          label: "Football",
+          icon: "pi pi-angle-right",
+          command: handleFootballSelection,
         },
         {
-          label: 'Inter-House',
-          icon: 'pi pi-angle-right',
-          command: handleInterHouseSelection
+          label: "Inter-House",
+          icon: "pi pi-angle-right",
+          command: handleInterHouseSelection,
         },
-      ]
-    }
+      ],
+    },
   ];
 
   const user_name = localStorage.getItem("name");
@@ -148,7 +155,12 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
               </span>{" "}
               <br></br>
               {/* <span className="text-sm" id="profile-menu-email">email id</span> */}
-              <button id="profile-menu-profile-button" onClick={handleViewProfileClick}>View Profile</button>
+              <button
+                id="profile-menu-profile-button"
+                onClick={handleViewProfileClick}
+              >
+                View Profile
+              </button>
             </div>
           </button>
         );
@@ -301,7 +313,13 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
         {/* Center section with navigation links */}
         <div className="center-menu">
           <span onClick={homeClickMenu}>Home</span>
-          <span onClick={()=>{window.location.href = '/matches'}}>Matches</span>
+          <span
+            onClick={() => {
+              window.location.href = "/matches";
+            }}
+          >
+            Matches
+          </span>
           <span>Results</span>
           {/* <span>Live</span> */}
         </div>
@@ -329,26 +347,26 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
             New Match
           </button> */}
 
-          {showCreateButton && (<button
-            className="new-tournament-button"
-            onClick={handleCreateButtonClick}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="size-6"
+          {showCreateButton && userType && (
+            <button
+              className="new-tournament-button"
+              onClick={handleCreateButtonClick}
             >
-              <path
-                fillRule="evenodd"
-                d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z"
-                clipRule="evenodd"
-              />
-            </svg>
-            {buttontext}
-           
-          </button>)}
-
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="size-6"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              {buttontext}
+            </button>
+          )}
 
           {/* Notification Bell Icon */}
           <div
@@ -380,9 +398,12 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
               strokeWidth={1.5}
               stroke="currentColor"
               className="size-6 icon"
-              style={{ color: "white" ,marginLeft:'-15px',marginRight:'20px'}}
+              style={{
+                color: "white",
+                marginLeft: "-15px",
+                marginRight: "20px",
+              }}
               onClick={handleCalenderSelection}
-              
             >
               <path
                 strokeLinecap="round"
@@ -427,40 +448,60 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
       >
         <div className="sidebar-menu">
           <h2>Explore</h2>
-
           <ul>
             <li>
-              <span onClick={homeClickMenu} >Home</span>
+              <button onClick={homeClickMenu} className="menu-item">
+                Home
+              </button>
             </li>
             <li>
-              <span  onClick={()=>{window.location.href = '/matches'}}>Matches</span>
+              <button
+                onClick={() => (window.location.href = "/matches")}
+                className="menu-item"
+              >
+                Matches
+              </button>
             </li>
             <li>
-              <span >Results</span>
+              <button className="menu-item">Results</button>
             </li>
             
-            <button
-              className="new-tournament-button"
-              style={{ backgroundColor: "blue" }}
-              onClick={handleCreateTournament}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6 text-blue-800 mr-2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                />
-              </svg>
-              New Tournament
-            </button>
+            
           </ul>
+          {showCreateButton && userType && (
+              <li style={{textDecoration:'none',lineHeightStep:'none',listStyle:'none'}}>
+                <button
+                  onClick={handleCreateButtonClick}
+                  className="create-button"
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#051da0",
+                    color: "white",
+                    borderRadius: "20px",
+                    padding: "10px",
+                    marginTop: "10px",
+                  }}
+                >
+                  {buttontext}
+                </button>
+              </li>
+            )}
+
+          <li style={{textDecoration:'none',lineHeightStep:'none',listStyle:'none'}}>
+              <button
+                onClick={handleCalenderSelection}
+                style={{
+                  width: "100%",
+                  backgroundColor: "#051da0",
+                  color: "white",
+                  borderRadius: "20px",
+                  padding: "10px",
+                  marginTop: "10px",
+                }}
+              >
+                Calendar
+              </button>
+            </li>
         </div>
       </Sidebar>
     </div>

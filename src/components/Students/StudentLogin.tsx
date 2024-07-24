@@ -67,7 +67,7 @@ const StudentLogin: React.FC = () => {
       if (response.data?.loginStudent.status) {
         localStorage.setItem("token", response.data.loginStudent.token);
         showToast('success', 'Login Successful', 'Redirecting to dashboard...');
-        
+        localStorage.setItem('usertype','student')
         window.location.href = "/dashboard";
       } else {
         showToast('error', 'Login Failed', response.data?.loginStudent.message || 'Error occurred during login');

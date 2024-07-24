@@ -81,11 +81,11 @@ const IHMatches: React.FC = () => {
             <p>No matches available at the moment.</p>
           </div>
         ) : (
-          <div style={{ display: 'flex', overflowX: 'auto', padding: '20px 0' }}>
+          <div style={{ }} className='ihmatchmain'>
             {data.getAllInterHouseEvents.map((match) => {
               const details: MatchDetails = JSON.parse(match.details);
               return (
-                <div key={match.id} className="match-card" style={{ minWidth: '300px', margin: '0 10px' }}>
+                <div key={match.id} className="match-card" style={{ minWidth: '300px' }}>
                   <div className="match-header">
                     <h3>{match.title}</h3>
                   </div>

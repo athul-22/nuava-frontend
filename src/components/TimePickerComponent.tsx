@@ -25,7 +25,7 @@ const TimePickerComponent = ({ value, onChange, sx = {} }: { value: any, onChang
           value={value}
           onChange={(newValue) => {
             onChange(newValue);
-            handleClose();
+            // handleClose();
           }}
           sx={{ ...sx, marginLeft: "15px" }}
           slots={{

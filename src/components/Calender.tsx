@@ -62,6 +62,23 @@ const CalendarComponent: React.FC = () => {
   const [eventType, setEventType] = useState<string>("Normal Event");
   const toast = useRef<any>(null);
 
+  const [editDialogVisible, setEditDialogVisible] = useState(false);
+
+
+  const [userType , setUserType ] = useState(false)
+  useEffect(()=>{
+    if(localStorage.getItem('usertype') === 'coach'){
+      setUserType(true)
+    }
+  },[])
+
+  const handleEditButtonClick = () => {
+    setEventDetailsVisible(false);
+    setEditDialogVisible(true);
+  };
+
+
+
   const [isOpen1, setIsOpen1] = useState(false);
 
   const toggleOpen1 = () => {
@@ -299,7 +316,10 @@ const CalendarComponent: React.FC = () => {
     }
 
     setEventDetailsVisible(false);
+    setEditDialogVisible(false);
+
   };
+  
 
   const handleDeleteEvent = async () => {
     if (!selectedEvent) {
@@ -404,7 +424,7 @@ const CalendarComponent: React.FC = () => {
     <div className="flex justify-content-between align-items-center">
       <span className="text-xl font-bold">Event Details</span>
       <div>
-        <Button icon="pi pi-pencil" className="p-button-text p-button-sm" style={{color:'grey'}} onClick={handleEditEvent} />
+        <Button icon="pi pi-pencil" className="p-button-text p-button-sm" style={{color:'grey'}} onClick={handleEditButtonClick} />
         <Button icon="pi pi-trash" className="p-button-text p-button-sm p-button-danger" style={{color:'red'}} onClick={handleDeleteEvent} />
         {/* <Button icon="pi pi-times" className="p-button-text p-button-sm" style={{color:'grey'}} onClick={() => setEventDetailsVisible(false)} /> */}
       </div>
@@ -420,9 +440,9 @@ const CalendarComponent: React.FC = () => {
       <Navbar buttontext="Create Tournament / Match" />
       <div className="calendar-container">
         <div className="sidebar">
-          <button className="create-btn" onClick={opencreateEventdialog}>
+          { userType && <button className="create-btn" onClick={opencreateEventdialog}>
             Create +
-          </button>
+          </button> }
           <div className="calendar-widget">
             <BigCalendar
               localizer={localizer}
@@ -633,6 +653,91 @@ const CalendarComponent: React.FC = () => {
             </div>
           </div>
         )}
+      </Dialog>
+
+      <Dialog
+        header="Edit Event"
+        visible={editDialogVisible}
+        style={{
+          width: "35vw",
+          height: "650px",
+          display: "flex",
+          justifyContent: "center",
+        }}
+        onHide={() => setEditDialogVisible(false)}
+      >
+        <div style={{ marginLeft: "30px" }}>
+          <div className="p-field">
+            <InputText
+              placeholder="Event title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="event-title"
+            />
+            <InputText
+              placeholder="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="event-title"
+            />
+          </div>
+          <div className="p-field" style={{ marginTop: "30px" }}>
+            <label htmlFor="startDate">Start Date</label>
+            <Calendar
+              className="input-box-pr-calendar-cal"
+              value={startDate}
+              onChange={(e) => setStartDate(e.value as Date | null)}
+              dateFormat="yy-mm-dd"
+            />
+          </div>
+          <div className="p-field">
+            <label htmlFor="startTime">Start Time </label>
+            <TimePickerComponent
+              value={startTime}
+              onChange={(newValue) => setStartTime(newValue)}
+            />
+          </div>
+          <div className="p-field">
+            <label htmlFor="endDate">End Date</label>
+            <Calendar
+              className="input-box-pr-calendar-cal-end"
+              value={endDate}
+              onChange={(e) => setEndDate(e.value as Date | null)}
+              dateFormat="yy-mm-dd"
+            />
+          </div>
+          <div className="p-field">
+            <label htmlFor="endTime">End Time</label>
+            <TimePickerComponent
+              sx={{ marginLeft: "29px" }}
+              value={endTime}
+              onChange={(newValue) => setEndTime(newValue)}
+            />
+          </div>
+          <div
+            className="p-field-checkbox"
+            style={{ marginTop: "30px", display: "flex" }}
+          >
+            <input
+              type="checkbox"
+              id="isAllDay"
+              checked={isAllDay}
+              onChange={(e) => setIsAllDay(e.target.checked)}
+              className="large-checkbox"
+            />
+            <label
+              htmlFor="isAllDay"
+              style={{ marginLeft: "12px", paddingTop: "-50px" }}
+            >
+              All Day
+            </label>
+          </div>
+          <Button
+            label="Update"
+            onClick={handleEditEvent}
+            className="cal-event-btn"
+          />
+        </div>
       </Dialog>
 
       <Toast ref={toast} position="top-right" />

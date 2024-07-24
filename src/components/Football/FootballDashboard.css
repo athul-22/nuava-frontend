@@ -58,6 +58,10 @@
     margin-left: 10px;
     border: none;
   }
+
+  .edit-button {
+    margin-top: 3px;
+  }
   
 }
 
@@ -96,6 +100,7 @@
     font-size:20px ;
     color: grey;
   }
+  
 
 }
 
@@ -420,4 +425,5 @@ padding-right: 30px;
     border: 1px solid #051da0;
     color: #051da0;
   }
+
 

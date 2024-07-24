@@ -95,9 +95,23 @@ const Dashboard: React.FC = () => {
     variables: { schoolId: parseInt(localStorage.getItem('schoolID') || '1') },
   });
 
+  const [showbanner , setShowbanner] = useState(false)
+
+
+  const [userType , setUserType ] = useState(false)
+
+  useEffect(()=>{
+    if(localStorage.getItem('usertype') === 'coach'){
+      setUserType(true)
+    }
+  },[])
+
   useEffect(() => {
     if (data && data.getAllFixturesForSchool) {
       setTournaments(data.getAllFixturesForSchool);
+    }
+    if (data && data.getAllFixturesForSchool.length > 0) {
+      setShowbanner(true)
     }
   }, [data]);
 
@@ -151,13 +165,16 @@ const Dashboard: React.FC = () => {
     redirectToMatchPage();
   };
 
+
+
   return (
     <>
       <Navbar buttontext="Create Tournament / Match" />
       <div className="dashboard-container">
-        <div className="banner-container">
+        {showbanner && <div className="banner-container">
           <img src={Banner} onClick={BannerClick} alt='Football' className="banner-image" />
         </div>
+        }
 
         <p className='live-match-title-fd' >UPCOMING MATCHES (<span style={{ color: 'grey' }}>{tournaments.length}</span>)</p>
         <div className="tournaments-container">
@@ -176,12 +193,12 @@ const Dashboard: React.FC = () => {
                   <h2 className="tournament-name">{tournament.tournamentName}</h2>
                   <div className="fixture-header">
                     <h3 className="fixture-title">{fixture.team1} <span style={{color:'grey',marginLeft:'10px',marginRight:'10px'}}>VS</span> {fixture.team2}</h3>
-                    <Button icon="pi pi-pencil" onClick={() => handleEditClick(fixture)} className="p-button-rounded edit-button fixture-edit-btn" />
+                    { userType && <Button icon="pi pi-pencil" onClick={() => handleEditClick(fixture)} className="p-button-rounded edit-button fixture-edit-btn" /> }
                   </div>
                   <p className="fixture-time">{formatDate(fixture.startDate)}</p>
                   <p className="fixture-info">{fixture.location}</p>
                   {/* <p className="fixture-info">{fixture.round} - {fixture.isBye ? 'Bye' : '7-A-Side'}</p> */}
-                  <button className='start-fxture' onClick={() => handleStartMatchClick(fixture.id)}>Start Match</button>
+                  {userType && <button className='start-fxture' onClick={() => handleStartMatchClick(fixture.id)}>Start Match</button> }
                 </div>
               ))}
             </div>
@@ -227,13 +244,13 @@ const Dashboard: React.FC = () => {
         <div className="p-fluid">
           <div className="p-field">
             <label htmlFor="startDate">Start Date</label>
-            <InputText id="startDate" value={selectedFixture?.startDate || ''} onChange={(e) => setSelectedFixture(prev => prev ? { ...prev, startDate: e.target.value } : null)} />
+            <InputText style={{border:'1px solid silver',height:'50px',borderRadius:'10px'}} id="startDate" value={selectedFixture?.startDate || ''} onChange={(e) => setSelectedFixture(prev => prev ? { ...prev, startDate: e.target.value } : null)} />
           </div>
           <div className="p-field">
             <label htmlFor="location">Location</label>
-            <InputText id="location" value={selectedFixture?.location || ''} onChange={(e) => setSelectedFixture(prev => prev ? { ...prev, location: e.target.value } : null)} />
+            <InputText style={{border:'1px solid silver',height:'50px',borderRadius:'10px'}} id="location" value={selectedFixture?.location || ''} onChange={(e) => setSelectedFixture(prev => prev ? { ...prev, location: e.target.value } : null)} />
           </div>
-          <Button label="Save" onClick={handleEditSave} />
+          <center><Button label="Save" style={{padding:'5px 10px',width:'100%',height:'50px',marginTop:'10px',backgroundColor:'#051da0',borderRadius:'50px',color:'white'}} onClick={handleEditSave} /></center>
         </div>
       </Dialog>
     </>

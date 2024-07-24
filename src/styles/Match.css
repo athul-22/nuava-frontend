@@ -25,7 +25,7 @@
     text-align: center;
     margin: 10px;
     color: #3749b4;
-    border-radius: 10px;
+    border-radius: 50px;
 }
 
 
@@ -36,3 +36,168 @@
 .match-card-all{
     
 }
+
+
+.skeleton-text {
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    animation: skeleton-loading 1s linear infinite alternate;
+  }
+  
+  @keyframes skeleton-loading {
+    0% {
+      background-color: #e0e0e0;
+    }
+    100% {
+      background-color: #f0f0f0;
+    }
+  }
+
+
+  .matches-container-all {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .match-card-all {
+    background-color: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    width: 350px;
+    margin: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .match-header-all {
+    background-color: #e9ecf7;
+    padding: 10px;
+    text-align: center;
+    margin: 10px;
+    color: #3749b4;
+    border-radius: 50px;
+  }
+  
+  .match-info-all {
+    width: 100%;
+  }
+  
+  .skeleton {
+    animation: skeleton-loading 1s linear infinite alternate;
+  }
+  
+  @keyframes skeleton-loading {
+    0% {
+      background-color: #e0e0e0;
+    }
+    100% {
+      background-color: #f0f0f0;
+    }
+  }
+  
+  .mb-1 {
+    margin-bottom: 0.25rem;
+  }
+
+  .all-match-title{
+    font-size: 30px;
+    margin-left:'140px';
+    font-size:'30px';
+    color:'grey';
+  }
+
+  
+  @media (max-width: 768px) {
+    .all-match-title{
+      font-size: 20px;
+      margin-top: 30px;
+      margin-left: 30px;
+    }
+
+    .skeleton{
+      width: 95%;
+    }
+
+    .tournament-card-all-match{
+      display: block;
+      justify-content: center;
+      align-items: center;
+      justify-content: center;
+      /* width: 90%;
+      margin-left: 30px; */
+    }
+
+    .tournament-card-all-match{
+      display: block;
+      justify-content: center;
+    }
+    
+    .tournaments-container-all-matches{
+      /* display: flex; */
+      justify-content: center;
+      align-items: center;
+      width: 95%;
+    }
+
+    .tournament-name{
+      margin-top: 5px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .tournament-card-match{
+      display: flex;
+      
+      margin-left: 30px;
+    }
+
+    .tournament-card-all-match{
+      display: inline-flex;
+      margin-left: 30px;
+    }
+
+    .all-match-title{
+      font-size: 25px;
+      color: grey;
+      font-weight: bolder;
+      margin-left: 50px;
+    }
+    .tournaments-container-all-matches{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 95%;
+      margin-left: 10px;
+    }
+    
+  }
+ 
+/* 
+  .tournaments-container-all-matches{
+    display: inline-flex;
+  } */
+
+
+  .fixture-card-all-matches{
+    padding-top: 10px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px;
+    flex: 1 1 45%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-align: center;
+    width: 100%;
+    padding-left: 30px;
+padding-right: 30px;
+  }

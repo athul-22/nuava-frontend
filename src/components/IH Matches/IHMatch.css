@@ -1,82 +1,80 @@
 .matches-container {
-    /* display: grid;
+  /* display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); */
-    gap: 20px;
-    padding: 20px;
-  }
-  
-  .match-card {
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-  }
-  
-  .match-header {
-    margin: 10px;
-    border-radius: 20px;
-    background-color: #e9ecf7;
-    /* padding: -20px; */
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .match-header h3 {
-    margin: 0;
-    color: #333;
-    font-size: 16px;
-  }
-  
-  .match-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-  }
-  
-  .team {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 50%;
-  }
-  
-  .team-logo {
-    width: 100px;
-    height: 50px;
-    object-fit: contain;
-  }
-  
-  .team p {
-    margin-top: 5px;
-    font-size: 14px;
-    text-align: center;
-  }
-  
-  .match-info {
-    text-align: center;
-    width: 40%;
-    
-  }
-  
-  .match-time {
-    font-weight: bold;
-    color: #e74c3c;
-    font-size: 12px;
-    margin-bottom: 5px;
-  }
-  
-  .match-venue {
-    font-size: 12px;
-    color: #7f8c8d;
-  }
+  gap: 20px;
+  padding: 20px;
+}
 
+.match-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
 
-  .titleihmatch{
-    background: linear-gradient(to right, #1613bd 0%, #1916d1 50%, #1a18e5 100%);
+.match-header {
+  margin: 10px;
+  border-radius: 20px;
+  background-color: #e9ecf7;
+  /* padding: -20px; */
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.match-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.match-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+}
+
+.team-logo {
+  width: 100px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.team p {
+  margin-top: 5px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.match-info {
+  text-align: center;
+  width: 40%;
+}
+
+.match-time {
+  font-weight: bold;
+  color: #e74c3c;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.match-venue {
+  font-size: 12px;
+  color: #7f8c8d;
+}
+
+.titleihmatch {
+  background: linear-gradient(to right, #1613bd 0%, #1916d1 50%, #1a18e5 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -84,15 +82,49 @@
   text-align: center;
   margin-top: -70px;
   font-weight: bold;
+}
+
+.ihmatchdesription {
+  font-size: 1.5rem;
+  text-align: left;
+  margin-left: 15px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: grey;
+  margin-top: -10px;
+}
+
+@media (max-width: 768px) {
+  .titleihmatch {
+    font-size: 6rem;
+    text-align: center;
+    margin-top: 1px;
+  }
+  .ihmatchdesription {
+    font-size: 1.2rem;
+    text-align: center;
   }
 
-
-  .ihmatchdesription{
-    font-size: 1.5rem;
-    text-align: left;
-    margin-left: 15px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    color: grey;
-    margin-top: -10PX;
+  .ihmatchmain {
+    display: grid;
+    justify-content: center;
   }
+
+  .match-card{
+    margin-top:20px ;
+  }
+}
+
+@media (min-width: 768px) {
+  .ihmatchmain {
+    display: inline-flex;
+    overflow-x: auto;
+    padding: 20px 0;
+    justify-content: center;
+  }
+
+  .match-card{
+    margin-top:20px ;
+    margin-left: 20px;
+  }
+}

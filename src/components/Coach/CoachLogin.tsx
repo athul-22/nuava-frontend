@@ -154,6 +154,7 @@ const CoachLogin: React.FC = () => {
           localStorage.setItem("schoolID", schoolID);
   
           // Redirect to dashboard
+          localStorage.setItem('usertype','coach')
           window.location.href = "/dashboard";
         } else {
           showToast("error", "Error", "Failed to fetch coach details");

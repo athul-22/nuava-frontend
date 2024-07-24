@@ -1,8 +1,9 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { useQuery, gql, ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import Navbar from "./Navbar";
-import '../styles/Match.css';
+import { Skeleton } from "primereact/skeleton";
+import '../styles/Match.css'
 
 // Define the GraphQL query
 const GET_ALL_FIXTURES_FOR_SCHOOL = gql`
@@ -49,42 +50,80 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
+const SkeletonCard = () => (
+  <div className="tournament-card skeleton">
+    <div className="fixture-card">
+      <Skeleton width="80%" height="24px" className="mb-2" />
+      <Skeleton width="60%" height="20px" className="mb-2" />
+      <Skeleton width="40%" height="16px" className="mb-1" />
+      <Skeleton width="50%" height="16px" />
+    </div>
+  </div>
+);
+
+const renderSkeletonCards = () => (
+  <>
+    <SkeletonCard />
+    <SkeletonCard />
+    <SkeletonCard />
+  </>
+);
+
 const Matches: React.FC = () => {
+  const [schoolId, setSchoolId] = useState<number | null>(null);
+  
+  useEffect(() => {
+    const storedSchoolId = localStorage.getItem('schoolID');
+    if (storedSchoolId) {
+      const parsedSchoolId = parseInt(storedSchoolId, 10);
+      if (isNaN(parsedSchoolId)) {
+        console.log("Error")
+      } else {
+        setSchoolId(parsedSchoolId);
+      }
+    } else {
+      console.log("Error")
+    }
+  }, []);
+
   const { loading, error, data } = useQuery(GET_ALL_FIXTURES_FOR_SCHOOL, {
-    variables: { schoolId: 1 },
+    
+    variables: { schoolId: schoolId },
   });
 
-  if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   const fixtures = data?.getAllFixturesForSchool[0]?.fixtures ?? [];
 
+  // Helper function to format date
+  const formatDate = (dateString: string) => {
+    const date = new Date(parseInt(dateString));
+    return `${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${date.toLocaleDateString()}`;
+  };
+
   return (
     <div>
       <Navbar buttontext="Create Tournament / Matches" />
-      <h1 style={{marginLeft:'120px',fontSize:'30px',color:'grey'}}>All MATCHES</h1>
-      <div className="tournament-card">
-        {fixtures.map((fixture: any) => (
-          <div className="match-card-all" key={fixture.id}>
-            <div className="match-header-all">
-              <h2>U15 Champions League</h2>
-            </div>
-            <div className="match-details-all">
-              <div className="team team1-all">
-                <p>{fixture.team1}</p>
+      <h1 className="all-match-title">All MATCHES ({fixtures.length})</h1>
+      <div className="tournaments-container-all-matches">
+        {loading ? (
+          renderSkeletonCards()
+        ) : (
+          <div className="tournament-card-all-match">
+            {fixtures.map((fixture: { id: React.Key | null | undefined; team1: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; team2: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; startDate: any; location: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }) => (
+              <div key={fixture.id} className="fixture-card-all-matches">
+                <h2 className="tournament-name">U15 Champions League</h2>
+                <div className="fixture-header">
+                  <h3 className="fixture-title">
+                    {fixture.team1} <span style={{color:'grey',marginLeft:'10px',marginRight:'10px'}}>VS</span> {fixture.team2}
+                  </h3>
+                </div>
+                <p className="fixture-time">{formatDate(fixture.startDate)}</p>
+                <p className="fixture-info">{fixture.location}</p>
               </div>
-              <div className="match-info-all">
-                <p>{new Date(parseInt(fixture.startDate)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                <p>{new Date(parseInt(fixture.startDate)).toLocaleDateString()}</p>
-                <p>7-A-Side</p>
-                <p>{fixture.location}</p>
-              </div>
-              <div className="team team2">
-                <p>{fixture.team2}</p>
-              </div>
-            </div>
+            ))}
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
