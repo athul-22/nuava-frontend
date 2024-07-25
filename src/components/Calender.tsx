@@ -19,7 +19,6 @@ import { Dropdown } from "primereact/dropdown";
 import TextField from "@mui/material/TextField";
 import TimePickerComponent from "./TimePickerComponent";
 
-
 const localizer = momentLocalizer(moment);
 
 const eventTypeColors = {
@@ -64,20 +63,17 @@ const CalendarComponent: React.FC = () => {
 
   const [editDialogVisible, setEditDialogVisible] = useState(false);
 
-
-  const [userType , setUserType ] = useState(false)
-  useEffect(()=>{
-    if(localStorage.getItem('usertype') === 'coach'){
-      setUserType(true)
+  const [userType, setUserType] = useState(false);
+  useEffect(() => {
+    if (localStorage.getItem("usertype") === "coach") {
+      setUserType(true);
     }
-  },[])
+  }, []);
 
   const handleEditButtonClick = () => {
     setEventDetailsVisible(false);
     setEditDialogVisible(true);
   };
-
-
 
   const [isOpen1, setIsOpen1] = useState(false);
 
@@ -317,9 +313,7 @@ const CalendarComponent: React.FC = () => {
 
     setEventDetailsVisible(false);
     setEditDialogVisible(false);
-
   };
-  
 
   const handleDeleteEvent = async () => {
     if (!selectedEvent) {
@@ -424,8 +418,18 @@ const CalendarComponent: React.FC = () => {
     <div className="flex justify-content-between align-items-center">
       <span className="text-xl font-bold">Event Details</span>
       <div>
-        <Button icon="pi pi-pencil" className="p-button-text p-button-sm" style={{color:'grey'}} onClick={handleEditButtonClick} />
-        <Button icon="pi pi-trash" className="p-button-text p-button-sm p-button-danger" style={{color:'red'}} onClick={handleDeleteEvent} />
+        <Button
+          icon="pi pi-pencil"
+          className="p-button-text p-button-sm"
+          style={{ color: "grey" }}
+          onClick={handleEditButtonClick}
+        />
+        <Button
+          icon="pi pi-trash"
+          className="p-button-text p-button-sm p-button-danger"
+          style={{ color: "red" }}
+          onClick={handleDeleteEvent}
+        />
         {/* <Button icon="pi pi-times" className="p-button-text p-button-sm" style={{color:'grey'}} onClick={() => setEventDetailsVisible(false)} /> */}
       </div>
     </div>
@@ -440,9 +444,11 @@ const CalendarComponent: React.FC = () => {
       <Navbar buttontext="Create Tournament / Match" />
       <div className="calendar-container">
         <div className="sidebar">
-          { userType && <button className="create-btn" onClick={opencreateEventdialog}>
-            Create +
-          </button> }
+          {userType && (
+            <button className="create-btn" onClick={opencreateEventdialog}>
+              Create +
+            </button>
+          )}
           <div className="calendar-widget">
             <BigCalendar
               localizer={localizer}
@@ -491,13 +497,9 @@ const CalendarComponent: React.FC = () => {
       <Dialog
         header="Create Event"
         visible={visible}
-        style={{
-          width: "35vw",
-          height: "650px",
-          display: "flex",
-          justifyContent: "center",
-        }}
+        style={{}}
         onHide={() => setVisible(false)}
+        className="new-cal-event-dialog"
       >
         <div style={{ marginLeft: "30px" }}>
           <div className="p-field">
@@ -516,6 +518,7 @@ const CalendarComponent: React.FC = () => {
           </div>
           <div className="p-field" style={{ marginTop: "30px" }}>
             <label htmlFor="startDate">Start Date</label>
+            <br></br>
             <Calendar
               className="input-box-pr-calendar-cal"
               value={startDate}
@@ -523,8 +526,10 @@ const CalendarComponent: React.FC = () => {
               dateFormat="yy-mm-dd"
             />
           </div>
-          <div className="p-field">
+
+          <div className="p-field timepicker-component-new-event">
             <label htmlFor="startTime">Start Time </label>
+            <br></br>
             {/* <LocalizationProvider dateAdapter={AdapterMoment}>
               <TimePicker
                 open={isOpen1}
@@ -564,15 +569,19 @@ const CalendarComponent: React.FC = () => {
         }}
       />
     </LocalizationProvider> */}
-
-            <TimePickerComponent
-              // label="Select Time"
-              value={startTime}
-              onChange={(newValue) => setStartTime(newValue)}
-            />
+            <div className="timepic-for-create-event">
+              <TimePickerComponent
+                // label="Select Time"
+                value={startTime}
+                onChange={(newValue) => setStartTime(newValue)}
+                sx={{ maxWidth: '20px', width: '100%',marginTop:'-100px' }}
+              />
+            </div>
           </div>
+          <br></br>
           <div className="p-field">
             <label htmlFor="endDate">End Date</label>
+            <br></br>
             <Calendar
               className="input-box-pr-calendar-cal-end"
               value={endDate}
@@ -582,6 +591,7 @@ const CalendarComponent: React.FC = () => {
           </div>
           <div className="p-field">
             <label htmlFor="endTime">End Time</label>
+            <br></br>
             {/* <LocalizationProvider dateAdapter={AdapterMoment}>
               <TimePicker
                 value={endTime}
@@ -590,12 +600,12 @@ const CalendarComponent: React.FC = () => {
               />
             </LocalizationProvider> */}
 
-            <TimePickerComponent
-              // label="Select Time"
-              sx={{ marginLeft: "29px" }}
-              value={endTime}
-              onChange={(newValue) => setEndTime(newValue)}
-            />
+            <div className="timepic-for-create-event">
+              <TimePickerComponent
+                value={endTime}
+                onChange={(newValue) => setEndTime(newValue)}
+              />
+            </div>
           </div>
           {/* <div className="p-field">
             <label htmlFor="eventType">Event Type</label>
@@ -634,22 +644,37 @@ const CalendarComponent: React.FC = () => {
       </Dialog>
 
       <Dialog
-  header={eventDetailsHeader}
-  visible={eventDetailsVisible}
-  style={{ width: '35vw' }}
-  onHide={() => setEventDetailsVisible(false)}
->
+        header={eventDetailsHeader}
+        visible={eventDetailsVisible}
+        style={{ width: "35vw" }}
+        onHide={() => setEventDetailsVisible(false)}
+      >
         {selectedEvent && (
           <div className="p-4">
-            <h2 className="text-xl font-bold mb-2" style={{fontSize:'24px',fontWeight:'bold'}}>{selectedEvent.title}</h2>
+            <h2
+              className="text-xl font-bold mb-2"
+              style={{ fontSize: "24px", fontWeight: "bold" }}
+            >
+              {selectedEvent.title}
+            </h2>
             <p className="mb-4">{selectedEvent.description}</p>
             <div className="mb-2">
-              <br>
-              </br>
-              <strong><i className="pi pi-clock" style={{ color: 'grey' }}></i> Start Date:</strong> {new Date(selectedEvent.start).toLocaleDateString()}
+              <br></br>
+              <strong>
+                <i className="pi pi-clock" style={{ color: "grey" }}></i> Start
+                Date:
+              </strong>{" "}
+              {new Date(selectedEvent.start).toLocaleDateString()}
             </div>
             <div>
-              <strong><i className="pi pi-hourglass" style={{ color: 'grey' }}></i> Duration:</strong> {formatDuration(new Date(selectedEvent.start), new Date(selectedEvent.end))}
+              <strong>
+                <i className="pi pi-hourglass" style={{ color: "grey" }}></i>{" "}
+                Duration:
+              </strong>{" "}
+              {formatDuration(
+                new Date(selectedEvent.start),
+                new Date(selectedEvent.end)
+              )}
             </div>
           </div>
         )}

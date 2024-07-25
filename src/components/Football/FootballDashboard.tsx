@@ -96,6 +96,7 @@ const Dashboard: React.FC = () => {
   });
 
   const [showbanner , setShowbanner] = useState(false)
+  const [nomatch,setNoMatch] = useState(true)
 
 
   const [userType , setUserType ] = useState(false)
@@ -106,13 +107,20 @@ const Dashboard: React.FC = () => {
     }
   },[])
 
+  const handleCreatetournamentclick = () => {
+    window.location.href = '/tournament/create'
+  }
+
   useEffect(() => {
     if (data && data.getAllFixturesForSchool) {
       setTournaments(data.getAllFixturesForSchool);
     }
     if (data && data.getAllFixturesForSchool.length > 0) {
       setShowbanner(true)
+      setNoMatch(false)
     }
+
+    
   }, [data]);
 
   const formatDate = (timestamp: string) => {
@@ -176,7 +184,12 @@ const Dashboard: React.FC = () => {
         </div>
         }
 
-        <p className='live-match-title-fd' >UPCOMING MATCHES (<span style={{ color: 'grey' }}>{tournaments.length}</span>)</p>
+       {showbanner &&  <p className='live-match-title-fd' >UPCOMING MATCHES (<span style={{ color: 'grey' }}>{tournaments.length}</span>)</p>}
+        {nomatch && (
+            <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+              <center><button onClick={handleCreatetournamentclick} style={{backgroundColor:'#051da0',color:'white',padding:'10px 20px',borderRadius:'20px'}}>Create Tournament / Match</button></center>
+            </div>
+          )}
         <div className="tournaments-container">
           {loading && (
             <>
@@ -186,6 +199,7 @@ const Dashboard: React.FC = () => {
             </>
           )}
           {error && <p className="error">Error loading tournaments: {error.message}</p>}
+         
           {tournaments.map((tournament, index) => (
             <div key={index} className="tournament-card">
               {tournament.fixtures.filter(fixture => fixture.status !== 'live').map((fixture) => (
@@ -207,7 +221,7 @@ const Dashboard: React.FC = () => {
 
 
         <div className="live-matches-container">
-          <p className='live-match-title-fd' style={{  }}>LIVE MATCHES </p>
+         {showbanner &&  <p className='live-match-title-fd' style={{  }}>LIVE MATCHES </p>}
           <div className="tournaments-container">
             {loading && (
               <>

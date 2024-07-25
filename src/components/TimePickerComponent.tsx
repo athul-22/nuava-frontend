@@ -2,11 +2,18 @@ import React, { useState, useRef } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { TextField } from '@mui/material';
+import { TextField, TextFieldProps } from '@mui/material';
+import "../styles/Calender.css";
 
-const TimePickerComponent = ({ value, onChange, sx = {} }: { value: any, onChange: (newValue: any) => void, sx?: any }) => {
+interface TimePickerComponentProps {
+  value: any;
+  onChange: (newValue: any) => void;
+  sx?: any;
+}
+
+const TimePickerComponent: React.FC<TimePickerComponentProps> = ({ value, onChange, sx }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const anchorRef = useRef(null);
+  const anchorRef = useRef<HTMLDivElement>(null);
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -18,24 +25,25 @@ const TimePickerComponent = ({ value, onChange, sx = {} }: { value: any, onChang
 
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
-      <div ref={anchorRef} style={{ display: 'inline-block' }}>
+      <div ref={anchorRef}>
         <TimePicker
           open={isOpen}
           onClose={handleClose}
           value={value}
           onChange={(newValue) => {
             onChange(newValue);
-            // handleClose();
+            handleClose();
           }}
-          sx={{ ...sx, marginLeft: "15px" }}
+          sx={{ ...sx, }}
           slots={{
-            textField: (params) => (
+            textField: (params: TextFieldProps) => (
               <TextField
                 {...params}
                 onClick={(e) => {
                   e.stopPropagation();
                   toggleOpen();
                 }}
+                sx={{ marginLeft: '15px'}}
               />
             ),
           }}
@@ -43,7 +51,7 @@ const TimePickerComponent = ({ value, onChange, sx = {} }: { value: any, onChang
             popper: {
               anchorEl: anchorRef.current,
               placement: 'bottom-start',
-              disablePortal: true
+              disablePortal: true,
             },
             inputAdornment: {
               onClick: (e) => {

@@ -80,14 +80,42 @@ const SuccessCoachEmail: React.FC = () => {
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState(localStorage.getItem("email") ?? "");
-
+  const [schoolID, setSchoolID] = useState<string | null>(null);
   const [registerCoach, { loading, error }] = useMutation(REGISTER_COACH, {
     client
   });
 
   useEffect(() => {
     setShowConfetti(true);
+
+   
   }, []);
+
+  const domainToSchoolIdMap: Record<string, number> = {
+    'school1.com': 1,
+    'school2.com': 2,
+    'school3.com': 3,
+    'school4.com': 4,
+  };
+
+  const getSchoolIdFromEmail = (email: string): number | null => {
+    const domain = email.split('@')[1];
+    return domainToSchoolIdMap[domain] || null;
+  };
+
+  useEffect(() => {
+    const email = localStorage.getItem('email') || '';
+    const id = getSchoolIdFromEmail(email);
+    if (id !== null) {
+      setSchoolID(String(id));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (schoolID !== null) {
+      localStorage.setItem('schoolID', schoolID);
+    }
+  }, [schoolID]);
 
   const handleComplete = async () => {
     if (!name || !mobile || !password || !email) {
@@ -107,12 +135,15 @@ const SuccessCoachEmail: React.FC = () => {
         },
       });
 
+      
+      
       if (response.data?.registerCoach.status) {
         localStorage.setItem('token', response.data.registerCoach.token);
         localStorage.setItem('name', name);
         localStorage.setItem('mobile', mobile);
-
+        // localStorage.setItem('schoolID', schoolID );
         notyf.success('Registration successful!');
+        localStorage.setItem('usertype','coach');
         window.location.href = "/dashboard";
       } else {
         notyf.error(response.data?.registerCoach.message || 'Error occurred during registration');

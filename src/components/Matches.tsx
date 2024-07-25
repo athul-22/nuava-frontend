@@ -91,7 +91,7 @@ const Matches: React.FC = () => {
     variables: { schoolId: schoolId },
   });
 
-  if (error) return <p>Error: {error.message}</p>;
+  // if (error) return <p>Error: {error.message}</p>;
 
   const fixtures = data?.getAllFixturesForSchool[0]?.fixtures ?? [];
 
