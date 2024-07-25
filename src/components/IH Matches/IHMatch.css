@@ -113,6 +113,53 @@
   .match-card{
     margin-top:20px ;
   }
+
+  .create-ih-match-new{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-left: 20px;
+  }
+
+  .input-box-pr-calendar-cal-create-match-ih{
+    /* max-width: 460px; */
+  width: 90%;
+  border: 1px solid #eee;
+  border-radius: 40px;
+  background-color: transparent;
+  height: 55px;
+  border-radius: 4px;
+  outline: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  /* padding-left: 15px; */
+  margin-left: 5px;
+  }
+
+    .input-box-pr-selection-box{
+    max-width: 90%;
+    width: 90%;
+    height: 50px;
+    padding: 0 5px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  }
+
+  .button-submit-ih-match{
+    height: 50px;
+    width: 90%;
+    background-color:#051da0;
+    border-radius: 10px;
+    color: white;
+    margin-left: 5px;
+    margin-top: 20px;
+  }
+
+
+
 }
 
 @media (min-width: 768px) {
@@ -127,4 +174,48 @@
     margin-top:20px ;
     margin-left: 20px;
   }
+  .create-ih-match-new{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-left: 100px;
+  }
+
+  .input-box-pr-calendar-cal-create-match-ih{
+    /* max-width: 460px; */
+  width: 21.5%;
+  border: 1px solid #eee;
+  border-radius: 40px;
+  background-color: transparent;
+  height: 55px;
+  border-radius: 4px;
+  outline: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  /* padding-left: 15px; */
+  margin-left: 5px;
+  }
+
+  .input-box-pr-selection-box{
+    max-width: 21.5%;
+    width: 33%;
+    height: 50px;
+    padding: 0 5px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  }
+
+  .button-submit-ih-match{
+    height: 50px;
+    width: 460px;
+    background-color:#051da0;
+    border-radius: 10px;
+    color: white;
+    margin-left: 5px;
+    margin-top: 20px;
+  }
+
 }

@@ -683,7 +683,7 @@ const NewTournament: React.FC = () => {
                 style={{ display: "flex", justifyContent: "left" }}
               >
                 <div
-                  className="card"
+                  className="card create-new-team"
                   onClick={() => setTeamDialogVisible(true)}
                   style={{
                     display: "flex",

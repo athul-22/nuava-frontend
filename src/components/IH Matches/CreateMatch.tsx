@@ -11,6 +11,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import "../../styles/Common.css";
+import './IHMatch.css'
 
 const CREATE_INTER_HOUSE_EVENT = gql`
   mutation Mutation($input: CreateInterHouseEventInput!) {
@@ -112,12 +113,9 @@ const CreateMatch: React.FC = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="p-4 "
+        className="p-4 create-ih-match-new"
         style={{
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "column",
-          marginLeft: "100px",
+          
         }}
       >
         <IconField iconPosition="left" className="mb-3 input-box-pr">
@@ -167,7 +165,7 @@ const CreateMatch: React.FC = () => {
 
         <Calendar
           placeholder="Start Date"
-          className="input-box-pr-calendar-cal-create-match"
+          className="input-box-pr-calendar-cal-create-match-ih"
           value={startDate}
           // onChange={(e) => setStartDate(e.value as Date | null)}
           onChange={(e: any) => setStartDate(e.value)}
@@ -176,7 +174,7 @@ const CreateMatch: React.FC = () => {
 
         <Calendar
           placeholder="End Date"
-          className="input-box-pr-calendar-cal-create-match"
+          className="input-box-pr-calendar-cal-create-match-ih"
           value={endDate}
           // onChange={(e) => setStartDate(e.value as Date | null)}
           onChange={(e: any) => setEndDate(e.value)}
@@ -246,14 +244,9 @@ const CreateMatch: React.FC = () => {
           type="submit"
           label="Create Match"
           style={{
-            height: "50px",
-            width: "460px",
-            backgroundColor: "#051da0",
-            borderRadius: "10px",
-            color: "white",
-            marginLeft: "5px",
-            marginTop: "20px",
+           
           }}
+          className="button-submit-ih-match"
         />
       </form>
       <Toast ref={toast} position="top-right" />

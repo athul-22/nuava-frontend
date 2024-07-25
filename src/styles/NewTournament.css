@@ -378,3 +378,38 @@
 .p-radiobutton:not(.p-disabled) .p-radiobutton-box:hover {
   border-color: #1E90FF !important;
 }
+
+
+@media (max-width: 767px) {
+  .create-new-team{
+    display: block;
+    justify-content: center;
+    justify-content: center;
+    padding: 3rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 15px;
+    border: 1px dashed #051da0;
+    width: 70%;
+    height: 200px;
+
+  }
+
+}
+
+
+@media (min-width: 767px) {
+  .create-new-team{
+    display: block;
+    justify-content: center;
+    justify-content: center;
+    padding: 3rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 15px;
+    border: 1px dashed #051da0;
+    width: 70%;
+    height: 200px;
+
+  }
+}
