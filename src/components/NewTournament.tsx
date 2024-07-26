@@ -4,6 +4,7 @@ import { Stepper } from "primereact/stepper";
 import { StepperPanel } from "primereact/stepperpanel";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
+// import { Calendar,CalendarChangeEvent } from "primereact/calendar";
 import { Calendar } from "primereact/calendar";
 import { Chips } from "primereact/chips";
 import { InputText } from "primereact/inputtext";
@@ -115,7 +116,8 @@ const NewTournament: React.FC = () => {
 
   // const [intervalFields, setIntervalFields] = useState([]);
   // const [intervalFields, setIntervalFields] = useState<IntervalField[]>([]);
-  const [dates, setDates] = useState<Date[]>([]);
+  //OLD
+  // const [dates, setDates] = useState<Date[]>([]);
   const [intervalFields, setIntervalFields] = useState<IntervalField[]>([]);
 
   const [fetchedTeams, setFetchedTeams] = useState<any[]>([]);
@@ -124,6 +126,46 @@ const NewTournament: React.FC = () => {
 
   const [newSchoolDialogVisible, setNewSchoolDialogVisible] = useState(false);
   const [newSchoolName, setNewSchoolName] = useState("");
+
+  // ********** SINGLE / MULTI DAY TOURNAMENT SELECTION **********
+
+  const [tournamentType, setTournamentType] = useState<
+    "single-day" | "multi-day"
+  >("multi-day");
+  const [singleDate, setSingleDate] = useState<Date | null>(null);
+  const [dates, setDates] = useState<Date[]>([]);
+
+  const handleTournamentTypeChange = (e: {
+    value: "single-day" | "multi-day";
+  }) => {
+    setTournamentType(e.value);
+    setDates([]);
+    setSingleDate(null);
+  };
+
+  const handleDateSelection = (e: any) => {
+    if (tournamentType === "single-day") {
+      const selectedDate = e.value as Date;
+      setSingleDate(selectedDate);
+      setDates([selectedDate, selectedDate]);
+    } else {
+      const selectedDates = e.value as Date[];
+      setDates(selectedDates);
+    }
+  };
+
+  useEffect(() => {
+    if (tournamentType === "single-day" && singleDate) {
+      const singleDayjs = dayjs(singleDate);
+      generateIntervalFields(singleDayjs, singleDayjs);
+    } else if (dates.length === 2) {
+      const start = dayjs(dates[0]);
+      const end = dayjs(dates[1]);
+      generateIntervalFields(start, end);
+    } else {
+      setIntervalFields([]);
+    }
+  }, [tournamentType, singleDate, dates]);
 
   const handleAddNewSchool = () => {
     if (newSchoolName.trim()) {
@@ -334,10 +376,7 @@ const NewTournament: React.FC = () => {
   const generateIntervalFields = (startDate: Dayjs, endDate: Dayjs) => {
     const fields: IntervalField[] = [];
     let currentDate = startDate;
-    while (
-      currentDate.isBefore(endDate) ||
-      currentDate.isSame(endDate, "day")
-    ) {
+    while (currentDate.isSame(endDate) || currentDate.isBefore(endDate)) {
       fields.push({
         date: currentDate,
         startTime: null,
@@ -473,14 +512,43 @@ const NewTournament: React.FC = () => {
     // Implement view logic here
   };
 
+  // const prepareCreateTournamentInput = () => {
+  //   return {
+  //     name: tournamentName,
+  //     location: location,
+  //     startDate: dates[0].toISOString(),
+  //     endDate: dates[1].toISOString(),
+  //     typeOfSport: "FOOTBALL",
+  //     gender:selectedGender,
+  //     intervalBetweenMatches: parseInt(intervalBetweenMatches),
+  //     tournamentDays: intervalFields
+  //       .filter(
+  //         (
+  //           field
+  //         ): field is IntervalField & { startTime: Dayjs; endTime: Dayjs } =>
+  //           field.startTime !== null && field.endTime !== null
+  //       )
+  //       .map((field) => ({
+  //         date: field.date.startOf("day").toISOString(),
+  //         startTime: field.startTime.toISOString(),
+  //         endTime: field.endTime.toISOString(),
+  //       })),
+  //     matchDuration: parseInt(matchDuration),
+  //     participatingSchoolNames: selectedSchools.map((school) => school.name),
+  //   };
+  // };
+
   const prepareCreateTournamentInput = () => {
+    const startDate = tournamentType === "single-day" ? singleDate : dates[0];
+    const endDate = tournamentType === "single-day" ? singleDate : dates[1];
+
     return {
       name: tournamentName,
       location: location,
-      startDate: dates[0].toISOString(),
-      endDate: dates[1].toISOString(),
+      startDate: startDate?.toISOString(),
+      endDate: endDate?.toISOString(),
       typeOfSport: "FOOTBALL",
-      gender:selectedGender,
+      gender: selectedGender,
       intervalBetweenMatches: parseInt(intervalBetweenMatches),
       tournamentDays: intervalFields
         .filter(
@@ -649,8 +717,8 @@ const NewTournament: React.FC = () => {
       <FootballNavbar buttontext="Create Tournament / Match" />
 
       <div
-        className="w-full text-center mb-4"
-        style={{ marginTop: "30px", textAlign: "left", marginLeft: "120px" }}
+        className="w-full text-center mb-4 create-tournament-top-texts"
+        style={{}}
       >
         {/* <h1 className="mb-4" style={{ fontSize: "25px", fontWeight: 700 }}>
           Create Tournament
@@ -663,6 +731,7 @@ const NewTournament: React.FC = () => {
             marginTop: "20px",
             color: "grey",
           }}
+          className="h2-top-create-tournament"
         >
           ORGANISE TOURNAMENT
         </h2>
@@ -695,7 +764,7 @@ const NewTournament: React.FC = () => {
                     cursor: "pointer",
                     borderRadius: "15px",
                     border: "1px dashed #051da0",
-                    width: "24%",
+                    // width: "24%",
                     height: "200px",
                   }}
                 >
@@ -712,14 +781,14 @@ const NewTournament: React.FC = () => {
                   header="Add Team"
                   visible={teamDialogVisible}
                   onHide={() => setTeamDialogVisible(false)}
-                  style={{
-                    width: "90vw",
-                    height: "90vh",
-                    margin: "20px",
-                    borderRadius: "15px",
-                  }}
+                  style={{}}
+                  className="add-team-dialog-style"
                 >
-                  <IconField iconPosition="left" className="input-box-pr">
+                  <IconField
+                    iconPosition="left"
+                    className="input-box-pr"
+                    style={{ marginTop: "20px" }}
+                  >
                     <InputIcon className="pi pi-users"></InputIcon>
                     <InputText
                       id="teamName"
@@ -741,15 +810,16 @@ const NewTournament: React.FC = () => {
                     }}
                   >
                     <div
-                      className="p-input-icon-left"
+                      className="p-input-icon-left pop-search"
                       id="pop-search"
-                      style={{
-                        width: "calc(100% - 900px)",
-                        borderRadius: "20px",
-                        border: "1px solid #ccc",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
+                      // style={{
+                      //   // width: "calc(100% - 900px)",
+                      //   borderRadius: "10px",
+                      //   height:'50px',
+                      //   border: "1px solid silver",
+                      //   display: "flex",
+                      //   alignItems: "center",
+                      // }}
                     >
                       <i
                         className="pi pi-search"
@@ -775,17 +845,7 @@ const NewTournament: React.FC = () => {
                       icon="pi pi-send"
                       onClick={handleCreateTeam}
                       className="p-button-success p-ml-4 pop-submit-button"
-                      style={{
-                        backgroundColor: "#051da0",
-                        borderRadius: "20px",
-                        width: "260px",
-                        color: "white",
-                        height: "37px",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        display: "flex",
-                        padding: "20px",
-                      }}
+                      style={{}}
                     />
                   </div>
                   <div className="mt-4">
@@ -797,6 +857,7 @@ const NewTournament: React.FC = () => {
                       }
                       dataKey="id"
                       selectionMode="multiple"
+                      className="data-table-popup"
                     >
                       <Column
                         selectionMode="multiple"
@@ -948,8 +1009,8 @@ const NewTournament: React.FC = () => {
                     className="p-button-outlined add-new-school-button"
                   />
                 </div>
-                    <br></br>
-                    <br></br>
+                <br></br>
+                <br></br>
                 <div className="selected-schools-container mt-4">
                   <h3>Selected Schools:</h3>
                   {selectedSchools.map(
@@ -960,7 +1021,6 @@ const NewTournament: React.FC = () => {
                           icon="pi pi-times"
                           className="p-button-rounded p-button-danger p-button-text"
                           onClick={() => removeSelectedSchool(school)}
-                          
                         />
                       </div>
                     )
@@ -969,9 +1029,10 @@ const NewTournament: React.FC = () => {
 
                 <Dialog
                   header="Add New School"
+                  className="add-new-school-create-tournament"
                   visible={newSchoolDialogVisible}
                   onHide={() => setNewSchoolDialogVisible(false)}
-                  style={{ width: "30vw", height: "25vh" }}
+                  style={{  }}
                   footer={
                     <div>
                       <Button
@@ -1075,8 +1136,42 @@ const NewTournament: React.FC = () => {
                   </div>
                 </div>
                 <br className="brbr" />
+
                 <div className="mt-4">
-                  <label>Tournament Dates</label>
+                  <h3 style={{ marginBottom: "10px" }}>Tournament Type</h3>
+
+                  <div className="p-formgroup-inline">
+                    <div className="p-field-radiobutton">
+                      <RadioButton
+                        inputId="tournamentType1"
+                        name="tournamentType"
+                        value="single-day"
+                        onChange={handleTournamentTypeChange}
+                        checked={tournamentType === "single-day"}
+                      />
+                      <label htmlFor="tournamentType1" className="p-ml-2">
+                        Single Day Match
+                      </label>
+                    </div>
+                    <div className="p-field-radiobutton">
+                      <RadioButton
+                        inputId="tournamentType2"
+                        name="tournamentType"
+                        value="multi-day"
+                        onChange={handleTournamentTypeChange}
+                        checked={tournamentType === "multi-day"}
+                      />
+                      <label htmlFor="tournamentType2" className="p-ml-2">
+                        Multi-Day Tournament
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <br className="brbr" />
+                <div className="mt-4">
+                  <label>
+                    Tournament Date{tournamentType === "multi-day" ? "s" : ""}
+                  </label>
                   <div className="flex">
                     <IconField
                       iconPosition="left"
@@ -1091,19 +1186,31 @@ const NewTournament: React.FC = () => {
                         className="pi pi-calendar"
                         style={{ zIndex: "999" }}
                       ></InputIcon>
-                      <Calendar
-                        value={dates}
-                        onChange={(e) => setDates(e.value as Date[])}
-                        selectionMode="range"
-                        placeholder="Select Date Range"
-                        readOnlyInput
-                        style={{ paddingLeft: "30px" }}
-                        className="input-box-pr-calendar"
-                        // touchUI
-                      />
+                      {tournamentType === "single-day" ? (
+                        <Calendar
+                          value={singleDate}
+                          onChange={handleDateSelection}
+                          selectionMode="single"
+                          placeholder="Select Date"
+                          readOnlyInput
+                          style={{ paddingLeft: "30px" }}
+                          className="input-box-pr-calendar"
+                        />
+                      ) : (
+                        <Calendar
+                          value={dates}
+                          onChange={handleDateSelection}
+                          selectionMode="range"
+                          placeholder="Select Date Range"
+                          readOnlyInput
+                          style={{ paddingLeft: "30px" }}
+                          className="input-box-pr-calendar"
+                        />
+                      )}
                     </IconField>
                   </div>
                 </div>
+
                 <br className="brbr" />
                 {intervalFields.length > 0 && (
                   <div className="mt-4">
@@ -1116,7 +1223,7 @@ const NewTournament: React.FC = () => {
                           <h4 className="daily-time-date">
                             {field.date.format("MMMM D, YYYY")}
                           </h4>
-                          <div className="flex gap-20 daily-time-range">
+                          <div className=" daily-time-range" style={{display:'flex',flexDirection:'column'}}>
                             <TimePicker
                               label="Start Time"
                               value={field.startTime}
@@ -1147,8 +1254,10 @@ const NewTournament: React.FC = () => {
                                 outline: "none",
                                 borderRadius: "20px",
                                 width: "220px",
-                                marginLeft: "160px",
+                                marginTop:'10px',
+                                // marginLeft: "160px",
                               }}
+                              className="input-box-time-end"
                             />
                           </div>
                         </div>
@@ -1220,7 +1329,7 @@ const NewTournament: React.FC = () => {
                     borderRadius: "10px",
                   }}
                   label="Create Tournament / Match"
-                  className="action-button"
+                  className="action-button-submit"
                   severity="secondary"
                   icon="pi pi-sparkles"
                   onClick={handleSubmit}
