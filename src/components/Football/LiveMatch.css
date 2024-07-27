@@ -14,12 +14,7 @@
   .live-button {
     margin-bottom: 1rem;
   }
-  
-  .match-card-individual {
-    background-color: white;
-    border-radius: 0.5rem;
-    overflow: hidden;
-  }
+
   
   .match-header {
     text-align: center;
@@ -85,4 +80,85 @@
   .scorer {
     display: flex;
     justify-content: space-between;
+  }
+
+
+  /** SINGLE FOOTBALL MATCHES */
+
+  .live-match-title-single-match{
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 50px;
+    text-align: center;
+
+  }
+
+    
+
+
+  @media (max-width: 768px) {
+    .match-card-individual{
+      width: 100%;
+    }
+  }
+
+
+
+  @media screen and (max-width: 768px) {
+    .live-match-container {
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .match-card-individual {
+      background-color: white;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 100%;
+    }
+
+    .match-header{
+      margin-top: 30px;
+    }
+
+    .tournament-name-live-match{
+      margin-top: 1px;
+    }
+
+    .match-content {
+      display: block;
+      justify-content: space-between;
+      align-items: center;
+      padding: .1rem;
+    }
+
+    .team-name{
+      font-size: 28px;
+      padding: 10px;
+    
+    }
+
+    .match-score{
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      font-size: 80px;
+    }
+    
+  }
+
+
+  @media screen and (min-width: 768px) {
+    .match-card-individual {
+      background-color: white;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 1100px;
+    }
+    
   }

@@ -57,6 +57,20 @@ const FIXTURE_UPDATES = gql`
   }
 `;
 
+const GET_LINEUPS = gql`
+  query GetLineUps($fixtureId: ID!) {
+    getLineUps(fixtureId: $fixtureId) {
+      teamID
+      name
+      students {
+        id
+        name
+        age
+      }
+    }
+  }
+`;
+
 // Apollo Client setup
 const httpLink = createHttpLink({
   uri: "https://nuavasports.com/graphql",
@@ -99,6 +113,17 @@ interface BroadcastUpdate {
   hasUpdate: boolean;
 }
 
+
+interface LineUp {
+  teamID: string;
+  name: string;
+  students: {
+    id: string;
+    name: string;
+    age: number;
+  }[];
+}
+
 const LiveMatch = () => {
   const navigate = useNavigate();
   const [showDialog, setShowDialog] = useState(false);
@@ -117,6 +142,47 @@ const LiveMatch = () => {
       },
     },
   });
+
+
+  // const { data: lineUpsData } = useQuery<{ getLineUps: LineUp[] }>(GET_LINEUPS, {
+  //   variables: { fixtureId },
+  //   context: {
+  //     headers: {
+  //       Authorization: `JWT ${localStorage.getItem("token")}`,
+  //     },
+  //   },
+  // });
+
+  
+  const { loading: lineUpsLoading, error: lineUpsError, data: lineUpsData } = useQuery<{ getLineUps: LineUp[] }>(GET_LINEUPS, {
+    variables: { fixtureId },
+    context: {
+      headers: {
+        Authorization: `JWT ${localStorage.getItem("token")}`,
+      },
+    },
+  });
+
+  
+  const renderLineUps = () => {
+    if (!lineUpsData || !lineUpsData.getLineUps) return null;
+
+    return lineUpsData.getLineUps.map((team) => (
+      <div key={team.teamID} className="team-lineup">
+        <h4>{team.name} Lineup</h4>
+        {team.students.length > 0 ? (
+          <ul>
+            {team.students.map((student) => (
+              <li key={student.id}>{student.name}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>No lineup available</p>
+        )}
+      </div>
+    ));
+  };
+
 
   const [startFixture] = useMutation(START_FIXTURE);
   const [updateFixture] = useMutation(FIXTURE_UPDATES);
@@ -287,87 +353,116 @@ const LiveMatch = () => {
         <Skeleton shape="rectangle" height="1.5rem" width="5rem" />
         <Skeleton shape="rectangle" height="1.5rem" width="5rem" />
       </div>
+
+      <div className="lineups-container">
+          {renderLineUps()}
+        </div>
     </Card>
   );
 
   const renderContent = () => {
-    if (loading) return renderSkeleton();
-    if (error) {
-      if (error.message === "Match result not found") {
-        return <p style={{ marginLeft: "-360px" }}>Match not yet started</p>;
-      }
-      return <div className="error-message">Error: {error.message}</div>;
+  if (loading) return renderSkeleton();
+  if (error) {
+    if (error.message === "Match result not found") {
+      return <p style={{ marginLeft: "-360px" }}>Match not yet started</p>;
     }
-    if (!data || !data.getMatchDetailsAndScore) return <p>No data available</p>;
+    return <div className="error-message">Error: {error.message}</div>;
+  }
+  if (!data || !data.getMatchDetailsAndScore) return <p>No data available</p>;
 
-    const matchData = data.getMatchDetailsAndScore;
-    return (
-      <Card className="match-card-individual">
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <div
-            style={{
-              backgroundColor: "red",
-              color: "white",
-              width: "100px",
-              borderRadius: "20px",
-              padding: "5px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <span className="pi pi-wifi" style={{ marginRight: "10px" }}></span>
-            Live
-          </div>
-        </div>
-        <div className="match-header">
-          <h2 className="tournament-name-live-match">TISB Tournament 2024</h2>
-        </div>
-        <div className="match-content">
-          <div
-            className="team-info"
-            onClick={() => {
-              setSelectedTeamId(matchData.teamDetails[0].teamID);
-              setUpdateDialogVisible(true);
-            }}
-          >
-            <h3 className="team-name">{matchData.teamDetails[0].teamName}</h3>
-          </div>
-          <div className="match-score">
-            <span>{matchData.teamDetails[0].score}</span>
-            <span>:</span>
-            <span>{matchData.teamDetails[1].score}</span>
-          </div>
-          <div
-            className="team-info"
-            onClick={() => {
-              setSelectedTeamId(matchData.teamDetails[1].teamID);
-              setUpdateDialogVisible(true);
-            }}
-          >
-            <h3 className="team-name">{matchData.teamDetails[1].teamName}</h3>
-          </div>
-        </div>
-        <div className="match-type">7-A-Side</div>
-        <div className="scorers">
-          {matchData.teamDetails.flatMap((team) =>
-            team.matchEvents.map((event, index) => (
-              <div key={index} className="scorer">
-                {event.playerName} - {event.eventType}
-              </div>
-            ))
-          )}
-        </div>
-      </Card>
-    );
+  const matchData = data.getMatchDetailsAndScore;
+
+  const renderLineUps = () => {
+    console.log("Lineup data:", lineUpsData); // Debug log
+    if (lineUpsLoading) return <p>Loading lineups...</p>;
+    if (lineUpsError) return <p>Error loading lineups: {lineUpsError.message}</p>;
+    if (!lineUpsData || !lineUpsData.getLineUps) return <p>No lineup data available</p>;
+
+    return lineUpsData.getLineUps.map((team) => (
+      <div key={team.teamID} className="team-lineup">
+        <h4>{team.name} Lineup</h4>
+        {team.students.length > 0 ? (
+          <ul>
+            {team.students.map((student) => (
+              <li key={student.id}>{student.name}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>No lineup available</p>
+        )}
+      </div>
+    ));
   };
+
+  return (
+    <div className="match-card-individual">
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <div
+          style={{
+            backgroundColor: "red",
+            color: "white",
+            width: "100px",
+            borderRadius: "20px",
+            padding: "5px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <span className="pi pi-wifi" style={{ marginRight: "10px" }}></span>
+          Live
+        </div>
+      </div>
+      <div className="match-header">
+        <h2 className="tournament-name-live-match">TISB Tournament 2024</h2>
+      </div>
+      <div className="match-content">
+        <div
+          className="team-info"
+          onClick={() => {
+            setSelectedTeamId(matchData.teamDetails[0].teamID);
+            setUpdateDialogVisible(true);
+          }}
+        >
+          <h3 className="team-name">{matchData.teamDetails[0].teamName}</h3>
+        </div>
+        <div className="match-score">
+          <span>{matchData.teamDetails[0].score}</span>
+          <span>:</span>
+          <span>{matchData.teamDetails[1].score}</span>
+        </div>
+        <div
+          className="team-info"
+          onClick={() => {
+            setSelectedTeamId(matchData.teamDetails[1].teamID);
+            setUpdateDialogVisible(true);
+          }}
+        >
+          <h3 className="team-name">{matchData.teamDetails[1].teamName}</h3>
+        </div>
+      </div>
+      <div className="scorers">
+        {matchData.teamDetails.flatMap((team) =>
+          team.matchEvents.map((event, index) => (
+            <div key={index} className="scorer">
+              {event.playerName} - {event.eventType}
+            </div>
+          ))
+        )}
+      </div>
+      <div className="lineups-container">
+        {renderLineUps()}
+      </div>
+    </div>
+  );
+};
 
   return (
     <ApolloProvider client={client}>
       <Navbar buttontext="Create Tournament / Matches" />
       <h1
-        className="live-match-title"
-        style={{ color: "grey", marginLeft: "100px" }}
+        className="live-match-title-single-match"
+        style={{ color: "grey" }}
       >
         LIVE MATCHES
       </h1>

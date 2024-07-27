@@ -16,7 +16,7 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Card } from "@mui/material";
-import Footballimg from '../../assets/football.png';
+import Footballimg from "../../assets/football.png";
 
 interface Fixture {
   id: number;
@@ -91,7 +91,6 @@ const GET_ALL_TOURNAMENTS = gql`
   }
 `;
 
-
 const httpLink = createHttpLink({
   uri: "https://nuavasports.com/graphql",
 });
@@ -114,8 +113,6 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-
-
 const Dashboard: React.FC = () => {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [selectedFixture, setSelectedFixture] = useState<Fixture | null>(null);
@@ -124,8 +121,11 @@ const Dashboard: React.FC = () => {
     variables: { schoolId: parseInt(localStorage.getItem("schoolID") || "1") },
   });
 
-  const { loading: tournamentsLoading, error: tournamentsError, data: tournamentsData } = useQuery(GET_ALL_TOURNAMENTS);
-
+  const {
+    loading: tournamentsLoading,
+    error: tournamentsError,
+    data: tournamentsData,
+  } = useQuery(GET_ALL_TOURNAMENTS);
 
   const [showbanner, setShowbanner] = useState(false);
   const [nomatch, setNoMatch] = useState(true);
@@ -166,17 +166,17 @@ const Dashboard: React.FC = () => {
   const formatTournamentDate = (timestamp: string) => {
     // Parse the timestamp as a number
     const date = new Date(parseInt(timestamp));
-    
+
     // Check if the date is valid
     if (isNaN(date.getTime())) {
       return "Invalid Date";
     }
-  
+
     // Format the date
     return date.toLocaleString("en-US", {
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit',
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
       // hour: '2-digit',
       // minute: '2-digit',
       // hour12: true
@@ -228,6 +228,12 @@ const Dashboard: React.FC = () => {
     redirectToMatchPage();
   };
 
+  const tournamentCardClick = (tournament: { id: string; }) => {
+    localStorage.setItem('schoolID', tournament.id);
+    window.location.href = '/brackets';
+  };
+
+
   return (
     <>
       <Navbar buttontext="Create Tournament / Match" />
@@ -243,23 +249,35 @@ const Dashboard: React.FC = () => {
           </div>
         )}
 
-{showbanner && ( <h2 className="live-match-title-fd title-mobile-custom">ALL TOURNAMENTS </h2> )}
-<div className="tournaments-list-container-all">
-
+        {showbanner && (
+          <h2 className="live-match-title-fd title-mobile-custom">
+            ALL TOURNAMENTS{" "}
+          </h2>
+        )}
+        <div
+          className="tournaments-list-container-all"
+          // onClick={tournamentCardClick}
+        >
           {tournamentsLoading && <p>Loading tournaments...</p>}
-          {tournamentsError && <p className="error">Error loading tournaments: {tournamentsError.message}</p>}
+          {tournamentsError && (
+            <p className="error">
+              Error loading tournaments: {tournamentsError.message}
+            </p>
+          )}
           {tournamentsData && (
             <div className="tournaments-grid-all">
               {tournamentsData.getAllTournaments.map((tournament: any) => (
-                <div key={tournament.id} className="tournament-card-all">
-                 <div className="image-container">
-        <img src={Footballimg} className="t-football-img" alt="" />
-    </div>
+                <div key={tournament.id} className="tournament-card-all" onClick={() => tournamentCardClick(tournament)}>
+                  <div className="image-container">
+                    <img src={Footballimg} className="t-football-img" alt="" />
+                  </div>
                   <h3>{tournament.name}</h3>
                   <p>Location: {tournament.location}</p>
                   {/* <p>Sport: {tournament.typeOfSport}</p> */}
-                  <p>Date: {formatTournamentDate(tournament.startDate)} to {formatTournamentDate(tournament.endDate)}</p>
-                 
+                  <p>
+                    Date: {formatTournamentDate(tournament.startDate)} to{" "}
+                    {formatTournamentDate(tournament.endDate)}
+                  </p>
                 </div>
               ))}
             </div>

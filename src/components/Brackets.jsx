@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { Bracket, Seed, SeedItem, SeedTeam } from 'react-brackets';
 import { usePopper } from 'react-popper';
 import Navbar from './Navbar';
@@ -9,6 +9,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Select, Menu
 
 const PopperMenu = ({ isOpen, onClose, title, anchorEl, options, onOptionClick }) => {
   const [popperElement, setPopperElement] = useState(null);
+  const menuRef = useRef(null);
   const { styles, attributes } = usePopper(anchorEl, popperElement, {
     placement: 'bottom-start',
     modifiers: [
@@ -16,11 +17,33 @@ const PopperMenu = ({ isOpen, onClose, title, anchorEl, options, onOptionClick }
     ],
   });
 
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target) && !anchorEl.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [isOpen, onClose, anchorEl]);
+
+
   if (!isOpen) return null;
 
   return (
     <div
-      ref={setPopperElement}
+      // ref={setPopperElement}
+      ref={(el) => {
+        setPopperElement(el);
+        menuRef.current = el;
+      }}
       style={{
         ...styles.popper,
         backgroundColor: 'white',
@@ -59,6 +82,56 @@ const PopperMenu = ({ isOpen, onClose, title, anchorEl, options, onOptionClick }
   );
 };
 
+// const CustomSeed = ({ seed, breakpoint, onFixtureClick }) => {
+//   const determineFixtureStyle = (fixture) => {
+//     switch (fixture.state) {
+//       case 'Pending':
+//         return { borderLeft: '5px solid grey' };
+//       case 'Live':
+//         return { borderLeft: '5px solid red' };
+//       case 'Ended':
+//         return { borderLeft: '5px solid green' };
+//       default:
+//         return { borderLeft: '5px solid grey' };
+//     }
+//   };
+
+//   const determineTeamStyle = (team, fixtureState) => {
+//     if (fixtureState === 'STARTED' || fixtureState === 'ENDED') {
+//       return team.isWinner ? { color: 'green', fontWeight: 'bold' } : { color: 'red' };
+//     }
+//     return { color: 'grey', borderLeft: '5px solid grey', marginTop: '10px', fontSize: '20px' };
+//   };
+
+//   return (
+//     <Seed mobileBreakpoint={breakpoint} style={{ fontSize: 16 }}>
+//       <SeedItem 
+//         style={{ 
+//           ...determineFixtureStyle(seed),
+//           backgroundColor: 'white', 
+//           color: 'black', 
+//           padding: '30px', 
+//           borderRadius: '5px', 
+//           border: '1px solid #eee',
+//           cursor: 'pointer',
+//         }}
+//         onClick={(e) => onFixtureClick(e, seed)}
+//       >
+//         <div>
+//           {seed.teams.map((team, index) => (
+//             <SeedTeam 
+//               key={index}
+//               style={determineTeamStyle(team, seed.state)}
+//             >
+//               {team.name || 'NO TEAM'}
+//             </SeedTeam>
+//           ))}
+//         </div>
+//       </SeedItem>
+//     </Seed>
+//   );
+// };
+
 const CustomSeed = ({ seed, breakpoint, onFixtureClick }) => {
   const determineFixtureStyle = (fixture) => {
     switch (fixture.state) {
@@ -80,20 +153,38 @@ const CustomSeed = ({ seed, breakpoint, onFixtureClick }) => {
     return { color: 'grey', borderLeft: '5px solid grey', marginTop: '10px', fontSize: '20px' };
   };
 
+  // Format the date and time
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    return date.toLocaleString('en-US', { 
+      month: 'short', 
+      day: 'numeric', 
+      year: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit'
+    });
+  };
+
   return (
     <Seed mobileBreakpoint={breakpoint} style={{ fontSize: 16 }}>
+      <div style={{ marginBottom: '10px', textAlign: 'center' }}>
+          <div style={{ fontWeight: 'bold', fontSize: '18px' }}>{seed.name || `Match ${seed.id}`}</div>
+          <div style={{ fontSize: '14px', color: '#666' }}>{formatDateTime(seed.date)}</div>
+        </div>
       <SeedItem 
         style={{ 
           ...determineFixtureStyle(seed),
           backgroundColor: 'white', 
           color: 'black', 
-          padding: '30px', 
+          padding: '20px', 
           borderRadius: '5px', 
           border: '1px solid #eee',
           cursor: 'pointer',
         }}
         onClick={(e) => onFixtureClick(e, seed)}
       >
+        
+        
         <div>
           {seed.teams.map((team, index) => (
             <SeedTeam 
@@ -205,6 +296,7 @@ const BracketsComponent = () => {
   const fetchBracketsData = async () => {
     try {
       const token = localStorage.getItem('token');
+      const schoolid = parseInt(localStorage.getItem('schoolID'));
       const response = await fetch('https://nuavasports.com/graphql', {
         method: 'POST',
         headers: {
@@ -229,7 +321,7 @@ const BracketsComponent = () => {
               }
             }
           }`,
-          variables: { input: { tournamentId: 1 } },
+          variables: { input: { tournamentId: schoolid } },
         }),
       });
 
