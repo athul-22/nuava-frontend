@@ -646,11 +646,12 @@ const CalendarComponent: React.FC = () => {
       <Dialog
         header={eventDetailsHeader}
         visible={eventDetailsVisible}
-        style={{ width: "35vw" }}
+        style={{ height:'fit-content' }}
         onHide={() => setEventDetailsVisible(false)}
+        className="new-cal-event-dialog"
       >
         {selectedEvent && (
-          <div className="p-4">
+          <div className="p-4 " style={{marginTop:'50px'}}>
             <h2
               className="text-xl font-bold mb-2"
               style={{ fontSize: "24px", fontWeight: "bold" }}
@@ -683,16 +684,19 @@ const CalendarComponent: React.FC = () => {
       <Dialog
         header="Edit Event"
         visible={editDialogVisible}
-        style={{
-          width: "35vw",
-          height: "650px",
-          display: "flex",
-          justifyContent: "center",
-        }}
+        // style={{
+        //   width: "35vw",
+        //   height: "650px",
+        //   display: "flex",
+        //   justifyContent: "center",
+        // }}
+        className="new-cal-event-dialog"
         onHide={() => setEditDialogVisible(false)}
       >
         <div style={{ marginLeft: "30px" }}>
+        
           <div className="p-field">
+           
             <InputText
               placeholder="Event title"
               value={title}
@@ -707,7 +711,7 @@ const CalendarComponent: React.FC = () => {
             />
           </div>
           <div className="p-field" style={{ marginTop: "30px" }}>
-            <label htmlFor="startDate">Start Date</label>
+            <label htmlFor="startDate">Start Date</label><br></br>
             <Calendar
               className="input-box-pr-calendar-cal"
               value={startDate}
@@ -716,14 +720,17 @@ const CalendarComponent: React.FC = () => {
             />
           </div>
           <div className="p-field">
-            <label htmlFor="startTime">Start Time </label>
-            <TimePickerComponent
+            <label htmlFor="startTime">Start Time </label><br className="brbr"></br>
+           <div style={{marginLeft:'-15px'}}>
+           <TimePickerComponent
               value={startTime}
               onChange={(newValue) => setStartTime(newValue)}
+              // sx={{ marginLeft: "-115px" }}
             />
+           </div>
           </div>
           <div className="p-field">
-            <label htmlFor="endDate">End Date</label>
+            <label htmlFor="endDate">End Date</label><br></br>
             <Calendar
               className="input-box-pr-calendar-cal-end"
               value={endDate}
@@ -732,12 +739,14 @@ const CalendarComponent: React.FC = () => {
             />
           </div>
           <div className="p-field">
-            <label htmlFor="endTime">End Time</label>
+            <label htmlFor="endTime">End Time</label><br></br>
+            <div style={{marginLeft:'-15px'}}>
             <TimePickerComponent
-              sx={{ marginLeft: "29px" }}
+              // sx={{ marginLeft: "-229px" }}
               value={endTime}
               onChange={(newValue) => setEndTime(newValue)}
             />
+            </div>
           </div>
           <div
             className="p-field-checkbox"

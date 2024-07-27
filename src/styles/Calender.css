@@ -115,11 +115,12 @@
 
   .input-box-pr-calendar-cal {
     /* max-width: 460px; */
-    width: 44.5%;
+    width: 58.5%;
   }
 
   .input-box-pr-calendar-cal-end {
-    width: 44.5%;
+    /* width: 44.5%; */
+    width: 58.5%;
   }
 }
 
