@@ -96,7 +96,7 @@
 .tournament-card-all {
   position: relative;
   width: 400px; 
-  height: 400px; 
+  height: 200px; 
   overflow: hidden;
   border: 1px solid #ddd; /* Optional: to visualize the card boundaries */
   padding: 20px;
@@ -187,7 +187,7 @@
     
   }
   .tournament-card-all{
-    height: 350px;
+    height: 200px;
   }
 
 }

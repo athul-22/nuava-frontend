@@ -268,9 +268,9 @@ const Dashboard: React.FC = () => {
             <div className="tournaments-grid-all">
               {tournamentsData.getAllTournaments.map((tournament: any) => (
                 <div key={tournament.id} className="tournament-card-all" onClick={() => tournamentCardClick(tournament)}>
-                  <div className="image-container">
+                  {/* <div className="image-container">
                     <img src={Footballimg} className="t-football-img" alt="" />
-                  </div>
+                  </div> */}
                   <h3>{tournament.name}</h3>
                   <p>Location: {tournament.location}</p>
                   {/* <p>Sport: {tournament.typeOfSport}</p> */}

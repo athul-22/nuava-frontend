@@ -24,7 +24,7 @@ const handleSwap = () => {
   console.log('Swap clicked');
 };
 
-const handleDelete = () => {
+const handleDeleteee = () => {
   console.log('Delete clicked');
 };
 
@@ -44,18 +44,18 @@ const menuOptionsWithIcons = [
     icon: SortAltIcon, 
     onClick: 'handleSwap'
   },
-  { 
-    label: 'Fixrure Info', 
-    icon: InfoCircleIcon, 
-    onClick: 'fixtureInfo'
-  },
-  { 
-    label: 'Delete', 
-    icon: TrashIcon, 
-    style: { color: 'red' },
-    onClick: handleDelete
+  // { 
+  //   label: 'Fixrure Info', 
+  //   icon: InfoCircleIcon, 
+  //   onClick: 'fixtureInfo'
+  // },
+  // { 
+  //   label: 'Delete', 
+  //   icon: TrashIcon, 
+  //   style: { color: 'red' },
+  //   onClick: handleDeleteee
     
-  }
+  // }
 ];
 
 export default menuOptionsWithIcons;
