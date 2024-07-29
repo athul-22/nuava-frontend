@@ -238,7 +238,7 @@ const Dashboard: React.FC = () => {
     <>
       <Navbar buttontext="Create Tournament / Match" />
       <div className="dashboard-container">
-        {showbanner && (
+        {/* {showbanner && (
           <div className="banner-container">
             <img
               src={Banner}
@@ -247,7 +247,7 @@ const Dashboard: React.FC = () => {
               className="banner-image"
             />
           </div>
-        )}
+        )} */}
 
         {showbanner && (
           <h2 className="live-match-title-fd title-mobile-custom">

@@ -5,6 +5,9 @@ import { InfoCircleIcon } from 'primereact/icons/infocircle';
 import { SortAltIcon } from 'primereact/icons/sortalt';
 import { CheckIcon } from 'primereact/icons/check';
 import { TrashIcon } from 'primereact/icons/trash';
+import 'primeicons/primeicons.css';
+// import { StopCircle } from 'primereact/icons';
+import { BanIcon } from 'primereact/icons/ban';
 import styled from '@emotion/styled/types/base';
 
 // Temporary functions
@@ -37,7 +40,7 @@ const menuOptionsWithIcons = [
   { 
     label: 'Edit', 
     icon: PencilIcon, 
-    onClick: handleEdit
+    onClick: 'handleEdit'
   },
   { 
     label: 'Swap Teams', 
@@ -49,13 +52,13 @@ const menuOptionsWithIcons = [
   //   icon: InfoCircleIcon, 
   //   onClick: 'fixtureInfo'
   // },
-  // { 
-  //   label: 'Delete', 
-  //   icon: TrashIcon, 
-  //   style: { color: 'red' },
-  //   onClick: handleDeleteee
+  { 
+    label: 'End Match', 
+    icon: BanIcon, 
+    style: { color: 'red' },
+    onClick: 'handleEndMatch'
     
-  // }
+  }
 ];
 
 export default menuOptionsWithIcons;

@@ -1,21 +1,53 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Bracket, Seed, SeedItem, SeedTeam } from "react-brackets";
-import { usePopper } from "react-popper";
-import Navbar from "./Navbar";
-import menuOptionsWithIcons from "./menuOptionsWithIcons";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-} from "@mui/material";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { Bracket, Seed, SeedItem, SeedTeam } from 'react-brackets';
+import { usePopper } from 'react-popper';
+import Navbar from './Navbar';
+import menuOptionsWithIcons from './menuOptionsWithIcons';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { gql, useQuery, useMutation, ApolloClient, InMemoryCache, createHttpLink, ApolloProvider } from '@apollo/client';
+// import { DateTimePicker, LocalizationProvider } from '@mui/lab';
+// import AdapterDateFns from '@date-fns/adapter';
+import { TextField } from '@mui/material';
+import { InputText, Calendar } from 'primereact';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
+
+const token = localStorage.getItem('token');
+
+const client = new ApolloClient({
+  link: createHttpLink({
+    uri: 'https://nuavasports.com/graphql',
+    headers: {
+      Authorization: `jwt ${token}`,
+    },
+  }),
+  cache: new InMemoryCache(),
+});
+
+const EDIT_FIXTURE_MUTATION = gql`
+  mutation EditFixture($input: EditFixtureInput!) {
+    editFixture(input: $input) {
+      status
+      message
+    }
+  }
+`;
+
+
+const END_FIXTURE_MUTATION = gql`
+  mutation EndFixture($input: EndFixtureInput!) {
+    endFixture(input: $input) {
+      message
+      status
+    }
+  }
+`;
+
 
 const PopperMenu = ({
   isOpen,
@@ -168,7 +200,6 @@ const PopperMenu = ({
 // ************************************************************
 
 const CustomSeed = ({ seed, breakpoint, onFixtureClick }) => {
-
   const determineFixtureStyle = (fixture) => {
     console.log("Fixture state:", fixture.state, "Teams:", fixture.teams);
 
@@ -232,14 +263,14 @@ const CustomSeed = ({ seed, breakpoint, onFixtureClick }) => {
   // };
 
   const determineTeamStyle = (team, fixtureState) => {
-    if (fixtureState === 'DONE') {
-      if (team.resultText === 'LOST') {
-        return { borderLeft: '5px solid red' };
-      } else if (team.resultText === 'WON') {
-        return { borderLeft: '5px solid green' };
+    if (fixtureState === "DONE") {
+      if (team.resultText === "LOST") {
+        return { borderLeft: "5px solid red" };
+      } else if (team.resultText === "WON") {
+        return { borderLeft: "5px solid green" };
       }
-    } else if (fixtureState === 'PENDING') {
-      return { borderLeft: '5px solid grey' };
+    } else if (fixtureState === "PENDING") {
+      return { borderLeft: "5px solid grey" };
     }
     return {};
   };
@@ -275,9 +306,82 @@ const CustomSeed = ({ seed, breakpoint, onFixtureClick }) => {
   );
 };
 
+const EditFixtureDialog = ({ isOpen, onClose, fixture }) => {
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+  const [location, setLocation] = useState('');
+
+  const [editFixture] = useMutation(EDIT_FIXTURE_MUTATION);
+
+  useEffect(() => {
+    if (isOpen && fixture) {
+      setStartTime(fixture.fixtureStartTime ? new Date(fixture.fixtureStartTime) : null);
+      setEndTime(fixture.fixtureEndTime ? new Date(fixture.fixtureEndTime) : null);
+      setLocation(fixture.fixtureLocation || '');
+    }
+  }, [isOpen, fixture]);
+
+  const handleSave = () => {
+    if (!startTime || !endTime) {
+      console.error('Invalid date or time');
+      return;
+    }
+
+    editFixture({
+      variables: {
+        input: {
+          fixtureId: parseInt(fixture.id),
+          fixtureStartTime: startTime.toISOString(),
+          fixtureEndTime: endTime.toISOString(),
+          fixtureLocation: location,
+        },
+      },
+    }).then(() => {
+      onClose();
+    }).catch((error) => {
+      console.error('Error editing fixture:', error);
+    });
+  };
+
+  return (
+    <Dialog open={isOpen} onClose={onClose} className='edit-fix-dialog' >
+      <DialogTitle>Edit Fixture</DialogTitle>
+      <DialogContent style={{width:'min-content'}}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <br></br>
+          <TimePicker
+            label="Start Time"
+            value={startTime}
+            onChange={(newValue) => setStartTime(newValue)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          <br></br><br></br>
+          <TimePicker
+            label="End Time"
+            value={endTime}
+            onChange={(newValue) => setEndTime(newValue)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
+        <TextField
+          label="Location"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          
+          margin="normal"
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={handleSave}>Save</Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 
 
 const BracketsComponent = () => {
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedFixture, setSelectedFixture] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -288,15 +392,48 @@ const BracketsComponent = () => {
   const [selectedTargetTeam, setSelectedTargetTeam] = useState("");
   const [allTeams, setAllTeams] = useState([]);
 
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
+
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [fixtureBeingEdited, setFixtureBeingEdited] = useState(null);
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+  const [location, setLocation] = useState(null);
+
+  const [ copylinktext, setCopylinktext] = useState("Copy Link")
+
+  const { mutate: editFixtureMutation } = useMutation(EDIT_FIXTURE_MUTATION);
 
   const handleEdit = (fixtureId) => {
     setFixtureBeingEdited(fixtureId);
     setEditDialogOpen(true);
   };
+
+  // const handleEditFixture = async () => {
+  //   const input = {
+  //     fixtureId: fixtureBeingEdited,
+  //     fixtureStartTime: startTime,
+  //     fixtureEndTime: endTime,
+  //     fixtureLocation: location,
+  //   };
+
+  //   try {
+  //     const response = await editFixtureMutation({ variables: { input } });
+  //     console.log(response);
+  //     setEditDialogOpen(false);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  const handleEditFixture = (fixture) => {
+    setSelectedFixture(fixture);
+    setEditDialogOpen(true);
+  };
   
-  
+
+
 
   const handleFixtureClick = (event, fixture) => {
     event.stopPropagation();
@@ -314,6 +451,8 @@ const BracketsComponent = () => {
       window.location.href = "/football/matches";
     } else if (action === "handleSwap") {
       prepareSwapDialog();
+    } else if (action === "handleEdit") {
+      handleEditFixture(selectedFixture);
     }
     setMenuOpen(false);
   };
@@ -524,8 +663,19 @@ const BracketsComponent = () => {
     console.log("Rounds updated:", rounds);
   }, [rounds]);
 
+  const handleCopylinkClick = () => {
+    const url = window.location.origin;
+    const schoolid = parseInt(localStorage.getItem("schoolID"));
+    const newurl = `${url}/all/football/brackets/${schoolid}`
+    
+    navigator.clipboard.writeText(newurl);
+    setCopylinktext("Link copied")
+  }
+
+  
+
   return (
-    <>
+    <ApolloProvider client={client}>
       <Navbar buttontext="Create Tournament / Match" />
       <div
         style={{
@@ -539,12 +689,16 @@ const BracketsComponent = () => {
         {loading ? (
           <Skeleton height={40} count={10} />
         ) : rounds ? (
-          <Bracket
+          <div>
+            <button onClick={handleCopylinkClick} style={{cursor:'pointer',backgroundColor:'#051da0',color:'white',padding:'10px 20px',fontSize:'18px',borderRadius:'10px',marginLeft:'50px',marginBottom:'50px',display:'flex'}}>{copylinktext} <i className="pi pi-link" style={{ color: 'white',fontSize:'20px',marginLeft:'20px',marginTop:'2px' }}></i></button>
+            <Bracket
             rounds={rounds}
             renderSeedComponent={(props) => (
               <CustomSeed {...props} onFixtureClick={handleFixtureClick} />
             )}
           />
+
+            </div>
         ) : (
           <img
             src="https://static.vecteezy.com/system/resources/previews/010/856/652/non_2x/no-result-data-document-or-file-not-found-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-etc-vector.jpg"
@@ -601,8 +755,20 @@ const BracketsComponent = () => {
             </Button>
           </DialogActions>
         </Dialog>
+
+
+
+        {/* <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
+       
+    </Dialog> */}
+     <EditFixtureDialog
+  isOpen={editDialogOpen}
+  onClose={() => setEditDialogOpen(false)}
+  fixture={selectedFixture}
+/>
+
       </div>
-    </>
+      </ApolloProvider >
   );
 };
 

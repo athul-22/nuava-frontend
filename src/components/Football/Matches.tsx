@@ -168,16 +168,16 @@ const LiveMatch = () => {
     if (!lineUpsData || !lineUpsData.getLineUps) return null;
 
     return lineUpsData.getLineUps.map((team) => (
-      <div key={team.teamID} className="team-lineup">
-        <h4>{team.name} Lineup</h4>
+      <div key={team.teamID} className="team-card">
+        <h4 className="team-name-lineup">{team.name} Lineup</h4>
         {team.students.length > 0 ? (
-          <ul>
+          <ul className="players-list">
             {team.students.map((student) => (
-              <li key={student.id}>{student.name}</li>
+              <li className="player-card" key={student.id}>{student.name}</li>
             ))}
           </ul>
         ) : (
-          <p>No lineup available</p>
+          <p></p>
         )}
       </div>
     ));
@@ -354,7 +354,7 @@ const LiveMatch = () => {
         <Skeleton shape="rectangle" height="1.5rem" width="5rem" />
       </div>
 
-      <div className="lineups-container">
+      <div className="lineups-container team-card">
           {renderLineUps()}
         </div>
     </Card>
@@ -374,25 +374,29 @@ const LiveMatch = () => {
 
   const renderLineUps = () => {
     console.log("Lineup data:", lineUpsData); // Debug log
-    if (lineUpsLoading) return <p>Loading lineups...</p>;
-    if (lineUpsError) return <p>Error loading lineups: {lineUpsError.message}</p>;
-    if (!lineUpsData || !lineUpsData.getLineUps) return <p>No lineup data available</p>;
-
-    return lineUpsData.getLineUps.map((team) => (
-      <div key={team.teamID} className="team-lineup">
-        <h4>{team.name} Lineup</h4>
-        {team.students.length > 0 ? (
-          <ul>
-            {team.students.map((student) => (
-              <li key={student.id}>{student.name}</li>
-            ))}
-          </ul>
-        ) : (
-          <p>No lineup available</p>
-        )}
+  
+    if (lineUpsLoading) return <div>Loading lineups...</div>;
+    if (lineUpsError) return <div>Error loading lineups: {lineUpsError.message}</div>;
+    if (!lineUpsData || !lineUpsData.getLineUps) return <div>No lineup data available</div>;
+  
+    const teamsWithStudents = lineUpsData.getLineUps.filter((team) => team.students.length > 0);
+  
+    if (teamsWithStudents.length === 0) return <div></div>;
+  
+    return teamsWithStudents.map((team) => (
+      <div style={{display:'flex',justifyContent:'center',}}>
+      <div key={team.teamID} className="team-card-live-match">
+        <ul className="players-lis">
+          <h4 className="team-name-lineup">{team.name} Lineup</h4>
+          {team.students.map((student) => (
+            <li className="player-card" key={student.id}>{student.name}</li>
+          ))}
+        </ul>
+      </div>
       </div>
     ));
   };
+  
 
   return (
     <div className="match-card-individual">
@@ -424,7 +428,7 @@ const LiveMatch = () => {
             setUpdateDialogVisible(true);
           }}
         >
-          <h3 className="team-name">{matchData.teamDetails[0].teamName}</h3>
+          <h3 className="team-name">{matchData.teamDetails[0].teamName} <i className="pi pi-plus-circle" style={{ fontSize: '1.5rem',marginLeft:'10px' }}></i></h3>
         </div>
         <div className="match-score">
           <span>{matchData.teamDetails[0].score}</span>
@@ -438,7 +442,7 @@ const LiveMatch = () => {
             setUpdateDialogVisible(true);
           }}
         >
-          <h3 className="team-name">{matchData.teamDetails[1].teamName}</h3>
+          <h3 className="team-name">{matchData.teamDetails[1].teamName} <i className="pi pi-plus-circle" style={{ fontSize: '1.5rem',marginLeft:'10px' }}></i></h3>
         </div>
       </div>
       <div className="scorers">
