@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Navbar from "../Navbar";
 import Banner from "../../assets/BANNER.png";
 import "./FootballDashboard.css";
@@ -8,15 +8,22 @@ import {
   ApolloClient,
   InMemoryCache,
   createHttpLink,
+  useMutation,
   ApolloProvider,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { Skeleton } from "primereact/skeleton";
-import { Dialog } from "primereact/dialog";
+import { Dialog } from "@mui/material";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import { Card } from "@mui/material";
+import { Card, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import Footballimg from "../../assets/football.png";
+import EditFixtureComponent from "../EditFixtureComponent";
+import moment from "moment";
+import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { Toast } from "primereact/toast";
+
 
 interface Fixture {
   id: number;
@@ -34,6 +41,8 @@ interface Fixture {
   status: string;
   createdAt: string;
   updatedAt: string;
+  startTime: string;
+  endTime: string;
 }
 
 interface Tournament {
@@ -67,6 +76,15 @@ const GET_ALL_EVENTS = gql`
 `;
 
 const EDIT_FIXTURE = gql`
+  mutation EditFixture($input: EditFixtureInput!) {
+    editFixture(input: $input) {
+      status
+      message
+    }
+  }
+`;
+
+const EDIT_FIXTURE_MUTATION = gql`
   mutation EditFixture($input: EditFixtureInput!) {
     editFixture(input: $input) {
       status
@@ -132,11 +150,56 @@ const Dashboard: React.FC = () => {
 
   const [userType, setUserType] = useState(false);
 
+  // const [fixtureId, setFixtureId] = useState("");
+  // const [startDate, setStartDate] = useState("");
+  // const [endDate, setEndDate] = useState("");
+  // const [startTime, setStartTime] = useState("");
+  // const [endTime, setEndTime] = useState("");
+  // const [isOpen, setIsOpen] = useState(false);
+
+const [editStartTime, setEditStartTime] = useState<Date | null>(null);
+const [editEndTime, setEditEndTime] = useState<Date | null>(null);
+const [editLocation, setEditLocation] = useState("");
+const toast = useRef<Toast>(null);
+
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
+  const [editFixture] = useMutation(EDIT_FIXTURE_MUTATION);
+
+  const handleEditFixture = (fixture: React.SetStateAction<Fixture | null>) => {
+    setSelectedFixture(fixture);
+    setIsEditDialogOpen(true);
+  };
+
+  // const handleEditFixtureClick = (
+  //   fixtureId: number,
+  //   startDate: string,
+  //   endDate: string,
+  //   startTime: string,
+  //   endTime: string
+  // ) => {
+  //   const formattedStartDate = moment(startDate).format("YYYY-MM-DD");
+  //   const formattedEndDate = moment(endDate).format("YYYY-MM-DD");
+  //   setFixtureId(fixtureId.toString());
+  //   setStartDate(formattedStartDate);
+  //   setEndDate(formattedEndDate);
+  //   setStartTime(startTime);
+  //   setEndTime(endTime);
+  //   setIsOpen(true);
+  // };
+
   useEffect(() => {
     if (localStorage.getItem("usertype") === "coach") {
       setUserType(true);
     }
   }, []);
+
+  const showToast = (severity: "error" | "success" | "info" | "warn" | undefined, summary: string, detail: string) => {
+    if (toast.current) {
+      toast.current.show({ severity, summary, detail, life: 3000 });
+    }
+  };
+  
 
   const handleCreatetournamentclick = () => {
     window.location.href = "/tournament/create";
@@ -162,6 +225,36 @@ const Dashboard: React.FC = () => {
       minute: "2-digit",
     });
   };
+
+  const handleSaveFixture = () => {
+    if (!selectedFixture || !editStartTime || !editEndTime) {
+      console.error("Invalid fixture or date/time");
+      showToast("error", "Error editing fixture", "Invalid fixture or date/time");
+      return;
+    }
+  
+    editFixture({
+      variables: {
+        input: {
+          fixtureId: selectedFixture.id,
+          fixtureStartTime: editStartTime.toISOString(),
+          fixtureEndTime: editEndTime.toISOString(),
+          fixtureLocation: editLocation,
+        },
+      },
+    })
+      .then(() => {
+        showToast("success", "Fixture edited", "Fixture has been successfully edited");
+        setIsEditDialogOpen(false);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Error editing fixture:", error);
+        showToast("error", "Error editing fixture", error.message);
+      });
+  };
+  
+  
 
   const formatTournamentDate = (timestamp: string) => {
     // Parse the timestamp as a number
@@ -228,11 +321,10 @@ const Dashboard: React.FC = () => {
     redirectToMatchPage();
   };
 
-  const tournamentCardClick = (tournament: { id: string; }) => {
-    localStorage.setItem('schoolID', tournament.id);
-    window.location.href = '/brackets';
+  const tournamentCardClick = (tournament: { id: string }) => {
+    localStorage.setItem("schoolID", tournament.id);
+    window.location.href = "/brackets";
   };
-
 
   return (
     <>
@@ -267,7 +359,11 @@ const Dashboard: React.FC = () => {
           {tournamentsData && (
             <div className="tournaments-grid-all">
               {tournamentsData.getAllTournaments.map((tournament: any) => (
-                <div key={tournament.id} className="tournament-card-all" onClick={() => tournamentCardClick(tournament)}>
+                <div
+                  key={tournament.id}
+                  className="tournament-card-all"
+                  onClick={() => tournamentCardClick(tournament)}
+                >
                   {/* <div className="image-container">
                     <img src={Footballimg} className="t-football-img" alt="" />
                   </div> */}
@@ -352,7 +448,18 @@ const Dashboard: React.FC = () => {
                       {userType && (
                         <Button
                           icon="pi pi-pencil"
-                          onClick={() => handleEditClick(fixture)}
+                          // onClick={() => handleEditClick(fixture)}
+                          // onClick={() =>
+                          //   handleEditFixtureClick(
+                          //     fixture.id,
+                          //     fixture.startDate,
+                          //     fixture.endDate,
+                          //     fixture.startTime,
+                          //     fixture.endTime
+                          //   )
+                          // }
+
+                          onClick={() => handleEditFixture(fixture)}
                           className="p-button-rounded edit-button fixture-edit-btn"
                         />
                       )}
@@ -379,7 +486,7 @@ const Dashboard: React.FC = () => {
         <div className="live-matches-container">
           {showbanner && (
             <p className="live-match-title-fd" style={{}}>
-              LIVE MATCHES
+              LIVE MATCHE
             </p>
           )}
           <div className="tournaments-container">
@@ -440,7 +547,7 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      <Dialog
+      {/* <Dialog
         header="Edit Fixture"
         visible={editDialogVisible}
         onHide={() => setEditDialogVisible(false)}
@@ -496,8 +603,60 @@ const Dashboard: React.FC = () => {
             />
           </center>
         </div>
-      </Dialog>
-      
+      </Dialog> */}
+
+      {/* {isOpen && (
+  <EditFixtureComponent
+    isOpen={isOpen}
+    onClose={() => setIsOpen(false)}
+    fixtureId={fixtureId}
+    startDate={startDate}
+    endDate={endDate}
+    startTime={startTime}
+    endTime={endTime}
+    onUpdate={(data) => console.log(data)}
+  />
+)} */}
+
+      {/* {selectedFixture && (
+        <EditFixtureComponent
+          isOpen={isEditDialogOpen}
+          onClose={() => setIsEditDialogOpen(false)}
+          fixture={selectedFixture}
+        />
+      )} */}
+
+{isEditDialogOpen && selectedFixture && (
+  <Dialog open={isEditDialogOpen} onClose={() => setIsEditDialogOpen(false)}>
+    <DialogTitle>Edit Fixture</DialogTitle>
+    <DialogContent style={{width:'min-content'}}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <TimePicker
+          label="Start Time"
+          value={editStartTime}
+          onChange={(newValue) => setEditStartTime(newValue)}
+        />
+        <br></br>       <br></br>
+        <TimePicker
+          label="End Time"
+          value={editEndTime}
+          onChange={(newValue) => setEditEndTime(newValue)}
+        />
+      </LocalizationProvider>
+      <TextField
+        label="Location"
+        value={editLocation}
+        onChange={(e) => setEditLocation(e.target.value)}
+        margin="normal"
+      />
+    </DialogContent>
+    <DialogActions>
+      <Button  onClick={() => setIsEditDialogOpen(false)}>Cancel</Button>
+      <Button style={{padding:'5px 30px',color:'#2038c2',borderRadius:'30px'}} onClick={handleSaveFixture}>Save</Button>
+    </DialogActions>
+  </Dialog>
+)}
+ <Toast ref={toast} />
     </>
   );
 };

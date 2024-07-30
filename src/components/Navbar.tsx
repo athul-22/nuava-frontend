@@ -81,7 +81,7 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
 
   const handleLogout = () => {
     localStorage.clear();
-    window.location.href = "https://nuavasports.com/";
+    window.location.href = "/";
   };
 
   const handleViewProfileClick = () => {
@@ -320,7 +320,9 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
           >
             Matches
           </span>
-          <span>Results</span>
+          <span onClick={() => {
+              window.location.href = "/result";
+            }}>Results</span>
           {/* <span>Live</span> */}
         </div>
 

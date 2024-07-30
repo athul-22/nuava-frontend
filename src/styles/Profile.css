@@ -1,65 +1,74 @@
-.profile-container {
+
+.profile-card {
+  background-color: #fff;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 24px;
+  padding: 2.5rem;
+  width: 36rem;
+  position: relative;
+  z-index: 3;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-}
-
-.profile-header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
+  justify-content: center;
 }
 
-.profile-header h1 {
-  font-size: 2rem;
-  font-weight: bold;
+.profile-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15rem;
+  width: 100%;
+  border-radius: 24px 24px 0 0;
+  background-color: #051da0;
 }
 
-.profile-actions button {
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 5px 10px;
-  margin-left: 10px;
-}
-
-.profile-content {
-  display: flex;
-  justify-content: space-between;
-}
-
-.profile-left, .profile-center, .profile-right {
-  flex: 1;
-  margin: 0 10px;
-}
-
-.profile-recognitions, .profile-info, .upcoming-events {
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.recognition-card, .event-card {
-  background-color: #f9f9f9;
-  border: 1px solid #eee;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.profile-right img {
+.profile-card .image {
   border-radius: 50%;
-  margin-bottom: 10px;
+  background-color: #051da0;
+  height: 15rem;
+  margin-bottom: 2rem;
+  padding: 0.3rem;
+  width: 15rem;
+  position: relative;
+  z-index: 3;
 }
 
-.profile-right div {
-  font-size: 1.2rem;
-  font-weight: bold;
+.image img {
+  border: 3px solid #fff;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.1rem;
+  height: 100%;
+  width: 100%;
+}
+
+.profile-card .text-data {
+  text-align: center;
+  
+}
+
+.text-data h2 {
+  font-size: 3.2rem;
+  font-weight: 500;
+}
+
+.text-data p {
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: gray;
+}
+
+/* media queries  */
+@media (width <= 390px) {
+  html {
+    font-size: 56.25%;
+  }
+}
+
+@media (width <= 370px) {
+  html {
+    font-size: 50%;
+  }
 }

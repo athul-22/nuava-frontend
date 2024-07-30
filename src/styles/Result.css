@@ -1,0 +1,160 @@
+.result-container-result {
+  padding: 20px;
+}
+
+.result-cards-result {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.result-card-result {
+  width: 300px;
+  height: 230px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-left: 10px solid #1e3a8a;
+  background-color: white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.result-card-result:hover {
+  cursor: pointer;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-content-result {
+  padding: 20px;
+}
+
+.tournament-name-result {
+  font-size: 0.9em;
+  margin-top: -30PX;
+  color: #666;
+  background-color: rgb(214, 228, 254);
+  border-radius: 30px;
+  margin-bottom: 10px;
+}
+
+.tournament-name-result-dialog {
+  font-size: 1.6em;
+  text-align: center;
+  margin-top: 0PX;
+  color: #666;
+  background-color: rgb(214, 228, 254);
+  border-radius: 30px;
+  margin-bottom: 10px;
+}
+
+.team-names-result {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.winning-team-result {
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.losing-team-result {
+  font-size: 1.2em;
+  color: #666;
+}
+
+.score-result {
+  font-size: 4em;
+  margin-top: -20px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.match-details-dialog-result {
+  width: fit-content;
+ 
+}
+
+.match-details-result {
+  padding: 20px;
+  flex-direction: column;
+}
+
+.tournament-name-result {
+  text-align: center;
+  font-size: 1.1em;
+  margin-bottom: 20px;
+  color: #1e3a8a;
+}
+
+.final-score-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.team-info-result {
+  flex: 1;
+  text-align: center;
+  width:30vh;
+}
+
+.team-name-result-win {
+  font-weight: bold;
+  font-size: 1.8em;
+  color: green;
+  background-color: rgba(5, 196, 5, 0.379);
+  padding: 10px;
+  border-radius:50px ;
+  margin: 30px;
+}
+
+.team-name-result-loss {
+  /* font-weight: bold; */
+  font-size: 1.8em;
+  color: rgb(255, 0, 0);
+  background-color: rgba(255, 90, 90, 0.379);
+  padding: 10px;
+  border-radius:50px ;
+  margin: 30px;
+}
+
+
+.score-container-result {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.match-format-result {
+  text-align: center;
+  font-size: 1em;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.match-events-result {
+  display: flex;
+  justify-content: space-between;
+}
+
+.team-events-result {
+  flex: 1;
+  padding: 0 20px;
+}
+
+.match-event-result {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.event-player-result {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.event-type-result {
+  font-size: 1.2em;
+}

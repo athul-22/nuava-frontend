@@ -26,6 +26,7 @@ import Profile from "./components/Profile";
 import Matches from "./components/Football/Matches";
 import MatchesMain from "./components/Matches";
 import NoAuthBrackets from './components/NoAuthBrackets'
+import Result from "./components/Result";
 
 // Set up Apollo Client
 const client = new ApolloClient({
@@ -69,6 +70,7 @@ const App: React.FC = () => {
           <Route path="/football/matches" element={<Matches/>} />
           <Route path="/matches" element={<MatchesMain/>} />
           <Route path="/all/football/brackets/:id" element={<NoAuthBrackets/>} />
+          <Route path="/result" element={<Result/>} />
         </Routes>
       </BrowserRouter>
     </ApolloProvider>
