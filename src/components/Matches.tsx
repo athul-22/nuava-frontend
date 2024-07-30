@@ -112,7 +112,7 @@ const Matches: React.FC = () => {
           <div className="tournament-card-all-match">
             {fixtures.map((fixture: { id: React.Key | null | undefined; team1: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; team2: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; startDate: any; location: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }) => (
               <div key={fixture.id} className="fixture-card-all-matches">
-                <h2 className="tournament-name">U15 Champions League</h2>
+                <h2 className="tournament-name">{}</h2>
                 <div className="fixture-header">
                   <h3 className="fixture-title">
                     {fixture.team1} <span style={{color:'grey',marginLeft:'10px',marginRight:'10px'}}>VS</span> {fixture.team2}

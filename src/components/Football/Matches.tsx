@@ -18,6 +18,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Make sure to install axios: npm install axios
 import "./LiveMatch.css";
 import Navbar from "../Navbar";
+import { useSubscription } from '@apollo/client';
+
 
 // GraphQL queries and mutations
 const GET_MATCH_DETAILS_AND_SCORE = gql`
@@ -70,6 +72,18 @@ const GET_LINEUPS = gql`
     }
   }
 `;
+
+const SCORE_UPDATES_SUBSCRIPTION = gql`
+  subscription Subscription($input: ScoreUpdatesInput!) {
+    scoreUpdates(input: $input) {
+      fixtureId
+      eventType
+      teamId
+      playerId
+    }
+  }
+`;
+
 
 // Apollo Client setup
 const httpLink = createHttpLink({
@@ -143,6 +157,12 @@ const LiveMatch = () => {
     },
   });
 
+  const parsedFixid = parseInt(fixtureId)
+
+  const { data: subscriptionData } = useSubscription(SCORE_UPDATES_SUBSCRIPTION, {
+    variables: { input: { parsedFixid } },
+  });
+
 
   // const { data: lineUpsData } = useQuery<{ getLineUps: LineUp[] }>(GET_LINEUPS, {
   //   variables: { fixtureId },
@@ -193,30 +213,42 @@ const LiveMatch = () => {
     }
   }, [error]);
 
-  useEffect(() => {
-    const pollBroadcastUpdates = async () => {
-      try {
-        const response = await axios.get<BroadcastUpdate>(
-          `https://nuavasports.com/graphql`,
-          {
-            headers: {
-              Authorization: `JWT ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+  // useEffect(() => {
+  //   const pollBroadcastUpdates = async () => {
+  //     try {
+  //       const response = await client.query({
+  //         query: gql`
+  //           query CheckBroadcastUpdate {
+  //             checkBroadcastUpdate {
+  //               hasUpdate
+  //             }
+  //           }
+  //         `,
+  //         fetchPolicy: 'network-only'
+  //       });
         
-        if (response.data.hasUpdate) {
-          refetch();
-        }
-      } catch (error) {
-        console.error("Error polling for broadcast updates:", error);
-      }
-    };
+  //       if (response.data.checkBroadcastUpdate.hasUpdate) {
+  //         refetch();
+  //       }
+  //     } catch (error) {
+  //       console.error("Error polling for broadcast updates:", error);
+  //     }
+  //   };
+  
+  //   const intervalId = setInterval(pollBroadcastUpdates, 10000); // Poll every 10 seconds
+  
+  //   return () => clearInterval(intervalId); // Clean up on component unmount
+  // }, [refetch]);
 
-    const pollInterval = setInterval(pollBroadcastUpdates, 10000); // Poll every 10 seconds
+  useEffect(() => {
+    if (subscriptionData) {
+      console.log("Received score update:", subscriptionData.scoreUpdates);
+      // Handle the score update here
+      // You might want to refetch your fixture data or update the local state
+      refetch();
+    }
+  }, [subscriptionData, refetch]);
 
-    return () => clearInterval(pollInterval);
-  }, [fixtureId, refetch]);
 
   const handleStartMatch = async () => {
     try {
@@ -269,7 +301,7 @@ const LiveMatch = () => {
       onHide={() => setShowDialog(false)}
       style={{
         height: "200px",
-        width: `500px`,
+        width: "fit-content",
         backgroundColor: "white",
         borderRadius: "20px",
       }}

@@ -85,7 +85,7 @@ const IHMatches: React.FC = () => {
             {data.getAllInterHouseEvents.map((match) => {
               const details: MatchDetails = JSON.parse(match.details);
               return (
-                <div key={match.id} className="match-card" style={{ minWidth: '300px' }}>
+                <div key={match.id} className="match-card" style={{ minWidth: '400px' }}>
                   <div className="match-header">
                     <h3>{match.title}</h3>
                   </div>
@@ -109,7 +109,7 @@ const IHMatches: React.FC = () => {
                       <p style={{color:'silver',marginBottom:'10px'}} className="description">
                         <strong></strong> {details.description}
                       </p>
-                      <button style={{padding:'5px',width:'90%',backgroundColor:'#051da0',textAlign:'center',color:'white',margin:'10px',borderRadius:'20px'}}>Edit</button>
+                      {/* <button style={{padding:'5px',width:'90%',backgroundColor:'#051da0',textAlign:'center',color:'white',margin:'10px',borderRadius:'20px'}}>Edit</button> */}
                     </center>
                   </div>
                 </div>
