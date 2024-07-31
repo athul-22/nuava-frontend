@@ -36,16 +36,37 @@ const Dashboard: React.FC = () => {
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
   const [coachError, setCoachError] = useState<string | null>(null);
   const [eventError, setEventError] = useState<string | null>(null);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     localStorage.setItem("selectedSport", "Overview");
   }, []);
+
+  // const fetchGraphQLData = async (query: string): Promise<any> => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) {
+  //     throw new Error("No JWT token found");
+  //   }
+  //   const response = await fetch("https://nuavasports.com/graphql", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `jwt ${token}`,
+  //     },
+  //     body: JSON.stringify({ query }),
+  //   });
+  //   if (!response.ok) {
+  //     throw new Error(`HTTP error! status: ${response.status}`);
+  //   }
+  //   return response.json();
+  // };
 
   const fetchGraphQLData = async (query: string): Promise<any> => {
     const token = localStorage.getItem("token");
     if (!token) {
       throw new Error("No JWT token found");
     }
+
     const response = await fetch("https://nuavasports.com/graphql", {
       method: "POST",
       headers: {
@@ -54,41 +75,107 @@ const Dashboard: React.FC = () => {
       },
       body: JSON.stringify({ query }),
     });
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+
     return response.json();
   };
 
+
+
   useEffect(() => {
-    const fetchCoaches = async () => {
-      setLoadingCoaches(true);
+    const userType = localStorage.getItem("usertype");
+
+    const fetchData = async () => {
       try {
-        const coachQuery = `
-          query Coach {
-            getAllCoaches {
-              id
-              name
-              email
-              phone
-              schoolID
+        let query;
+        if (userType === "coach") {
+          query = `
+            query Coach {
+              getAllCoaches {
+                id
+                name
+                email
+                phone
+                schoolID
+              }
             }
-          }
-        `;
-        const coachData = await fetchGraphQLData(coachQuery);
-        if (coachData.errors) {
-          throw new Error(coachData.errors[0].message);
+          `;
+        } else if (userType === "student") {
+          query = `
+            query Student {
+              student {
+                id
+                email
+                name
+                schoolID
+                grade
+                age
+              }
+            }
+          `;
+        } else {
+          throw new Error("Invalid user type");
         }
-        setCoaches(coachData.data.getAllCoaches || []);
+
+        const data = await fetchGraphQLData(query);
+        setData(data.data);
+        if (userType === "student") {
+          const { id, email, name, schoolID, grade, age } = data.data.student;
+          localStorage.setItem("id", id.toString());
+          localStorage.setItem("email", email);
+          localStorage.setItem("name", name);
+          localStorage.setItem("schoolID", schoolID.toString());
+          localStorage.setItem("grade", grade);
+          localStorage.setItem("age", age.toString());
+        } else if (userType === "coach") {
+          const { id, email, name, phone, schoolID } = data.data.getAllCoaches[0];
+          localStorage.setItem("id", id.toString());
+          localStorage.setItem("email", email);
+          localStorage.setItem("name", name);
+          localStorage.setItem("phone", phone);
+          localStorage.setItem("schoolID", schoolID.toString());
+        }
+        localStorage.setItem("responseData", JSON.stringify(data.data));
       } catch (error) {
-        console.error("Error fetching coaches:", error);
-        setCoachError(
-          error instanceof Error ? error.message : "An unknown error occurred"
-        );
-      } finally {
-        setLoadingCoaches(false);
+        console.log("Error fetching data:", error);
       }
     };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    // const fetchCoaches = async () => {
+    //   setLoadingCoaches(true);
+    //   try {
+    //     const coachQuery = `
+    //       query Coach {
+    //         getAllCoaches {
+    //           id
+    //           name
+    //           email
+    //           phone
+    //           schoolID
+    //         }
+    //       }
+    //     `;
+    //     const coachData = await fetchGraphQLData(coachQuery);
+    //     if (coachData.errors) {
+    //       throw new Error(coachData.errors[0].message);
+    //     }
+    //     setCoaches(coachData.data.getAllCoaches || []);
+    //   } catch (error) {
+    //     console.error("Error fetching coaches:", error);
+    //     setCoachError(
+    //       error instanceof Error ? error.message : "An unknown error occurred"
+    //     );
+    //   } finally {
+    //     setLoadingCoaches(false);
+    //   }
+    // };
 
     const fetchEvents = async () => {
       setLoadingEvents(true);
@@ -128,9 +215,10 @@ const Dashboard: React.FC = () => {
       }
     };
 
-    fetchCoaches();
+    // fetchGraphQLData();
     fetchEvents();
   }, []);
+
 
   const eventStyleGetter = (event: Event) => {
     let backgroundColor = "#3174ad";

@@ -48,6 +48,10 @@ const Onboarding: React.FC = () => {
     setShowStudentDialog(false);
   };
 
+  const waitlist = () => {
+    window.location.href = "/contact";
+  }
+
   const coachDialogContent = () => (
     <div
       className="dialog-content"
@@ -213,9 +217,9 @@ const Onboarding: React.FC = () => {
 
               <div className="content-c">
                 <h1>Ready to use Nuava</h1>
-                <p>Digitize the entire Sports with us!</p>
+                <p>Digitize Sports with us!</p>
                 <div className="card flex justify-content-center"></div>
-                <button className="btn-c">Join our waitlist</button>
+                <button className="btn-c" onClick={waitlist}>Join our waitlist</button>
                 {/* <img src={Circle_4} alt="" className="circle_4"/> */}
                 {/* <img src={Circle_3} alt="" className="circle_3" /> */}
               </div>

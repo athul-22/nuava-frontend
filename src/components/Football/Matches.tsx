@@ -174,7 +174,7 @@ const LiveMatch = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [updateDialogVisible, setUpdateDialogVisible] = useState(false);
   const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null);
-  const [eventType, setEventType] = useState<string>("");
+  const [eventType, setEventType] = useState<string>("Goal");
   const fixtureId = localStorage.getItem("startfix") || "1";
 
   const toastRef = useRef<Toast>(null);
@@ -486,7 +486,7 @@ const LiveMatch = () => {
       <div>
         <Dropdown
           value={eventType}
-          options={["Goal", "RedCard", "YellowCard"]}
+          options={["Goal"]}
           onChange={(e) => setEventType(e.value)}
           placeholder="Select Event Type"
           style={{ marginBottom: "20px" }}
@@ -501,6 +501,7 @@ const LiveMatch = () => {
       <div className="match-header">
         <Skeleton shape="rectangle" height="1.5rem" width="15rem" />
       </div>
+      <p>Scores</p>
       <div className="match-content">
         <Skeleton shape="rectangle" height="1.5rem" width="10rem" />
         <Skeleton shape="rectangle" height="1.5rem" width="5rem" />
@@ -578,10 +579,25 @@ const LiveMatch = () => {
             <span className="pi pi-wifi" style={{ marginRight: "10px" }}></span>
             Live
           </div>
+          {/* <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: "green",
+            padding: "10px 20px",
+            color: "white",
+            borderRadius: "20px",
+            marginLeft: "20px",
+          }}
+        >
+          <Button onClick={() => setEndMatchDialogVisible(true)}>
+            End Match
+          </Button>
+        </div> */}
         </div>
 
         <div className="match-header">
-          <h2 className="tournament-name-live-match">TISB Tournament 2024</h2>
+          <h2 className="tournament-name-live-match">{matchData.fixtureId}</h2>
         </div>
         <div className="match-content">
           <div
@@ -629,19 +645,23 @@ const LiveMatch = () => {
             ))
           )}
         </div>
+        <div style={{display:'flex',justifyContent:'center'}}>
         <div
           style={{
             display: "flex",
             justifyContent: "center",
-            backgroundColor: "green",
+            backgroundColor: "#051DA0",
             padding: "10px 20px",
             color: "white",
             borderRadius: "20px",
+            marginLeft: "20px",
+            width:'140px'
           }}
         >
           <Button onClick={() => setEndMatchDialogVisible(true)}>
             End Match
           </Button>
+        </div>
         </div>
         <div className="lineups-container">{renderLineUps()}</div>
         <Dialog

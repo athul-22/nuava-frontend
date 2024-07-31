@@ -463,6 +463,12 @@ const BracketsComponent = () => {
   const [ copylinktext, setCopylinktext] = useState("Copy Link")
 
   const { mutate: editFixtureMutation } = useMutation(EDIT_FIXTURE_MUTATION);
+  const [userType, setUserType] = useState(false);
+  useEffect(() => {
+    if (localStorage.getItem("usertype") === "coach") {
+      setUserType(true);
+    }
+  },[])
 
   const handleEdit = (fixtureId) => {
     setFixtureBeingEdited(fixtureId);
@@ -798,13 +804,15 @@ const handleEndMatch = async (fixtureId, winnerID) => {
           padding: "20px",
           backgroundColor: "white",
           fontSize: "24px",
+          flexDirection: "column",
         }}
       >
+         <button onClick={handleCopylinkClick} style={{cursor:'pointer',backgroundColor:'#051da0',color:'white',padding:'10px 20px',fontSize:'18px',borderRadius:'10px',marginLeft:'50px',marginBottom:'50px',display:'flex',width:'180px'}}>{copylinktext} <i className="pi pi-link" style={{ color: 'white',fontSize:'20px',marginLeft:'20px',marginTop:'2px' }}></i></button>
         {loading ? (
           <Skeleton height={40} count={10} />
         ) : rounds ? (
           <div style={{float:'left'}}>
-            <button onClick={handleCopylinkClick} style={{cursor:'pointer',backgroundColor:'#051da0',color:'white',padding:'10px 20px',fontSize:'18px',borderRadius:'10px',marginLeft:'50px',marginBottom:'50px',display:'flex',width:'180px'}}>{copylinktext} <i className="pi pi-link" style={{ color: 'white',fontSize:'20px',marginLeft:'20px',marginTop:'2px' }}></i></button>
+           
             <Bracket
             rounds={rounds}
             renderSeedComponent={(props) => (
@@ -821,6 +829,7 @@ const handleEndMatch = async (fixtureId, winnerID) => {
             alt="No data"
           />
         )}
+        {userType &&
         <PopperMenu
           isOpen={menuOpen}
           onClose={() => setMenuOpen(false)}
@@ -829,6 +838,7 @@ const handleEndMatch = async (fixtureId, winnerID) => {
           options={menuOptionsWithIcons}
           onOptionClick={handleOptionClick}
         />
+      }
         <Dialog open={swapDialogOpen} onClose={() => setSwapDialogOpen(false)}>
           <DialogTitle>Swap Teams</DialogTitle>
           <DialogContent style={{width:'min-content'}}>

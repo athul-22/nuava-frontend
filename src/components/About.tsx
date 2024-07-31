@@ -54,9 +54,9 @@ const About: React.FC = () => {
         ></div>
 
         <p className="aboutus-text">About us</p>
-        <p className="aboutus-text-tagline">
+        {/* <p className="aboutus-text-tagline">
           We are democratizing the digital Sports
-        </p>
+        </p> */}
 
         <div className="container-class-forabout">
           <br></br>

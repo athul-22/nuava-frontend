@@ -1,0 +1,80 @@
+.profile-settings {
+    display: flex;
+    height: 90vh;
+    margin-top: -20px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  
+  .sidebar-settings {
+    width: 20%;
+    background-color: #051da0; /* Silver/Grey background */
+    padding: 20px;
+    color: white;
+    border-radius: 20px;
+    margin-left: 20px;
+    margin-top: 15px;
+    /* margin-right: 10%; */
+  }
+  
+  .sidebar-settings ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar-settingsli {
+    padding: 10px 100px;
+    border-radius: 20px;
+    cursor: pointer;
+    background-color: white; 
+  }
+  
+  .sidebar-settings li.selected {
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: white;
+    color: #051da0;
+    border-radius: 20px;
+    text-align: center;
+  }
+  
+  .content {
+    width: 70%;
+    flex-grow: 1;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #fff;
+  }
+  
+  .input-group {
+    margin-bottom: 20px;
+
+  }
+  
+  .input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    
+  }
+  
+  .info-text {
+    color: grey;
+    margin-bottom: 20px;
+  }
+  
+#studentId {
+    width: 130%;
+    height: 50px ;
+    border: 1px solid silver;
+    background-color: transparent;
+    border-radius: 10px;
+    padding-left: 40px;
+  }
+  
+  .p-input-icon-left .p-inputtext {
+    width: 100%;
+  }
+  
+
+  

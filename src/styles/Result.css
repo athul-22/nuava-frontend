@@ -107,20 +107,18 @@
   color: green;
   background-color: rgba(5, 196, 5, 0.379);
   padding: 10px;
-  border-radius:50px ;
+  border-radius: 50px;
   margin: 30px;
 }
 
 .team-name-result-loss {
-  /* font-weight: bold; */
   font-size: 1.8em;
   color: rgb(255, 0, 0);
   background-color: rgba(255, 90, 90, 0.379);
   padding: 10px;
-  border-radius:50px ;
+  border-radius: 50px;
   margin: 30px;
 }
-
 
 .score-container-result {
   font-size: 2em;

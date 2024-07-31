@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, gql, ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import Navbar from "./Navbar";
@@ -87,11 +87,8 @@ const Matches: React.FC = () => {
   }, []);
 
   const { loading, error, data } = useQuery(GET_ALL_FIXTURES_FOR_SCHOOL, {
-    
     variables: { schoolId: schoolId },
   });
-
-  // if (error) return <p>Error: {error.message}</p>;
 
   const fixtures = data?.getAllFixturesForSchool[0]?.fixtures ?? [];
 
@@ -112,14 +109,15 @@ const Matches: React.FC = () => {
           <div className="tournament-card-all-match">
             {fixtures.map((fixture: { id: React.Key | null | undefined; team1: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; team2: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; startDate: any; location: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }) => (
               <div key={fixture.id} className="fixture-card-all-matches">
-                {/* <h2 className="tournament-name">{}</h2> */}
-                <div className="fixture-header">
-                  <h3 className="fixture-title">
-                    {fixture.team1} <span style={{color:'grey',marginLeft:'10px',marginRight:'10px'}}>VS</span> {fixture.team2}
-                  </h3>
+                <div className="card-content-result">
+                  <div className="tournament-name-result">{fixture.location}</div>
+                  <div className="team-names-result">
+                    <span className="winning-team-result">{fixture.team1}</span>
+                    <span className="losing-team-result"> vs {fixture.team2}</span>
+                  </div>
+                  
                 </div>
-                <p className="fixture-time">{formatDate(fixture.startDate)}</p>
-                <p className="fixture-info">{fixture.location}</p>
+                <div className="score-result-all-match">{formatDate(fixture.startDate)}</div>
               </div>
             ))}
           </div>

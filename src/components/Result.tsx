@@ -79,12 +79,14 @@ const Result: React.FC = () => {
   };
 
   const getWinningTeam = (fixture: FixtureResult) => {
-    const [team1Score, team2Score] = fixture.finalScore.split('-').map(Number);
+    const team1Score = parseInt(fixture.team1.score);
+    const team2Score = parseInt(fixture.team2.score);
     return team1Score > team2Score ? fixture.team1 : fixture.team2;
   };
 
   const getLosingTeam = (fixture: FixtureResult) => {
-    const [team1Score, team2Score] = fixture.finalScore.split('-').map(Number);
+    const team1Score = parseInt(fixture.team1.score);
+    const team2Score = parseInt(fixture.team2.score);
     return team1Score < team2Score ? fixture.team1 : fixture.team2;
   };
 
@@ -98,67 +100,70 @@ const Result: React.FC = () => {
   };
 
   return (
-    <><Navbar buttontext=''/>
-    <div className="result-container-result">
-      <div className="result-cards-result">
-        {data.getFixtureResults.map((fixture: FixtureResult) => {
-          const winningTeam = getWinningTeam(fixture);
-          const losingTeam = getLosingTeam(fixture);
-          
-          return (
-            <Card style={{cursor:'pointer'}}
-              key={fixture.fixtureId}
-              className="result-card-result"
-              onClick={() => handleCardClick(fixture)}
-            >
-              <div className="card-content-result" style={{cursor:'pointer'}}>
-                <div className="tournament-name-result">{fixture.tournamentName}</div>
-                <div className="team-names-result">
-                  <span className="winning-team-result">{winningTeam.teamName} </span>
-                
-                  <span className="losing-team-result"> vs  {losingTeam.teamName}</span>
+    <>
+      <Navbar buttontext='Create Tournament / Match'/>
+      <div className="result-container-result">
+        <div className="result-cards-result">
+          {data.getFixtureResults.map((fixture: FixtureResult) => {
+            const winningTeam = getWinningTeam(fixture);
+            const losingTeam = getLosingTeam(fixture);
+            
+            return (
+              <Card style={{cursor:'pointer'}}
+                key={fixture.fixtureId}
+                className="result-card-result"
+                onClick={() => handleCardClick(fixture)}
+              >
+                <div className="card-content-result" style={{cursor:'pointer'}}>
+                  <div className="tournament-name-result">{fixture.tournamentName}</div>
+                  <div className="team-names-result">
+                    <span className="winning-team-result">{winningTeam.teamName} </span>
+                    <span className="losing-team-result"> vs  {losingTeam.teamName}</span>
+                  </div>
+                  <div className="score-result">{fixture.finalScore}</div>
                 </div>
-                <div className="score-result">{fixture.finalScore}</div>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
+              </Card>
+            );
+          })}
+        </div>
 
-      <Dialog
-        visible={selectedFixture !== null}
-        onHide={closeDialog}
-        modal
-        className="match-details-dialog-result"
-        dismissableMask={true}
-      >
-        {selectedFixture && (
-          <div className="match-details-result">
-            <h2 className="tournament-name-result-dialog">{selectedFixture.tournamentName}</h2>
-            <div className="final-score-result">
-              <div className="team-info-result">
-                <span className="team-name-result-win">{selectedFixture.team1.teamName}</span>
+        <Dialog
+          visible={selectedFixture !== null}
+          onHide={closeDialog}
+          modal
+          className="match-details-dialog-result"
+          dismissableMask={true}
+        >
+          {selectedFixture && (
+            <div className="match-details-result">
+              <h2 className="tournament-name-result-dialog">{selectedFixture.tournamentName}</h2>
+              <div className="final-score-result">
+                <div className="team-info-result">
+                  <span className={`team-name-result ${parseInt(selectedFixture.team1.score) > parseInt(selectedFixture.team2.score) ? 'team-name-result-win' : 'team-name-result-loss'}`}>
+                    {selectedFixture.team1.teamName}
+                  </span>
+                </div>
+                <div className="score-container-result">
+                  <span className="score-result">{selectedFixture.finalScore}</span>
+                </div>
+                <div className="team-info-result">
+                  <span className={`team-name-result ${parseInt(selectedFixture.team2.score) > parseInt(selectedFixture.team1.score) ? 'team-name-result-win' : 'team-name-result-loss'}`}>
+                    {selectedFixture.team2.teamName}
+                  </span>
+                </div>
               </div>
-              <div className="score-container-result">
-                <span className="score-result">{selectedFixture.finalScore}</span>
-              </div>
-              <div className="team-info-result">
-                <span className="team-name-result-loss">{selectedFixture.team2.teamName}</span>
+              <div className="match-events-result">
+                <div className="team-events-result">
+                  {renderMatchEvents(selectedFixture.team1.matchEvents)}
+                </div>
+                <div className="team-events-result">
+                  {renderMatchEvents(selectedFixture.team2.matchEvents)}
+                </div>
               </div>
             </div>
-            {/* <div className="match-format-result">7-A-Side</div> */}
-            <div className="match-events-result">
-              <div className="team-events-result">
-                {renderMatchEvents(selectedFixture.team1.matchEvents)}
-              </div>
-              <div className="team-events-result">
-                {renderMatchEvents(selectedFixture.team2.matchEvents)}
-              </div>
-            </div>
-          </div>
-        )}
-      </Dialog>
-    </div>
+          )}
+        </Dialog>
+      </div>
     </>
   );
 };

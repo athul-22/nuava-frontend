@@ -46,7 +46,7 @@ const Profile: React.FC = () => {
         <p>{mobile}</p>
         <p>{email}</p>
         <p>{school}</p>
-        <p>{schoolId}</p>
+        {/* <p>{schoolId}</p> */}
       </div>
     </section>
     </div>
