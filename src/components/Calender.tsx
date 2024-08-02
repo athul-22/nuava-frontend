@@ -662,10 +662,17 @@ const CalendarComponent: React.FC = () => {
             <div className="mb-2">
               <br></br>
               <strong>
-                <i className="pi pi-clock" style={{ color: "grey" }}></i> Start
+                <i className="pi pi-calendar-clock" style={{ color: "grey" }}></i> Start
                 Date:
               </strong>{" "}
               {new Date(selectedEvent.start).toLocaleDateString()}
+            </div>
+            <div style={{marginBottom:'7px'}}>
+              <strong>
+                <i className="pi pi-clock" style={{ color: "grey" }}></i>{" "}
+                Start Time:
+              </strong>{" "}
+              {new Date(selectedEvent.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </div>
             <div>
               <strong>

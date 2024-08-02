@@ -9,6 +9,10 @@ import {
   ApolloProvider,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { split, HttpLink } from '@apollo/client';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { createClient } from 'graphql-ws';
 import { Card } from "primereact/card";
 import { Skeleton } from "primereact/skeleton";
 import { Dialog } from "primereact/dialog";
@@ -93,6 +97,7 @@ const SCORE_UPDATES_SUBSCRIPTION = gql`
   }
 `;
 
+
 const END_FIXTURE_MUTATION = gql`
   mutation EndFixture($input: EndFixtureInput!) {
     endFixture(input: $input) {
@@ -120,6 +125,8 @@ interface MatchData {
 const httpLink = createHttpLink({
   uri: "https://nuavasports.com/graphql",
 });
+
+
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("token");
@@ -185,6 +192,50 @@ const LiveMatch = () => {
     }
   };
 
+  // BROADCAST UPDATES
+
+  const httpLink = new HttpLink({
+    uri: 'https://nuavasports.com/graphql',
+  });
+  
+  const wsLink = new GraphQLWsLink(createClient({
+    url: 'ws://nuavasports.com/graphql',
+    // connectionParams: {
+    //   authToken: localStorage.getItem('token'),
+    // },
+  }));
+  
+  const splitLink = split(
+    ({ query }) => {
+      const definition = getMainDefinition(query);
+      return (
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'subscription'
+      );
+    },
+    wsLink,
+    authLink.concat(httpLink)
+  );
+  
+  const client = new ApolloClient({
+    link: splitLink,
+    cache: new InMemoryCache(),
+  });
+
+  const { data: subscriptionData, error: subscriptionError } = useSubscription(
+    SCORE_UPDATES_SUBSCRIPTION,
+    {
+      variables: { input: { fixtureId: parseInt(fixtureId) } },
+      onError: (error) => {
+        console.error("Subscription error:", error);
+        showToast('error', 'Subscription Error', 'Failed to receive live updates');
+      },
+    }
+  );
+
+  
+  
+
 
   const { loading, error, data, refetch } = useQuery<{
     getMatchDetailsAndScore: MatchDetails;
@@ -197,14 +248,14 @@ const LiveMatch = () => {
     },
   });
 
-  const parsedFixid = parseInt(fixtureId);
+  // const parsedFixid = parseInt(fixtureId);
 
-  const { data: subscriptionData } = useSubscription(
-    SCORE_UPDATES_SUBSCRIPTION,
-    {
-      variables: { input: { parsedFixid } },
-    }
-  );
+  // const { data: subscriptionData } = useSubscription(
+  //   SCORE_UPDATES_SUBSCRIPTION,
+  //   {
+  //     variables: { input: { parsedFixid } },
+  //   }
+  // );
 
   // END MATCH FUNCTIONS
 
@@ -368,14 +419,38 @@ const LiveMatch = () => {
   //   return () => clearInterval(intervalId); // Clean up on component unmount
   // }, [refetch]);
 
+  // useEffect(() => {
+  //   if (subscriptionData) {
+  //     console.log("Received score update:", subscriptionData.scoreUpdates);
+  //     // Handle the score update here
+  //     // You might want to refetch your fixture data or update the local state
+  //     refetch();
+  //   }
+  // }, [subscriptionData, refetch]);
+
   useEffect(() => {
-    if (subscriptionData) {
+    if (subscriptionData && subscriptionData.scoreUpdates) {
       console.log("Received score update:", subscriptionData.scoreUpdates);
-      // Handle the score update here
-      // You might want to refetch your fixture data or update the local state
       refetch();
     }
   }, [subscriptionData, refetch]);
+  
+  useEffect(() => {
+    if (subscriptionError) {
+      console.error("Subscription error:", subscriptionError);
+      showToast('error', 'Subscription Error', 'Failed to receive live updates');
+    }
+  }, [subscriptionError]);
+
+  useEffect(() => {
+    const pollInterval = setInterval(() => {
+      refetch();
+    }, 10000); // Poll every 10 seconds
+  
+    return () => clearInterval(pollInterval);
+  }, [refetch]);
+  
+  
 
   const handleStartMatch = async () => {
     try {

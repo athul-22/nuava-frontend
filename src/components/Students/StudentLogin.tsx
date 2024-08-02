@@ -12,6 +12,7 @@ const LOGIN_STUDENT = gql`
       status
       message
       token
+      isStudentModerator
     }
   }
 `;
@@ -68,6 +69,8 @@ const StudentLogin: React.FC = () => {
         localStorage.setItem("token", response.data.loginStudent.token);
         showToast('success', 'Login Successful', 'Redirecting to dashboard...');
         localStorage.setItem('usertype','student')
+       localStorage.setItem('studentmoderator', response.data.loginStudent.isStudentModerator);
+        localStorage.setItem('message', response.data.loginStudent.message)
         window.location.href = "/dashboard";
       } else {
         showToast('error', 'Login Failed', response.data?.loginStudent.message || 'Error occurred during login');

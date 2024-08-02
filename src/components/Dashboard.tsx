@@ -148,34 +148,34 @@ const Dashboard: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // const fetchCoaches = async () => {
-    //   setLoadingCoaches(true);
-    //   try {
-    //     const coachQuery = `
-    //       query Coach {
-    //         getAllCoaches {
-    //           id
-    //           name
-    //           email
-    //           phone
-    //           schoolID
-    //         }
-    //       }
-    //     `;
-    //     const coachData = await fetchGraphQLData(coachQuery);
-    //     if (coachData.errors) {
-    //       throw new Error(coachData.errors[0].message);
-    //     }
-    //     setCoaches(coachData.data.getAllCoaches || []);
-    //   } catch (error) {
-    //     console.error("Error fetching coaches:", error);
-    //     setCoachError(
-    //       error instanceof Error ? error.message : "An unknown error occurred"
-    //     );
-    //   } finally {
-    //     setLoadingCoaches(false);
-    //   }
-    // };
+    const fetchCoaches = async () => {
+      setLoadingCoaches(true);
+      try {
+        const coachQuery = `
+          query Coach {
+            getAllCoaches {
+              id
+              name
+              email
+              phone
+              schoolID
+            }
+          }
+        `;
+        const coachData = await fetchGraphQLData(coachQuery);
+        if (coachData.errors) {
+          throw new Error(coachData.errors[0].message);
+        }
+        setCoaches(coachData.data.getAllCoaches || []);
+      } catch (error) {
+        console.error("Error fetching coaches:", error);
+        setCoachError(
+          error instanceof Error ? error.message : "An unknown error occurred"
+        );
+      } finally {
+        setLoadingCoaches(false);
+      }
+    };
 
     const fetchEvents = async () => {
       setLoadingEvents(true);
@@ -216,6 +216,7 @@ const Dashboard: React.FC = () => {
     };
 
     // fetchGraphQLData();
+    fetchCoaches()
     fetchEvents();
   }, []);
 

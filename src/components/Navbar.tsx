@@ -21,12 +21,16 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
   const toastRef = useRef<Toast>(null);
   const [showCreateButton, setShowCreateButton] = useState(false);
   const [userType, setUserType] = useState(false);
+  const [footballselected , setFootballSelected] = useState(false);
+  const [interhouseselect , setInterhouseselected] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem("selectedSport") === "Inter-House") {
       setShowCreateButton(true);
+      setInterhouseselected(true);
     } else if (localStorage.getItem("selectedSport") === "Football") {
       setShowCreateButton(true);
+      setFootballSelected(true);
     } else {
       setShowCreateButton(false);
     }
@@ -314,17 +318,30 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
 
         {/* Center section with navigation links */}
         <div className="center-menu">
+          { footballselected &&
           <span onClick={homeClickMenu}>Home</span>
-          <span
+          }
+
+{ interhouseselect &&
+          <span onClick={homeClickMenu}>Home</span>
+          }
+
+          { footballselected && <span
             onClick={() => {
               window.location.href = "/matches";
             }}
           >
             Matches
-          </span>
-          <span onClick={() => {
+          </span> }
+
+           { footballselected && <span onClick={() => {
               window.location.href = "/result";
-            }}>Results</span>
+            }}>Results</span> }
+
+{ interhouseselect && <span onClick={() => {
+              window.location.href = "/inter-house-result";
+            }}>InterHouse Results</span> }
+
           {/* <span>Live</span> */}
         </div>
 

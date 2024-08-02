@@ -380,113 +380,12 @@ const toast = useRef<Toast>(null);
           )}
         </div>
 
-        {showbanner && (
-          <p className="live-match-title-fd">
-            UPCOMING MATCHES (
-            <span style={{ color: "grey" }}>{tournaments.length}</span>)
-          </p>
-        )}
-        {nomatch && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <center>
-              <button
-                onClick={handleCreatetournamentclick}
-                style={{
-                  backgroundColor: "#051da0",
-                  color: "white",
-                  padding: "10px 20px",
-                  borderRadius: "20px",
-                }}
-              >
-                Create Tournament / Match
-              </button>
-            </center>
-          </div>
-        )}
-
-        <div className="tournaments-container">
-          {loading && (
-            <>
-              {renderSkeletonCard()}
-              {renderSkeletonCard()}
-              {renderSkeletonCard()}
-            </>
-          )}
-          {error && (
-            <p className="error">Error loading tournaments: {error.message}</p>
-          )}
-
-          {tournaments.map((tournament, index) => (
-            <div key={index} className="tournament-card">
-              {tournament.fixtures
-                .filter((fixture) => fixture.status !== "live")
-                .map((fixture) => (
-                  <div key={fixture.id} className="fixture-card">
-                    <h2 className="tournament-name">
-                      {tournament.tournamentName}
-                    </h2>
-                    <div className="fixture-header">
-                      <h3 className="fixture-title">
-                        {fixture.team1}{" "}
-                        <span
-                          style={{
-                            color: "grey",
-                            marginLeft: "10px",
-                            marginRight: "10px",
-                          }}
-                        >
-                          VS
-                        </span>{" "}
-                        {fixture.team2}
-                      </h3>
-                      {userType && (
-                        <Button
-                          icon="pi pi-pencil"
-                          // onClick={() => handleEditClick(fixture)}
-                          // onClick={() =>
-                          //   handleEditFixtureClick(
-                          //     fixture.id,
-                          //     fixture.startDate,
-                          //     fixture.endDate,
-                          //     fixture.startTime,
-                          //     fixture.endTime
-                          //   )
-                          // }
-
-                          onClick={() => handleEditFixture(fixture)}
-                          className="p-button-rounded edit-button fixture-edit-btn"
-                        />
-                      )}
-                    </div>
-                    <p className="fixture-time">
-                      {formatDate(fixture.startDate)}
-                    </p>
-                    <p className="fixture-info">{fixture.location}</p>
-                    {/* <p className="fixture-info">{fixture.round} - {fixture.isBye ? 'Bye' : '7-A-Side'}</p> */}
-                    {userType && (
-                      <button
-                        className="start-fxture"
-                        onClick={() => handleStartMatchClick(fixture.id)}
-                      >
-                        Start Match
-                      </button>
-                    )}
-                  </div>
-                ))}
-            </div>
-          ))}
-        </div>
+          {/* UPCOMIGN MATCH COMMENTED SPACE */}
 
         <div className="live-matches-container">
           {showbanner && (
             <p className="live-match-title-fd" style={{}}>
-              LIVE MATCHE
+              {/* LIVE MATCHES */}
             </p>
           )}
           <div className="tournaments-container">
