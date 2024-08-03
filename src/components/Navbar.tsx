@@ -322,9 +322,6 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
           <span onClick={homeClickMenu}>Home</span>
           }
 
-{ interhouseselect &&
-          <span onClick={homeClickMenu}>Home</span>
-          }
 
           { footballselected && <span
             onClick={() => {
@@ -337,7 +334,9 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
            { footballselected && <span onClick={() => {
               window.location.href = "/result";
             }}>Results</span> }
-
+{ interhouseselect && <span onClick={() => {
+              window.location.href = "/dashboard/inter-house-matches";
+            }}>Home</span> }
 { interhouseselect && <span onClick={() => {
               window.location.href = "/inter-house-result";
             }}>InterHouse Results</span> }
@@ -470,23 +469,34 @@ const Navbar: React.FC<NavbarProps> = ({ buttontext }) => {
         <div className="sidebar-menu">
           <h2>Explore</h2>
           <ul>
-            <li>
+            {/* <li>
               <button onClick={homeClickMenu} className="menu-item">
                 Home
               </button>
-            </li>
-            <li>
-              <button
+            </li> */}
+             { footballselected &&
+          <span onClick={homeClickMenu}>Home</span>
+          }
+            { footballselected && <li>
+             <button
                 onClick={() => (window.location.href = "/matches")}
                 className="menu-item"
               >
                 Matches
-              </button>
-            </li>
-            <li>
-              <button className="menu-item">Results</button>
-            </li>
-            
+              </button> 
+            </li>}
+            { footballselected &&   <li>
+            <button onClick={() => {
+              window.location.href = "/result";
+            }} className="menu-item">Results</button> 
+            </li>}
+
+            { interhouseselect && <li onClick={() => {
+              window.location.href = "/dashboard/inter-house-matches";
+            }}>Home</li> }
+            { interhouseselect && <li onClick={() => {
+              window.location.href = "/inter-house-result";
+            }}>Results</li> }
             
           </ul>
           {showCreateButton && userType && (

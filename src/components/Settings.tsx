@@ -89,16 +89,9 @@ const ProfileSettings: React.FC = () => {
                 label="Submit"
                 onClick={handleSubmit}
                 style={{
-                  border: "1px solid #051da0",
-                  padding: "5px 20px",
-                  width: "24%",
-                  height: "50px",
-                  textAlign: "center",
-                  paddingLeft: "20px",
-                  backgroundColor: "#051da0",
-                  color: "white",
-                  borderRadius: "10px",
+                  
                 }}
+                id="mod-submit-btn"
               />
             </div>
           </Card>

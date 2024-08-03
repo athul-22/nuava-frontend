@@ -626,7 +626,13 @@ const NewTournament: React.FC = () => {
         );
       } else if (result.data && result.data.createTournament.status) {
         showToast("success", "Success", result.data.createTournament.message);
+
+        // ⭕️ REDIRECT TO THE BRACKETS PAGE
+        // GET THE NEW TOURNAMENT ID 
+        // localStorage.setItem("schoolID", tournament.id);
+        // window.location.href = "/brackets";
         window.location.href = "/dashboard/football";
+
       } else {
         showToast(
           "error",

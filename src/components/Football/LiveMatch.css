@@ -56,8 +56,9 @@
     text-align: center;
     /* padding-top: 25%; */
     /* background-color: #edf5ff; */
-    border-radius: 20px;
+    border-radius: 50px;
     padding: 10px;
+    
   }
   
   .match-score {
@@ -184,8 +185,9 @@
     text-align: center;
     /* background-color:#d1e0ff; */
     background-color: white;
-    border:1px solid #002d87;;
-    padding: 5px 10px;
+    /* border:1px solid #002d87;; */
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    padding: 15px 40px;
     /* margin-bottom: 20px; */
   }
   
