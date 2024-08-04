@@ -674,9 +674,9 @@ const LiveMatch = () => {
         </div> */}
         </div>
 
-        <div className="match-header">
+        {/* <div className="match-header">
           <h2 className="tournament-name-live-match">{matchData.fixtureId}</h2>
-        </div>
+        </div> */}
         <div className="match-content">
           <div
             className="team-info"

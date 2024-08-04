@@ -95,7 +95,7 @@
   margin-top: -10px;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 320px) and (max-width: 768px) {
   .titleihmatch {
     font-size: 6rem;
     text-align: center;

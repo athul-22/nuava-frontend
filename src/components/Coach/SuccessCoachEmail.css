@@ -163,7 +163,7 @@
 }
 
 /* Media Query for screens up to 768px width */
-@media (max-width: 768px) {
+@media (min-width: 320px) and (max-width: 768px) {
   .tick {
     height: 70px;
     width: 70px;

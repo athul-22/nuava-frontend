@@ -385,7 +385,7 @@ const toast = useRef<Toast>(null);
         <div className="live-matches-container">
           {showbanner && (
             <p className="live-match-title-fd" style={{}}>
-              {/* LIVE MATCHES */}
+             { nomatch ? "" : "LIVE MATCHES"}
             </p>
           )}
           <div className="tournaments-container">

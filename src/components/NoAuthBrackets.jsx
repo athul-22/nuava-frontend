@@ -217,7 +217,7 @@ const CustomSeed = ({ seed, breakpoint }) => {
         <div>
           {seed.teams.map((team, index) => (
             <SeedTeam key={index} style={determineTeamStyle(team, seed.state)}>
-              {team.name || "NO TEAM"}
+              {team.name || "NO TEAM"} {team.score ? `(${team.score})` : ""}
             </SeedTeam>
           ))}
         </div>
@@ -261,6 +261,7 @@ const BracketsComponent = () => {
       resultText
       isWinner
       status
+      score
     }
   }
 }`,
@@ -289,6 +290,7 @@ const BracketsComponent = () => {
               isWinner: participant.isWinner,
               resultText: participant.resultText,
               status: participant.status,
+              score: participant.score,
             })),
           });
           return acc;
@@ -317,17 +319,22 @@ const BracketsComponent = () => {
       {/* <Navbar buttontext="Create Tournament / Match" /> */}
       <div style={{display:'flex',justifyContent:'center',marginTop:'20px'}}>
       <OnboardingNav />
+
       </div>
+      
       <div
         style={{
           
           display: "flex",
           justifyContent: "center",
-          padding: "200px",
+          // padding: "200px",
           backgroundColor: "white",
           fontSize: "24px",
+          flexDirection:'column',
+          
         }}
       >
+        <h1 style={{marginTop:'100px',}} className='titleihmatch-copylink'>NUAVA</h1>
         {loading ? (
           <Skeleton height={40} count={10} />
         ) : rounds ? (

@@ -80,8 +80,8 @@
   
 
   #mod-submit-btn {
-    width: 50%;
-    margin-left: 25%;
+    width: 25%;
+    /* margin-left: 25%; */
     margin-top: 20px;
     background-color: #051da0;
     color: white;
@@ -91,7 +91,7 @@
     cursor: pointer;
   }
   
-  @media (max-width: 768px) {
+  @media (min-width: 320px) and (max-width: 768px) {
     .profile-settings {
       flex-direction: column;
       margin-top: 0;

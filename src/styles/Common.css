@@ -119,4 +119,31 @@
   text-align: center;
 }
 
+@media (min-width: 768px) {
+.titleihmatch-copylink {
+  background: linear-gradient(to right, #1613bd 0%, #1916d1 50%, #1a18e5 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 12rem;
+  text-align: center;
+  margin-top: -100px;
+  /* margin-bottom: -100px; */
+  font-weight: bold;
+}
+}
 
+@media screen and (max-width: 768px) {
+  .titleihmatch-copylink {
+    font-size: 6rem;
+    text-align: center;
+    margin-top: 1px;
+    width: 100%;
+    background: linear-gradient(to right, #1613bd 0%, #1916d1 50%, #1a18e5 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+    padding: -100px;
+  }
+}

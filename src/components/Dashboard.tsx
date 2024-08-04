@@ -8,6 +8,8 @@ import { Card, CardContent, Typography, Alert } from "@mui/material";
 import { Skeleton } from "primereact/skeleton";
 import "primeicons/primeicons.css";
 import '../styles/Dashboard.css'
+import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
 
 const localizer = momentLocalizer(moment);
 
@@ -37,6 +39,95 @@ const Dashboard: React.FC = () => {
   const [coachError, setCoachError] = useState<string | null>(null);
   const [eventError, setEventError] = useState<string | null>(null);
   const [data, setData] = useState(null);
+  const [eventDetailsVisible, setEventDetailsVisible] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  const [startTime, setStartTime] = useState<moment.Moment | null>(moment());
+  const [endTime, setEndTime] = useState<moment.Moment | null>(moment());
+  const [isAllDay, setIsAllDay] = useState<boolean>(false);
+  const [eventType, setEventType] = useState<string>("Normal Event");
+
+  const fetchEvents = async () => {
+    const query = `
+      query GetAllEvents {
+        getAllEvents {
+          id
+          title
+          startDate
+          endDate
+          isAllDay
+          details
+          typeOfEvent
+        }
+      }
+    `;
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Authentication token is missing");
+      return;
+    }
+
+    try {
+      const response = await fetch("https://nuavasports.com/api", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ query }),
+      });
+
+      const result = await response.json();
+
+      if (result.errors) {
+        console.error("GraphQL Errors:", result.errors);
+        // showToast("error", "Error", "An error occurred.");
+        return;
+      }
+
+      const eventsData = result.data.getAllEvents.map((event: any) => ({
+        id: event.id,
+        title: event.title,
+        start: new Date(parseInt(event.startDate, 10)),
+        end: new Date(parseInt(event.endDate, 10)),
+        description: JSON.parse(event.details)?.description || "",
+        allDay: event.isAllDay,
+        typeOfEvent: event.typeOfEvent,
+      }));
+
+      setEvents(eventsData);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+      // showToast("error", "Error", "An error occurred while fetching data");
+    }
+  };
+
+
+  // EVENT DETIALS DIALOG
+  const formatDuration = (start: Date, end: Date) => {
+    const duration = moment.duration(moment(end).diff(moment(start)));
+    return `${duration.asHours().toFixed(1)} hours`;
+  };
+
+
+  const handleEventSelect = (event: any) => {
+    setSelectedEvent(event);
+    setTitle(event.title);
+    setDescription(event.description);
+    setStartDate(new Date(event.start));
+    setEndDate(new Date(event.end));
+    setStartTime(moment(event.start));
+    setEndTime(moment(event.end));
+    setIsAllDay(event.allDay);
+    setEventType(event.typeOfEvent);
+    setEventDetailsVisible(true);
+  };
+
 
   useEffect(() => {
     localStorage.setItem("selectedSport", "Overview");
@@ -82,6 +173,30 @@ const Dashboard: React.FC = () => {
 
     return response.json();
   };
+
+  // const eventDetailsHeader = (
+  //   <div className="flex justify-content-between align-items-center">
+  //     <span className="text-xl font-bold">Event Details</span>
+  //     <div>
+  //       {/* <Button
+  //         icon="pi pi-pencil"
+  //         className="p-button-text p-button-sm"
+  //         style={{ color: "grey" }}
+  //         // onClick={handleEditButtonClick}
+  //       />
+  //       <Button
+  //         icon="pi pi-trash"
+  //         className="p-button-text p-button-sm p-button-danger"
+  //         style={{ color: "red" }}
+  //         // onClick={handleDeleteEvent}
+  //       /> */}
+  //       {/* <Button icon="pi pi-times" className="p-button-text p-button-sm" style={{color:'grey'}} onClick={() => setEventDetailsVisible(false)} /> */}
+  //     </div>
+  //   </div>
+  // );
+
+
+  
 
 
 
@@ -326,7 +441,8 @@ const Dashboard: React.FC = () => {
               }}
               eventPropGetter={eventStyleGetter}
               tooltipAccessor={(event: { title: any }) => event.title}
-              onSelectEvent={(event: any) => console.log(event)}
+              // onSelectEvent={(event: any) => console.log(event)}
+              onSelectEvent={handleEventSelect}
               popup
               popupOffset={{ x: 30, y: 20 }}
             />
@@ -476,6 +592,50 @@ const Dashboard: React.FC = () => {
       >
         <Footer />
       </div> */}
+      <Dialog
+        header="Event Details"
+        visible={eventDetailsVisible}
+        style={{ height:'fit-content' }}
+        onHide={() => setEventDetailsVisible(false)}
+        className="new-cal-event-dialog"
+      >
+        {selectedEvent && (
+          <div className="p-4 " style={{marginTop:'50px'}}>
+            <h2
+              className="text-xl font-bold mb-2"
+              style={{ fontSize: "24px", fontWeight: "bold" }}
+            >
+              {selectedEvent.title}
+            </h2>
+            <p className="mb-4">{selectedEvent.description}</p>
+            <div className="mb-2">
+              <br></br>
+              <strong>
+                <i className="pi pi-calendar-clock" style={{ color: "grey" }}></i> Start
+                Date:
+              </strong>{" "}
+              {new Date(selectedEvent.start).toLocaleDateString()}
+            </div>
+            <div style={{marginBottom:'7px'}}>
+              <strong>
+                <i className="pi pi-clock" style={{ color: "grey" }}></i>{" "}
+                Start Time:
+              </strong>{" "}
+              {new Date(selectedEvent.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </div>
+            <div>
+              <strong>
+                <i className="pi pi-hourglass" style={{ color: "grey" }}></i>{" "}
+                Duration:
+              </strong>{" "}
+              {formatDuration(
+                new Date(selectedEvent.start),
+                new Date(selectedEvent.end)
+              )}
+            </div>
+          </div>
+        )}
+      </Dialog>
     </div>
   );
 };

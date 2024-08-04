@@ -298,7 +298,7 @@ const CustomSeed = ({ seed, breakpoint, onFixtureClick }) => {
         <div>
           {seed.teams.map((team, index) => (
             <SeedTeam key={index} style={determineTeamStyle(team, seed.state)}>
-              {team.name || "NO TEAM"}
+              {team.name || "NO TEAM"}  {team.score ? `(${team.score})` : ""}
             </SeedTeam>
           ))}
         </div>
@@ -732,6 +732,7 @@ const handleEndMatch = async (fixtureId, winnerID) => {
                 resultText
                 isWinner
                 status
+                score
               }
             }
           }`,
@@ -760,6 +761,7 @@ const handleEndMatch = async (fixtureId, winnerID) => {
               isWinner: participant.isWinner,
               resultText: participant.resultText,
               status: participant.status,
+              score: participant.score,
             })),
           });
           return acc;

@@ -77,7 +77,7 @@
   
 }
 
-@media (max-width: 768px) {
+@media (min-width: 320px) and (max-width: 768px) {
   .profile-card{
     width: 90%;
   }

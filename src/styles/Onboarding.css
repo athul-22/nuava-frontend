@@ -182,7 +182,7 @@
   color: grey;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 320px) and (max-width: 768px) {
   .onboard-title {
     font-size: 1rem;
     width: 100%;
@@ -596,7 +596,7 @@ margin-left: 900px;
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width: 768px) {
+@media (min-width: 320px) and (max-width: 768px) {
   .gradient-text{
     font-size: 6rem;
   
@@ -759,7 +759,7 @@ margin-left: 900px;
 }
 
 /* Mobile Navbar Styles */
-@media (max-width: 768px) {
+@media (min-width: 320px) and (max-width: 768px) {
   .mobile-nav-home, .mobile-nav-about, .mobile-nav-contact, .mobile-nav-popup-menu-coach-class, .mobile-nav-popup-menu-student-class {
     display: none;
   }
