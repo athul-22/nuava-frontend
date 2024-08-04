@@ -54,7 +54,7 @@ const REGISTER_COACH = gql`
 
 // Create an Apollo client instance with the temporary token in the headers
 const httpLink = createHttpLink({
-  uri: 'https://nuavasports.com/graphql',
+  uri: 'https://nuavasports.com/api',
 });
 
 const authLink = setContext((_, { headers }) => {

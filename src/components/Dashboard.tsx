@@ -47,7 +47,7 @@ const Dashboard: React.FC = () => {
   //   if (!token) {
   //     throw new Error("No JWT token found");
   //   }
-  //   const response = await fetch("https://nuavasports.com/graphql", {
+  //   const response = await fetch("https://nuavasports.com/api", {
   //     method: "POST",
   //     headers: {
   //       "Content-Type": "application/json",
@@ -67,7 +67,7 @@ const Dashboard: React.FC = () => {
       throw new Error("No JWT token found");
     }
 
-    const response = await fetch("https://nuavasports.com/graphql", {
+    const response = await fetch("https://nuavasports.com/api", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

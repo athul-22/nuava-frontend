@@ -31,7 +31,7 @@ import Settings from "./components/Settings";
 
 // Set up Apollo Client
 const client = new ApolloClient({
-  uri: 'https://nuavasports.com/graphql',
+  uri: 'https://nuavasports.com/api',
   cache: new InMemoryCache(),
 });
 

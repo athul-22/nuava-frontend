@@ -118,7 +118,7 @@ const CalendarComponent: React.FC = () => {
     }
 
     try {
-      const response = await fetch("https://nuavasports.com/graphql", {
+      const response = await fetch("https://nuavasports.com/api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -195,7 +195,7 @@ const CalendarComponent: React.FC = () => {
     }
 
     try {
-      const response = await fetch("https://nuavasports.com/graphql", {
+      const response = await fetch("https://nuavasports.com/api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -280,7 +280,7 @@ const CalendarComponent: React.FC = () => {
     }
 
     try {
-      const response = await fetch("https://nuavasports.com/graphql", {
+      const response = await fetch("https://nuavasports.com/api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -342,7 +342,7 @@ const CalendarComponent: React.FC = () => {
     }
 
     try {
-      const response = await fetch("https://nuavasports.com/graphql", {
+      const response = await fetch("https://nuavasports.com/api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

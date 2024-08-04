@@ -22,7 +22,7 @@ const token = localStorage.getItem('token');
 
 const client = new ApolloClient({
   link: createHttpLink({
-    uri: 'https://nuavasports.com/graphql',
+    uri: 'https://nuavasports.com/api',
     headers: {
       Authorization: `jwt ${token}`,
     },
@@ -603,7 +603,7 @@ const handleEndMatch = async (fixtureId, winnerID) => {
           seed.teams.some((team) => team.id === selectedTargetTeam)
         );
 
-      const response = await fetch("https://nuavasports.com/graphql", {
+      const response = await fetch("https://nuavasports.com/api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -648,7 +648,7 @@ const handleEndMatch = async (fixtureId, winnerID) => {
   //   try {
   //     const token = localStorage.getItem('token');
   //     const schoolid = parseInt(localStorage.getItem('schoolID'));
-  //     const response = await fetch('https://nuavasports.com/graphql', {
+  //     const response = await fetch('https://nuavasports.com/api', {
   //       method: 'POST',
   //       headers: {
   //         'Content-Type': 'application/json',
@@ -711,7 +711,7 @@ const handleEndMatch = async (fixtureId, winnerID) => {
     try {
       const token = localStorage.getItem("token");
       const schoolid = parseInt(localStorage.getItem("schoolID"));
-      const response = await fetch("https://nuavasports.com/graphql", {
+      const response = await fetch("https://nuavasports.com/api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

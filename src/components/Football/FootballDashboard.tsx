@@ -110,7 +110,7 @@ const GET_ALL_TOURNAMENTS = gql`
 `;
 
 const httpLink = createHttpLink({
-  uri: "https://nuavasports.com/graphql",
+  uri: "https://nuavasports.com/api",
 });
 
 const authLink = setContext(

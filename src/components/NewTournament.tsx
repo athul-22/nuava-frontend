@@ -206,7 +206,7 @@ const NewTournament: React.FC = () => {
   const fetchTeams = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("https://nuavasports.com/graphql", {
+      const response = await fetch("https://nuavasports.com/api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -428,7 +428,7 @@ const NewTournament: React.FC = () => {
       const token = localStorage.getItem("token");
 
       try {
-        const response = await fetch("https://nuavasports.com/graphql", {
+        const response = await fetch("https://nuavasports.com/api", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -584,7 +584,7 @@ const NewTournament: React.FC = () => {
     }
 
     try {
-      const response = await fetch("https://nuavasports.com/graphql", {
+      const response = await fetch("https://nuavasports.com/api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -666,7 +666,7 @@ const NewTournament: React.FC = () => {
 
     if (teamName && selectedStudents.length > 0) {
       try {
-        const response = await fetch("https://nuavasports.com/graphql", {
+        const response = await fetch("https://nuavasports.com/api", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

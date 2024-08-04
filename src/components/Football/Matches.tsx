@@ -123,7 +123,7 @@ interface MatchData {
 
 // Apollo Client setup
 const httpLink = createHttpLink({
-  uri: "https://nuavasports.com/graphql",
+  uri: "https://nuavasports.com/api",
 });
 
 
@@ -195,7 +195,7 @@ const LiveMatch = () => {
   // BROADCAST UPDATES
 
   const httpLink = new HttpLink({
-    uri: 'https://nuavasports.com/graphql',
+    uri: 'https://nuavasports.com/api',
   });
   
   const wsLink = new GraphQLWsLink(createClient({
