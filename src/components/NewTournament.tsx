@@ -567,92 +567,11 @@ const NewTournament: React.FC = () => {
     };
   };
 
-  // const handleSubmit = async () => {
-  //   const token = localStorage.getItem("token");
-  //   const input = prepareCreateTournamentInput();
-  //   console.log("Tournament input:", input);
-
-  //   if (
-  //     !input.name ||
-  //     !input.location ||
-  //     input.tournamentDays.length === 0 ||
-  //     !input.matchDuration ||
-  //     input.participatingSchoolNames.length === 0
-  //   ) {
-  //     showToast("error", "Error", "Please fill all required fields");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await fetch("https://nuavasports.com/api", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `jwt ${token}`,
-  //       },
-  //       body: JSON.stringify({
-  //         query: `
-  //           mutation CreateTournament($input: CreateTournamentInput!) {
-  //             createTournament(input: $input) {
-  //               message
-  //               status
-  //               tournament {
-  //                 id
-  //                 name
-  //                 location
-  //                 startDate
-  //                 endDate
-  //                 typeOfSport
-  //                 organizingSchoolId
-  //                 createdAt
-  //                 updatedAt
-  //               }
-  //             }
-  //           }
-  //         `,
-  //         variables: { input },
-  //       }),
-  //     });
-
-  //     const result = await response.json();
-  //     console.log("API response:", result);
-
-  //     if (result.errors) {
-  //       console.error("GraphQL errors:", result.errors);
-  //       showToast(
-  //         "error",
-  //         "Error",
-  //         "Failed to create tournament: " + result.errors[0].message
-  //       );
-  //     } else if (result.data && result.data.createTournament.status) {
-  //       showToast("success", "Success", result.data.createTournament.message);
-
-      
-  //       window.location.href = "/dashboard/football";
-
-  //     } else {
-  //       showToast(
-  //         "error",
-  //         "Error",
-  //         "Failed to create tournament: " +
-  //           (result.data?.createTournament?.message || "Unknown error")
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error("Error creating tournament: ", error);
-  //     showToast(
-  //       "error",
-  //       "Error",
-  //       "Error creating tournament: " + (error as Error).message
-  //     );
-  //   }
-  // };
-
   const handleSubmit = async () => {
     const token = localStorage.getItem("token");
     const input = prepareCreateTournamentInput();
     console.log("Tournament input:", input);
-  
+
     if (
       !input.name ||
       !input.location ||
@@ -663,7 +582,7 @@ const NewTournament: React.FC = () => {
       showToast("error", "Error", "Please fill all required fields");
       return;
     }
-  
+
     try {
       const response = await fetch("https://nuavasports.com/api", {
         method: "POST",
@@ -694,30 +613,111 @@ const NewTournament: React.FC = () => {
           variables: { input },
         }),
       });
-  
+
       const result = await response.json();
       console.log("API response:", result);
-  
+
       if (result.errors) {
         console.error("GraphQL errors:", result.errors);
-        showToast("error", "Error", "Failed to create tournament: " + result.errors[0].message);
+        showToast(
+          "error",
+          "Error",
+          "Failed to create tournament: " + result.errors[0].message
+        );
       } else if (result.data && result.data.createTournament.status) {
         showToast("success", "Success", result.data.createTournament.message);
-  
-        // Store the tournament ID in local storage
-        const tournamentId = result.data.createTournament.tournament.id;
-        localStorage.setItem("schoolID", tournamentId);
-  
-        // Redirect to the brackets page
-        window.location.href = "/brackets";
+
+      
+        window.location.href = "/dashboard/football";
+
       } else {
-        showToast("error", "Error", "Failed to create tournament: " + (result.data?.createTournament?.message || "Unknown error"));
+        showToast(
+          "error",
+          "Error",
+          "Failed to create tournament: " +
+            (result.data?.createTournament?.message || "Unknown error")
+        );
       }
     } catch (error) {
       console.error("Error creating tournament: ", error);
-      showToast("error", "Error", "Error creating tournament: " + (error as Error).message);
+      showToast(
+        "error",
+        "Error",
+        "Error creating tournament: " + (error as Error).message
+      );
     }
   };
+
+  // const handleSubmit = async () => {
+  //   const token = localStorage.getItem("token");
+  //   const input = prepareCreateTournamentInput();
+  //   console.log("Tournament input:", input);
+  
+  //   if (
+  //     !input.name ||
+  //     !input.location ||
+  //     input.tournamentDays.length === 0 ||
+  //     !input.matchDuration ||
+  //     input.participatingSchoolNames.length === 0
+  //   ) {
+  //     showToast("error", "Error", "Please fill all required fields");
+  //     return;
+  //   }
+  
+  //   try {
+  //     const response = await fetch("https://nuavasports.com/api", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `jwt ${token}`,
+  //       },
+  //       body: JSON.stringify({
+  //         query: `
+  //           mutation CreateTournament($input: CreateTournamentInput!) {
+  //             createTournament(input: $input) {
+  //               message
+  //               status
+  //               tournament {
+  //                 id
+  //                 name
+  //                 location
+  //                 startDate
+  //                 endDate
+  //                 typeOfSport
+  //                 organizingSchoolId
+  //                 createdAt
+  //                 updatedAt
+  //               }
+  //             }
+  //           }
+  //         `,
+  //         variables: { input },
+  //       }),
+  //     });
+  
+  //     const result = await response.json();
+  //     console.log("API response:", result);
+  
+  //     if (result.errors) {
+  //       console.error("GraphQL errors:", result.errors);
+  //       showToast("error", "Error", "Failed to create tournament: " + result.errors[0].message);
+  //     } else if (result.data && result.data.createTournament.status) {
+  //       showToast("success", "Success", result.data.createTournament.message);
+  
+  //       // Store the tournament ID in local storage
+  //       const tournamentId = result.data.createTournament.tournament.id;
+  //       localStorage.setItem("schoolID", tournamentId);
+  
+  //       // Redirect to the brackets page
+  //       window.location.href = "/brackets";
+  //     } else {
+  //       showToast("error", "Error", "Failed to create tournament: " + (result.data?.createTournament?.message || "Unknown error"));
+  //     }
+  //   } catch (error) {
+  //     console.error("Error creating tournament: ", error);
+  //     showToast("error", "Error", "Error creating tournament: " + (error as Error).message);
+  //   }
+  // };
   
 
 
