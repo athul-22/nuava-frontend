@@ -35,6 +35,8 @@ const CreateMatch: React.FC = () => {
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [endTime, setEndTime] = useState<Date | null>(null);
   const [isAllDay, setIsAllDay] = useState(false);
   const [house1Name, setHouse1Name] = useState("");
   const [house2Name, setHouse2Name] = useState("");
@@ -45,14 +47,26 @@ const CreateMatch: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const combineDateAndTime = (date: Date | null, time: Date | null) => {
+      if (!date || !time) return null;
+      const combined = new Date(date);
+      combined.setHours(time.getHours());
+      combined.setMinutes(time.getMinutes());
+      return combined;
+    };
+
+    const combinedStartDateTime = combineDateAndTime(startDate, startTime);
+    const combinedEndDateTime = combineDateAndTime(endDate, endTime);
+
     try {
       const result = await createInterHouseEvent({
         variables: {
           input: {
             title,
             description,
-            startDate: startDate?.toISOString(),
-            endDate: endDate?.toISOString(),
+            startDate: combinedStartDateTime?.toISOString(),
+            endDate: combinedEndDateTime?.toISOString(),
             isAllDay,
             house1Name,
             house2Name,
@@ -148,49 +162,39 @@ const CreateMatch: React.FC = () => {
           />
         </IconField>
 
-        {/* <IconField iconPosition="left" className="mb-3 input-box-pr">
-          <InputIcon className="pi pi-calendar" />
-          <Calendar
-            id="startDate"
-            value={startDate}
-            onChange={(e: any) => setStartDate(e.value)}
-            showTime
-            placeholder="Start Date and Time"
-          />
-        </IconField> */}
-
-        {/* <div className="p-field" style={{ marginTop: "30px" }}>
-         
-        </div> */}
-
         <Calendar
           placeholder="Start Date"
           className="input-box-pr-calendar-cal-create-match-ih"
           value={startDate}
-          // onChange={(e) => setStartDate(e.value as Date | null)}
           onChange={(e: any) => setStartDate(e.value)}
           dateFormat="yy-mm-dd"
+        />
+
+        <Calendar
+          placeholder="Start Time"
+          className="input-box-pr-calendar-cal-create-match-ih"
+          value={startTime}
+          onChange={(e: any) => setStartTime(e.value)}
+          timeOnly
+          hourFormat="24"
         />
 
         <Calendar
           placeholder="End Date"
           className="input-box-pr-calendar-cal-create-match-ih"
           value={endDate}
-          // onChange={(e) => setStartDate(e.value as Date | null)}
           onChange={(e: any) => setEndDate(e.value)}
           dateFormat="yy-mm-dd"
         />
 
-        {/* <IconField iconPosition="left" className="mb-3 input-box-pr">
-          <InputIcon className="pi pi-calendar" />
-          <Calendar
-            id="endDate"
-            value={endDate}
-            onChange={(e: any) => setEndDate(e.value)}
-            showTime
-            placeholder="End Date and Time"
-          />
-        </IconField> */}
+        <Calendar
+          placeholder="End Time"
+          className="input-box-pr-calendar-cal-create-match-ih"
+          value={endTime}
+          onChange={(e: any) => setEndTime(e.value)}
+          timeOnly
+          hourFormat="24"
+        />
 
         <div className="mb-3" style={{display:'flex',alignItems:'center'}}>
           <label htmlFor="isAllDay" className="mr-2" style={{marginTop:'-10px'}}>
@@ -217,18 +221,6 @@ const CreateMatch: React.FC = () => {
 
           />
         </IconField>
-
-        {/* <IconField iconPosition="left" className="mb-3 input-box-pr">
-          <InputIcon className="pi pi-align-left" />
-          <InputTextarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={5}
-            placeholder="Event Description"
-            style={{he}}
-          />
-        </IconField> */}
 
         <IconField iconPosition="left" className="mb-3 input-box-pr">
           <InputIcon className="pi pi-align-left" />

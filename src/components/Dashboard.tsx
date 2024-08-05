@@ -10,6 +10,7 @@ import "primeicons/primeicons.css";
 import '../styles/Dashboard.css'
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
+import { set } from "date-fns";
 
 const localizer = momentLocalizer(moment);
 
@@ -49,6 +50,7 @@ const Dashboard: React.FC = () => {
   const [endTime, setEndTime] = useState<moment.Moment | null>(moment());
   const [isAllDay, setIsAllDay] = useState<boolean>(false);
   const [eventType, setEventType] = useState<string>("Normal Event");
+  const [moderatorAccess, setModeratorAccess] = useState<boolean>(false);
 
   const fetchEvents = async () => {
     const query = `
@@ -228,6 +230,7 @@ const Dashboard: React.FC = () => {
                 schoolID
                 grade
                 age
+                moderatorAccess
               }
             }
           `;
@@ -245,6 +248,8 @@ const Dashboard: React.FC = () => {
           localStorage.setItem("schoolID", schoolID.toString());
           localStorage.setItem("grade", grade);
           localStorage.setItem("age", age.toString());
+          localStorage.setItem("moderatorAccess", data.data.student.moderatorAccess);
+          setModeratorAccess(data.data.student.moderatorAccess);
         } else if (userType === "coach") {
           const { id, email, name, phone, schoolID } = data.data.getAllCoaches[0];
           localStorage.setItem("id", id.toString());

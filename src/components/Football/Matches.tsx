@@ -9,10 +9,10 @@ import {
   ApolloProvider,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { split, HttpLink } from '@apollo/client';
-import { getMainDefinition } from '@apollo/client/utilities';
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-import { createClient } from 'graphql-ws';
+import { split, HttpLink } from "@apollo/client";
+import { getMainDefinition } from "@apollo/client/utilities";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { createClient } from "graphql-ws";
 import { Card } from "primereact/card";
 import { Skeleton } from "primereact/skeleton";
 import { Dialog } from "primereact/dialog";
@@ -33,6 +33,7 @@ import "./LiveMatch.css";
 import Navbar from "../Navbar";
 import { useSubscription } from "@apollo/client";
 import { Toast } from "primereact/toast";
+import { Calendar } from "primereact/calendar";
 
 // GraphQL queries and mutations
 const GET_MATCH_DETAILS_AND_SCORE = gql`
@@ -97,7 +98,6 @@ const SCORE_UPDATES_SUBSCRIPTION = gql`
   }
 `;
 
-
 const END_FIXTURE_MUTATION = gql`
   mutation EndFixture($input: EndFixtureInput!) {
     endFixture(input: $input) {
@@ -125,8 +125,6 @@ interface MatchData {
 const httpLink = createHttpLink({
   uri: "https://nuavasports.com/api",
 });
-
-
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("token");
@@ -183,40 +181,51 @@ const LiveMatch = () => {
   const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null);
   const [eventType, setEventType] = useState<string>("Goal");
   const fixtureId = localStorage.getItem("startfix") || "1";
+  const [nextMatchStartDate, setNextMatchStartDate] = useState<Date | null>(
+    null
+  );
+  const [nextMatchEndDate, setNextMatchEndDate] = useState<Date | null>(null);
 
   const toastRef = useRef<Toast>(null);
 
   const showToast = (severity: string, summary: string, detail: string) => {
     if (toast.current) {
-      toast.current.show({ severity: severity as "success" | "info" | "warn" | "error", summary, detail, life: 3000 });
+      toast.current.show({
+        severity: severity as "success" | "info" | "warn" | "error",
+        summary,
+        detail,
+        life: 3000,
+      });
     }
   };
 
   // BROADCAST UPDATES
 
   const httpLink = new HttpLink({
-    uri: 'https://nuavasports.com/api',
+    uri: "https://nuavasports.com/api",
   });
-  
-  const wsLink = new GraphQLWsLink(createClient({
-    url: 'ws://nuavasports.com/graphql',
-    // connectionParams: {
-    //   authToken: localStorage.getItem('token'),
-    // },
-  }));
-  
+
+  const wsLink = new GraphQLWsLink(
+    createClient({
+      url: "ws://nuavasports.com/graphql",
+      // connectionParams: {
+      //   authToken: localStorage.getItem('token'),
+      // },
+    })
+  );
+
   const splitLink = split(
     ({ query }) => {
       const definition = getMainDefinition(query);
       return (
-        definition.kind === 'OperationDefinition' &&
-        definition.operation === 'subscription'
+        definition.kind === "OperationDefinition" &&
+        definition.operation === "subscription"
       );
     },
     wsLink,
     authLink.concat(httpLink)
   );
-  
+
   const client = new ApolloClient({
     link: splitLink,
     cache: new InMemoryCache(),
@@ -228,14 +237,14 @@ const LiveMatch = () => {
       variables: { input: { fixtureId: parseInt(fixtureId) } },
       onError: (error) => {
         console.error("Subscription error:", error);
-        showToast('error', 'Subscription Error', 'Failed to receive live updates');
+        showToast(
+          "error",
+          "Subscription Error",
+          "Failed to receive live updates"
+        );
       },
     }
   );
-
-  
-  
-
 
   const { loading, error, data, refetch } = useQuery<{
     getMatchDetailsAndScore: MatchDetails;
@@ -265,8 +274,33 @@ const LiveMatch = () => {
 
   // ⭕️ TIME FOR NEXT MATCH COMPONENT CALL BELOW
   // const [nextMatchDialogVisible, setNextMatchDialogVisible] = useState(false);
-  
-  const handleEndMatch = async (fixtureId: number, winnerID: number) => {
+
+  // const handleEndMatch = async (fixtureId: number, winnerID: number) => {
+  //   try {
+  //     const { data } = await client.mutate({
+  //       mutation: END_FIXTURE_MUTATION,
+  //       variables: {
+  //         input: {
+  //           fixtureId,
+  //           winnerID,
+  //         },
+  //       },
+  //     });
+  //     console.log(data);
+  //     showToast('success', 'Success', 'Match ended successfully');
+  //     window.location.href = "/brackets";
+  //   } catch (error) {
+  //     showToast('error', 'Error ending fixture', 'Previous fixture has not been finished');
+  //     console.error(error);
+  //   }
+  // };
+
+  const handleEndMatch = async (
+    fixtureId: number,
+    winnerID: number,
+    startTime: Date | null,
+    endTime: Date | null
+  ) => {
     try {
       const { data } = await client.mutate({
         mutation: END_FIXTURE_MUTATION,
@@ -274,18 +308,23 @@ const LiveMatch = () => {
           input: {
             fixtureId,
             winnerID,
+            startTimeForNextFixture: startTime ? startTime.toISOString() : null,
+            endTimeForNextFixture: endTime ? endTime.toISOString() : null,
           },
         },
       });
       console.log(data);
-      showToast('success', 'Success', 'Match ended successfully');
+      showToast("success", "Success", "Match ended successfully");
       window.location.href = "/brackets";
     } catch (error) {
-      showToast('error', 'Error ending fixture', 'Previous fixture has not been finished');
+      showToast(
+        "error",
+        "Error ending fixture",
+        "An error occurred while ending the match"
+      );
       console.error(error);
     }
   };
-  
 
   const renderEndMatchDialog = (matchData: MatchData) => (
     <Dialog
@@ -316,10 +355,39 @@ const LiveMatch = () => {
                 </MenuItem>
               ))}
           </Select>
+          <br></br>
+          <div className="p-field">
+            <label htmlFor="nextMatchStartDate">
+              Next Match Start Date/Time
+            </label>
+            <br></br>
+            <Calendar
+              id="nextMatchStartDate"
+              value={nextMatchStartDate}
+              onChange={(e) => setNextMatchStartDate(e.value as Date | null)}
+              showTime
+              hourFormat="24"
+              dateFormat="dd/mm/yy"
+              style={{height:'50px',width:'72%',border:'1px solid silver'}}
+            />
+            <br></br>
+<label htmlFor="nextMatchStartDate">
+              Next Match End Date/Time
+            </label>
+            <Calendar
+              id="nextMatchEndDate"
+              value={nextMatchEndDate}
+              onChange={(e) => setNextMatchEndDate(e.value as Date | null)}
+              showTime
+              hourFormat="24"
+              dateFormat="dd/mm/yy"
+              style={{height:'50px',width:'72%',border:'1px solid silver'}}
+            />
+          </div>
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button
+        {/* <Button
           onClick={() => setEndMatchDialogVisible(false)}
           className="p-button-secondary"
         >
@@ -337,10 +405,35 @@ const LiveMatch = () => {
           className="p-button-secondary"
         >
           End Match
-        </Button>
+        </Button> */}
+
+        <Button
+          label="End Match"
+          onClick={() => {
+            if (
+              selectedWinner !== null &&
+              nextMatchStartDate &&
+              nextMatchEndDate
+            ) {
+              handleEndMatch(
+                parseInt(fixtureId),
+                selectedWinner,
+                nextMatchStartDate,
+                nextMatchEndDate
+              );
+            } else {
+              console.error("Please select a winner and set next match times");
+              showToast(
+                "error",
+                "Invalid Input",
+                "Please select a winner and set next match times"
+              );
+            }
+          }}
+          className="p-button-secondary"
+        />
       </DialogActions>
       <Toast ref={toast}></Toast>
-      
     </Dialog>
   );
   // const { data: lineUpsData } = useQuery<{ getLineUps: LineUp[] }>(GET_LINEUPS, {
@@ -437,11 +530,15 @@ const LiveMatch = () => {
       refetch();
     }
   }, [subscriptionData, refetch]);
-  
+
   useEffect(() => {
     if (subscriptionError) {
       console.error("Subscription error:", subscriptionError);
-      showToast('error', 'Subscription Error', 'Failed to receive live updates');
+      showToast(
+        "error",
+        "Subscription Error",
+        "Failed to receive live updates"
+      );
     }
   }, [subscriptionError]);
 
@@ -449,11 +546,9 @@ const LiveMatch = () => {
     const pollInterval = setInterval(() => {
       refetch();
     }, 10000); // Poll every 10 seconds
-  
+
     return () => clearInterval(pollInterval);
   }, [refetch]);
-  
-  
 
   const handleStartMatch = async () => {
     try {
@@ -723,23 +818,23 @@ const LiveMatch = () => {
             ))
           )}
         </div>
-        <div style={{display:'flex',justifyContent:'center'}}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            backgroundColor: "#051DA0",
-            padding: "10px 20px",
-            color: "white",
-            borderRadius: "20px",
-            marginLeft: "20px",
-            width:'140px'
-          }}
-        >
-          <Button onClick={() => setEndMatchDialogVisible(true)}>
-            End Match
-          </Button>
-        </div>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              backgroundColor: "#051DA0",
+              padding: "10px 20px",
+              color: "white",
+              borderRadius: "20px",
+              marginLeft: "20px",
+              width: "140px",
+            }}
+          >
+            <Button onClick={() => setEndMatchDialogVisible(true)}>
+              End Match
+            </Button>
+          </div>
         </div>
         <div className="lineups-container">{renderLineUps()}</div>
         <Dialog
@@ -758,6 +853,16 @@ const LiveMatch = () => {
     );
   };
 
+  const [moderatorAccess, setModeratorAccess] = useState<boolean>(false);
+  useEffect(() => {
+    const usertype = localStorage.getItem("usertype");
+    const moderatorAcces = localStorage.getItem("moderatorAccess");
+
+    if (usertype === "coach" || moderatorAcces === "true") {
+      setModeratorAccess(true);
+    }
+  }, []);
+
   return (
     <ApolloProvider client={client}>
       <Navbar buttontext="Create Tournament / Matches" />
@@ -766,8 +871,10 @@ const LiveMatch = () => {
       </h1>
       <div className="live-match-container">
         {renderContent()}
-        {renderDialog()}
-        {renderUpdateDialog()}
+        {/* {renderDialog()}
+        {renderUpdateDialog()} */}
+        {moderatorAccess && renderDialog()}
+        {moderatorAccess && renderUpdateDialog()}
       </div>
     </ApolloProvider>
   );
